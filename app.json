@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "AstroRhythm",
-    "slug": "AstroRhythm",
+    "slug": "astrorhythm-uiqakao4-qovgesipm8zu",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -23,6 +23,18 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "615d126a-3853-40d3-86f4-cac96808f6b4"
+      }
+    },
+    "owner": "carlos.henrique",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/615d126a-3853-40d3-86f4-cac96808f6b4"
     }
   }
 }
