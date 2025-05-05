@@ -1,108 +1,233 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator, Modal, Platform, Pressable } from 'react-native'; // Added Platform, Pressable
 import { StatusBar } from 'expo-status-bar';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../navigation/types';
+import { BlurView } from 'expo-blur'; // Import BlurView for glassmorphism
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons'; // Import icons
+
+// Importar dados das meditações e eventos
+import meditationJsonData from '../data/meditations.json';
+import eventJsonData from '../data/astronomical_events.json';
+
+// --- Cores (Reutilizando as definidas no Dashboard) ---
+const COLORS = {
+  backgroundPrimary: '#050810',
+  backgroundSecondary: '#111528',
+  backgroundTertiary: '#1E2245',
+  accentPrimary: '#8A4FFF',
+  accentSecondary: '#4ECDC4',
+  accentTertiary: '#FF6B6B',
+  accentQuaternary: '#F7B801',
+  textPrimary: '#FFFFFF',
+  textSecondary: '#E0E0E0',
+  textTertiary: '#A0A0B0',
+  borderSubtle: '#606075',
+};
+
+// --- Fontes (Reutilizando as definidas no Dashboard) ---
+const FONTS = {
+  title: 'SpaceGrotesk-Bold',
+  titleMedium: 'SpaceGrotesk-Medium',
+  body: 'Inter-Regular',
+  bodyMedium: 'Inter-Medium',
+  bodySemiBold: 'Inter-SemiBold',
+};
+
+// Interfaces
+interface AstronomicalEvent {
+  id: string;
+  day: number;
+  month: number;
+  year: number;
+  title: string;
+  description: string;
+  color: string;
+  viewing_tips: string[];
+}
+
+interface Meditation {
+  id: string;
+  title: string;
+  description: string;
+  duration_seconds: number;
+  category: string;
+  audio_url: string;
+  image_url?: string;
+  is_premium: boolean;
+  related_event_id?: string | null;
+  related_event_type?: string | null;
+}
+
+// Função para formatar segundos
+const formatDuration = (seconds: number): string => {
+  const minutes = Math.floor(seconds / 60);
+  return `${minutes} min`;
+};
 
 type CalendarScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Calendar'>;
 
-// Dados de exemplo para os eventos astronômicos
-const astronomicalEvents = [
-  { id: '1', day: 23, month: 'ABR', title: 'Conjunção Lua-Vênus', description: 'A Lua e Vênus aparecerão próximos no céu noturno', color: '#6b3fa0' },
-  { id: '2', day: 25, month: 'ABR', title: 'Chuva de Meteoros Líridas', description: 'Meditação especial disponível', color: '#d44f9a' },
-  { id: '3', day: 30, month: 'ABR', title: 'Lua Nova', description: 'Perfeito para meditação profunda', color: '#47d6a0' },
-];
-
-// Dados de exemplo para meditações especiais
-const specialMeditations = [
-  { id: '1', title: 'Chuva de Líridas', duration: '15 min', date: '25 Abr', color: '#d44f9a' },
-  { id: '2', title: 'Energia da Lua Nova', duration: '20 min', date: '30 Abr', color: '#47d6a0' },
-];
-
-// Dias da semana para o calendário
 const daysOfWeek = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'];
+const monthNames = ["JAN", "FEV", "MAR", "ABR", "MAI", "JUN", "JUL", "AGO", "SET", "OUT", "NOV", "DEZ"];
 
 const CalendarScreen = () => {
   const navigation = useNavigation<CalendarScreenNavigationProp>();
-  const [currentMonth, setCurrentMonth] = useState('Abril 2025');
+  const [currentDate, setCurrentDate] = useState(new Date(2025, 3, 1)); // Abril 2025
+  const [events, setEvents] = useState<AstronomicalEvent[]>([]);
+  const [allMeditations, setAllMeditations] = useState<Meditation[]>([]);
+  const [specialMeditationsForMonth, setSpecialMeditationsForMonth] = useState<Meditation[]>([]);
+  const [loadingEvents, setLoadingEvents] = useState(true);
+  const [loadingMeditations, setLoadingMeditations] = useState(true);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState<AstronomicalEvent | null>(null);
 
-  // Gera os dias do mês para o calendário
-  const generateDays = () => {
-    const days = [];
-    // Dias do mês anterior
-    days.push(30, 31);
-    
-    // Dias do mês atual
-    for (let i = 1; i <= 30; i++) {
-      days.push(i);
+  const currentMonthNumber = currentDate.getMonth() + 1;
+  const currentYear = currentDate.getFullYear();
+
+  // Carregar eventos
+  useEffect(() => {
+    setLoadingEvents(true);
+    try {
+      setEvents(eventJsonData as AstronomicalEvent[]);
+    } catch (e) {
+      console.error("Failed to load local events:", e);
+    } finally {
+      setLoadingEvents(false);
     }
-    
-    // Dias do próximo mês
-    days.push(1, 2, 3);
-    
-    return days;
+  }, []);
+
+  // Carregar meditações
+  useEffect(() => {
+    setLoadingMeditations(true);
+    try {
+      setAllMeditations(meditationJsonData as Meditation[]);
+    } catch (e) {
+      console.error("Failed to load meditations:", e);
+    } finally {
+      setLoadingMeditations(false);
+    }
+  }, []);
+
+  // Filtrar meditações especiais
+  useEffect(() => {
+    if (!loadingEvents && !loadingMeditations) {
+      const eventsThisMonth = events.filter(event => event.month === currentMonthNumber && event.year === currentYear);
+      const eventTypesThisMonth = new Set(eventsThisMonth.map(event => event.title));
+
+      const relevantMeditations = allMeditations.filter(meditation =>
+        meditation.related_event_type &&
+        Array.from(eventTypesThisMonth).some(eventType =>
+            eventType.includes(meditation.related_event_type!)
+        )
+      );
+      setSpecialMeditationsForMonth(relevantMeditations);
+    }
+  }, [events, allMeditations, loadingEvents, loadingMeditations, currentMonthNumber, currentYear]);
+
+  // --- Geração do Calendário --- 
+  const generateCalendarDays = (year: number, month: number) => {
+    const daysInMonth = new Date(year, month, 0).getDate();
+    const firstDayOfMonth = new Date(year, month - 1, 1).getDay(); // 0 = Domingo, 1 = Segunda...
+    const daysArray = [];
+
+    // Dias do mês anterior (para preencher o início)
+    const daysInPrevMonth = new Date(year, month - 1, 0).getDate();
+    for (let i = 0; i < firstDayOfMonth; i++) {
+      daysArray.push({ day: daysInPrevMonth - firstDayOfMonth + 1 + i, isCurrentMonth: false });
+    }
+
+    // Dias do mês atual
+    for (let i = 1; i <= daysInMonth; i++) {
+      daysArray.push({ day: i, isCurrentMonth: true });
+    }
+
+    // Dias do próximo mês (para preencher o final)
+    const remainingCells = 42 - daysArray.length; // 6 linhas * 7 dias
+    for (let i = 1; i <= remainingCells; i++) {
+      daysArray.push({ day: i, isCurrentMonth: false });
+    }
+
+    return daysArray;
   };
 
-  const days = generateDays();
+  const calendarDays = generateCalendarDays(currentYear, currentMonthNumber);
+
+  const handleEventClick = (event: AstronomicalEvent) => {
+    setSelectedEvent(event);
+    setModalVisible(true);
+  };
+
+  const handleMeditationClick = (meditation: Meditation) => {
+     navigation.navigate('Player', {
+        title: meditation.title,
+        duration: formatDuration(meditation.duration_seconds),
+        audio_url: meditation.audio_url,
+     });
+  };
+
+  const changeMonth = (increment: number) => {
+      setCurrentDate(prevDate => {
+          const newDate = new Date(prevDate);
+          newDate.setMonth(prevDate.getMonth() + increment);
+          return newDate;
+      });
+  };
 
   return (
     <View style={styles.container}>
       <StatusBar style="light" />
-      <ScrollView style={styles.scrollView}>
+      <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContentContainer}>
         <View style={styles.header}>
           <Text style={styles.title}>Calendário Cósmico</Text>
-          <Text style={styles.subtitle}>Eventos astronômicos e meditações especiais</Text>
+          <Text style={styles.subtitle}>Eventos e meditações especiais</Text>
         </View>
 
         {/* Calendário mensal */}
         <View style={styles.calendarContainer}>
-          <View style={styles.calendarHeader}>
-            <TouchableOpacity style={styles.calendarNavButton}>
-              <Text style={styles.calendarNavButtonText}>◀</Text>
+           <View style={styles.calendarHeader}>
+            <TouchableOpacity style={styles.calendarNavButton} onPress={() => changeMonth(-1)}>
+              <Ionicons name="chevron-back" size={24} color={COLORS.textSecondary} />
             </TouchableOpacity>
-            <Text style={styles.calendarTitle}>{currentMonth}</Text>
-            <TouchableOpacity style={styles.calendarNavButton}>
-              <Text style={styles.calendarNavButtonText}>▶</Text>
+            <Text style={styles.calendarTitle}>{`${monthNames[currentDate.getMonth()]} ${currentYear}`}</Text>
+            <TouchableOpacity style={styles.calendarNavButton} onPress={() => changeMonth(1)}>
+              <Ionicons name="chevron-forward" size={24} color={COLORS.textSecondary} />
             </TouchableOpacity>
           </View>
 
-          {/* Dias da semana */}
           <View style={styles.weekdaysContainer}>
-            {daysOfWeek.map((day) => (
-              <Text key={day} style={styles.weekdayText}>{day}</Text>
+            {daysOfWeek.map((day, index) => (
+              <Text key={index} style={styles.weekdayText}>{day}</Text>
             ))}
           </View>
 
-          {/* Dias do mês */}
           <View style={styles.daysContainer}>
-            {days.map((day, index) => {
-              const isCurrentMonth = index >= 2 && index < 32;
-              const isToday = isCurrentMonth && day === 23;
-              const hasEvent = astronomicalEvents.some(event => event.day === day);
-              const eventColor = astronomicalEvents.find(event => event.day === day)?.color;
-              
+            {calendarDays.map(({ day, isCurrentMonth }, index) => {
+              const today = new Date();
+              const isToday = isCurrentMonth && day === today.getDate() && currentMonthNumber === today.getMonth() + 1 && currentYear === today.getFullYear();
+              const eventOnDay = isCurrentMonth ? events.find(event => event.day === day && event.month === currentMonthNumber && event.year === currentYear) : undefined;
+              const hasEvent = !!eventOnDay;
+              const eventColor = eventOnDay?.color || COLORS.accentPrimary; // Cor padrão se não definida
+
               return (
-                <View key={index} style={styles.dayContainer}>
+                <View key={index} style={styles.dayCell}>
                   {isCurrentMonth ? (
-                    <View 
-                      style={[
-                        styles.dayCircle,
-                        isToday && styles.todayCircle,
-                        hasEvent && { backgroundColor: eventColor }
-                      ]}
+                    <TouchableOpacity
+                      style={styles.dayButton}
+                      onPress={() => eventOnDay && handleEventClick(eventOnDay)}
+                      disabled={!hasEvent}
                     >
-                      <Text 
-                        style={[
-                          styles.dayText,
-                          (isToday || hasEvent) && styles.activeDayText
-                        ]}
-                      >
-                        {day}
-                      </Text>
-                    </View>
+                      <View style={[styles.dayInnerContainer, isToday && styles.todayIndicator]}>
+                        <Text style={[styles.dayText, isToday && styles.todayText]}>
+                          {day}
+                        </Text>
+                        {hasEvent && <View style={[styles.eventDot, { backgroundColor: eventColor }]} />} 
+                      </View>
+                    </TouchableOpacity>
                   ) : (
-                    <Text style={styles.inactiveDayText}>{day}</Text>
+                    <View style={styles.dayInnerContainer}>
+                       <Text style={styles.inactiveDayText}>{day}</Text>
+                    </View>
                   )}
                 </View>
               );
@@ -112,303 +237,470 @@ const CalendarScreen = () => {
 
         {/* Eventos astronômicos */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Eventos Astronômicos</Text>
-          
-          {astronomicalEvents.map((event) => (
-            <TouchableOpacity 
-              key={event.id}
-              style={[styles.eventCard, { backgroundColor: `${event.color}30` }]}
-            >
-              <View style={styles.eventDate}>
-                <Text style={styles.eventDay}>{event.day}</Text>
-                <Text style={styles.eventMonth}>{event.month}</Text>
-              </View>
-              <View style={styles.eventInfo}>
-                <Text style={styles.eventTitle}>{event.title}</Text>
-                <Text style={styles.eventDescription}>{event.description}</Text>
-              </View>
-              <TouchableOpacity style={styles.notificationButton}>
-                <Text style={[styles.notificationIcon, { color: event.color }]}>🔔</Text>
+          <Text style={styles.sectionTitle}>Eventos Astronômicos ({monthNames[currentDate.getMonth()]})</Text>
+          {loadingEvents ? (
+            <ActivityIndicator size="large" color={COLORS.textPrimary} />
+          ) : (
+            events.filter(event => event.month === currentMonthNumber && event.year === currentYear).map((event) => (
+              <TouchableOpacity
+                key={event.id}
+                style={styles.eventCard} // Fundo sólido agora
+                onPress={() => handleEventClick(event)}
+              >
+                <View style={[styles.eventDateIndicator, { backgroundColor: event.color || COLORS.accentPrimary }]} />
+                <View style={styles.eventDate}>
+                  <Text style={styles.eventDay}>{event.day}</Text>
+                  <Text style={styles.eventMonth}>{monthNames[event.month - 1]}</Text>
+                </View>
+                <View style={styles.eventInfo}>
+                  <Text style={styles.eventTitle}>{event.title}</Text>
+                  <Text style={styles.eventDescription} numberOfLines={2}>{event.description}</Text>
+                </View>
+                {/* Ícone de sino (opcional, funcionalidade futura) */}
+                {/* <TouchableOpacity style={styles.notificationButton} disabled>
+                  <Ionicons name="notifications-outline" size={22} color={COLORS.textTertiary} />
+                </TouchableOpacity> */}
+                <Ionicons name="chevron-forward" size={20} color={COLORS.textTertiary} style={styles.eventArrow} />
               </TouchableOpacity>
-            </TouchableOpacity>
-          ))}
+            ))
+          )}
+          {events.filter(event => event.month === currentMonthNumber && event.year === currentYear).length === 0 && !loadingEvents && (
+             <Text style={styles.noItemsText}>Nenhum evento astronômico para este mês.</Text>
+          )}
         </View>
 
         {/* Meditações especiais */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Meditações Especiais</Text>
-          
-          <View style={styles.meditationGrid}>
-            {specialMeditations.map((meditation) => (
-              <TouchableOpacity 
-                key={meditation.id}
-                style={styles.meditationCard}
-                onPress={() => navigation.navigate('Player', { 
-                  title: meditation.title,
-                  duration: meditation.duration
-                })}
-              >
-                <View style={[styles.meditationImage, {backgroundColor: meditation.color}]}>
-                  <Text style={styles.placeholderText}>{meditation.title.split(' ').pop()}</Text>
-                </View>
-                <View style={styles.meditationOverlay}>
-                  <Text style={styles.meditationTitle}>{meditation.title}</Text>
-                  <Text style={styles.meditationDuration}>{meditation.duration} • {meditation.date}</Text>
-                </View>
-              </TouchableOpacity>
-            ))}
-          </View>
+          <Text style={styles.sectionTitle}>Meditações Especiais (Relacionadas)</Text>
+          {loadingMeditations || loadingEvents ? (
+             <ActivityIndicator size="small" color={COLORS.textPrimary} />
+          ) : specialMeditationsForMonth.length > 0 ? (
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.meditationScrollContainer}>
+              {specialMeditationsForMonth.map((meditation) => (
+                <TouchableOpacity
+                  key={meditation.id}
+                  style={styles.meditationCard}
+                  onPress={() => handleMeditationClick(meditation)}
+                >
+                   <View style={styles.meditationImageContainer}>
+                     {/* Imagem ou Placeholder */}
+                     <View style={[styles.meditationImage, {backgroundColor: COLORS.accentSecondary}]}>
+                       <MaterialCommunityIcons name="meditation" size={40} color={`${COLORS.backgroundPrimary}99`} />
+                     </View>
+                     {meditation.is_premium && (
+                        <View style={styles.premiumBadge}>
+                            <Ionicons name="star" size={12} color={COLORS.accentQuaternary} />
+                        </View>
+                     )}
+                  </View>
+                  <View style={styles.meditationInfo}>
+                    <Text style={styles.meditationTitle} numberOfLines={1}>{meditation.title}</Text>
+                    <Text style={styles.meditationDuration}>{formatDuration(meditation.duration_seconds)}</Text>
+                  </View>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+          ) : (
+            <Text style={styles.noItemsText}>Nenhuma meditação especial para os eventos deste mês.</Text>
+          )}
         </View>
-        
-        {/* Espaço para a barra de navegação */}
-        <View style={styles.navbarSpace} />
+
       </ScrollView>
 
-      {/* Navegação inferior */}
-      <View style={styles.navbar}>
-        <TouchableOpacity 
-          style={styles.navItem}
-          onPress={() => navigation.navigate('Dashboard')}
-        >
-          <Text style={styles.navIcon}>🏠</Text>
-          <Text style={styles.navText}>Início</Text>
-        </TouchableOpacity>
-        <TouchableOpacity 
-          style={styles.navItem}
-          onPress={() => navigation.navigate('Library')}
-        >
-          <Text style={styles.navIcon}>📚</Text>
-          <Text style={styles.navText}>Biblioteca</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={[styles.navItem, styles.navItemActive]}>
-          <Text style={styles.navIcon}>📅</Text>
-          <Text style={styles.navText}>Eventos</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem}>
-          <Text style={styles.navIcon}>👤</Text>
-          <Text style={styles.navText}>Perfil</Text>
-        </TouchableOpacity>
-      </View>
+      {/* Modal com Glassmorphism */}
+       <Modal
+        animationType="fade" // Fade fica melhor com blur
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+          setSelectedEvent(null);
+        }}
+      >
+        <BlurView intensity={90} tint="dark" style={styles.modalOverlay}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalTitle}>{selectedEvent?.title}</Text>
+            <Text style={styles.modalDescription}>{selectedEvent?.description}</Text>
+            <Text style={styles.modalSectionTitle}>Dicas de Visualização:</Text>
+            <ScrollView style={styles.tipsScrollView}>
+              {selectedEvent?.viewing_tips.map((tip, index) => (
+                <Text key={index} style={styles.modalText}>• {tip.replace(/\*\*/g, '')}</Text>
+              ))}
+            </ScrollView>
+            <TouchableOpacity style={styles.closeButton} onPress={() => setModalVisible(!modalVisible)}>
+                <Text style={styles.closeButtonText}>Fechar</Text>
+            </TouchableOpacity>
+          </View>
+        </BlurView>
+      </Modal>
+
+      {/* Navegação inferior (Reutilizar do Dashboard) */}
+       <BlurView intensity={90} tint="dark" style={styles.navbarContainer}>
+         <View style={styles.navbar}>
+           <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('Dashboard')}> 
+             <Ionicons name="home-outline" size={24} color={COLORS.textTertiary} />
+             <Text style={styles.navText}>Início</Text>
+           </TouchableOpacity>
+           <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('Library')}> 
+             <Ionicons name="library-outline" size={24} color={COLORS.textTertiary} />
+             <Text style={styles.navText}>Biblioteca</Text>
+           </TouchableOpacity>
+           {/* Item Ativo */}
+           <TouchableOpacity style={styles.navItem}>
+             <View style={styles.navItemActiveIndicator} />
+             <Ionicons name="calendar" size={24} color={COLORS.accentPrimary} />
+             <Text style={[styles.navText, styles.navTextActive]}>Eventos</Text>
+           </TouchableOpacity>
+           <TouchableOpacity style={styles.navItem} disabled> 
+             <Ionicons name="person-outline" size={24} color={COLORS.textTertiary} />
+             <Text style={styles.navText}>Perfil</Text>
+           </TouchableOpacity>
+         </View>
+       </BlurView>
     </View>
   );
 };
 
+// --- Estilos Refinados ---
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0a0a0f',
+    backgroundColor: COLORS.backgroundPrimary,
   },
   scrollView: {
     flex: 1,
-    padding: 20,
+  },
+  scrollContentContainer: {
+      padding: 20,
+      paddingBottom: 100, // Espaço para navbar
   },
   header: {
-    marginTop: 40,
-    marginBottom: 20,
+    marginTop: Platform.OS === 'ios' ? 50 : 40,
+    marginBottom: 30,
   },
   title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#FFFFFF',
+    fontFamily: FONTS.title,
+    fontSize: 28,
+    color: COLORS.textPrimary,
+    marginBottom: 4,
   },
   subtitle: {
+    fontFamily: FONTS.body,
     fontSize: 16,
-    color: '#FFFFFF',
-    opacity: 0.7,
+    color: COLORS.textTertiary,
   },
+  // --- Calendário --- 
   calendarContainer: {
-    backgroundColor: '#121330',
-    borderRadius: 16,
-    padding: 16,
-    marginBottom: 24,
+    backgroundColor: COLORS.backgroundSecondary,
+    borderRadius: 20,
+    padding: 18,
+    marginBottom: 35,
   },
   calendarHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 16,
+    marginBottom: 20,
   },
   calendarNavButton: {
     padding: 8,
   },
-  calendarNavButtonText: {
-    fontSize: 18,
-    color: '#FFFFFF',
-  },
   calendarTitle: {
+    fontFamily: FONTS.titleMedium,
     fontSize: 18,
-    fontWeight: 'bold',
-    color: '#FFFFFF',
+    color: COLORS.textSecondary,
   },
   weekdaysContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 8,
+    marginBottom: 10,
   },
   weekdayText: {
-    width: 40,
+    flex: 1, // Distribuir igualmente
     textAlign: 'center',
-    fontSize: 14,
-    color: '#FFFFFF',
-    opacity: 0.7,
+    fontFamily: FONTS.bodyMedium,
+    fontSize: 13,
+    color: COLORS.textTertiary,
+    opacity: 0.8,
   },
   daysContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'flex-start',
   },
-  dayContainer: {
-    width: 40,
-    height: 40,
+  dayCell: {
+    width: `${100 / 7}%`, // 7 colunas
+    aspectRatio: 1, // Manter quadrado
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 8,
+    padding: 2, // Pequeno espaço entre células
   },
-  dayCircle: {
-    width: 30,
-    height: 30,
-    borderRadius: 15,
-    justifyContent: 'center',
-    alignItems: 'center',
+  dayButton: {
+      flex: 1,
+      width: '100%',
+      justifyContent: 'center',
+      alignItems: 'center',
   },
-  todayCircle: {
-    backgroundColor: '#6b3fa0',
+  dayInnerContainer: {
+      flex: 1,
+      width: '100%',
+      justifyContent: 'center',
+      alignItems: 'center',
+      borderRadius: 8, // Leve arredondamento interno
+      position: 'relative', // Para o ponto do evento
+  },
+  todayIndicator: {
+      backgroundColor: `${COLORS.accentSecondary}30`, // Fundo sutil para hoje
+      borderWidth: 1,
+      borderColor: COLORS.accentSecondary,
   },
   dayText: {
-    fontSize: 14,
-    color: '#FFFFFF',
+    fontFamily: FONTS.bodyMedium,
+    fontSize: 15,
+    color: COLORS.textSecondary,
   },
-  activeDayText: {
-    fontWeight: 'bold',
+  todayText: {
+      color: COLORS.accentSecondary, // Cor de destaque para hoje
+      fontWeight: 'bold',
   },
   inactiveDayText: {
-    fontSize: 14,
-    color: '#FFFFFF',
-    opacity: 0.3,
+    fontFamily: FONTS.body,
+    fontSize: 15,
+    color: COLORS.textTertiary,
+    opacity: 0.4,
   },
+  eventDot: {
+      position: 'absolute',
+      bottom: 4,
+      width: 6,
+      height: 6,
+      borderRadius: 3,
+  },
+  // --- Eventos --- 
   section: {
-    marginBottom: 24,
+    marginBottom: 35,
   },
   sectionTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#FFFFFF',
-    marginBottom: 16,
+    fontFamily: FONTS.titleMedium,
+    fontSize: 22,
+    color: COLORS.textPrimary,
+    marginBottom: 20,
   },
   eventCard: {
     flexDirection: 'row',
-    borderRadius: 10,
-    padding: 15,
-    marginBottom: 10,
+    backgroundColor: COLORS.backgroundSecondary,
+    borderRadius: 15,
+    paddingVertical: 15,
+    paddingHorizontal: 18,
+    marginBottom: 12,
     alignItems: 'center',
+    overflow: 'hidden', // Para o indicador lateral
+    position: 'relative',
+  },
+  eventDateIndicator: {
+      position: 'absolute',
+      left: 0,
+      top: 0,
+      bottom: 0,
+      width: 5,
   },
   eventDate: {
     alignItems: 'center',
-    marginRight: 15,
+    marginRight: 18,
+    marginLeft: 10, // Espaço após o indicador
+    width: 45,
   },
   eventDay: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#FFFFFF',
+    fontFamily: FONTS.titleMedium,
+    fontSize: 22,
+    color: COLORS.textPrimary,
   },
   eventMonth: {
-    fontSize: 14,
-    color: '#FFFFFF',
-    opacity: 0.7,
+    fontFamily: FONTS.bodyMedium,
+    fontSize: 12,
+    color: COLORS.textTertiary,
+    textTransform: 'uppercase',
+    marginTop: 2,
   },
   eventInfo: {
     flex: 1,
+    marginRight: 10,
   },
   eventTitle: {
+    fontFamily: FONTS.bodySemiBold,
     fontSize: 16,
-    fontWeight: 'bold',
-    color: '#FFFFFF',
-    marginBottom: 4,
+    color: COLORS.textSecondary,
+    marginBottom: 5,
   },
   eventDescription: {
+    fontFamily: FONTS.body,
     fontSize: 14,
-    color: '#FFFFFF',
-    opacity: 0.7,
+    color: COLORS.textTertiary,
+    lineHeight: 20,
   },
-  notificationButton: {
-    padding: 8,
+  eventArrow: {
+      marginLeft: 'auto', // Empurra para a direita
   },
-  notificationIcon: {
-    fontSize: 20,
+  noItemsText: {
+      fontFamily: FONTS.body,
+      color: COLORS.textTertiary,
+      opacity: 0.8,
+      marginTop: 10,
+      textAlign: 'center',
+      width: '100%',
+      fontSize: 15,
   },
-  meditationGrid: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+  // --- Meditações Especiais --- 
+  meditationScrollContainer: {
+      paddingRight: 20, // Espaço no final do scroll horizontal
   },
   meditationCard: {
-    width: '48%',
-    aspectRatio: 1,
-    borderRadius: 16,
+    width: 160, // Largura fixa para scroll horizontal
+    marginRight: 15,
+    borderRadius: 15,
     overflow: 'hidden',
-    position: 'relative',
+    backgroundColor: COLORS.backgroundSecondary,
+  },
+  meditationImageContainer: {
+      aspectRatio: 1,
+      position: 'relative',
   },
   meditationImage: {
-    width: '100%',
-    height: '100%',
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  placeholderText: {
-    color: '#FFFFFF',
-    fontSize: 18,
-    fontWeight: 'bold',
+  premiumBadge: {
+      position: 'absolute',
+      top: 8,
+      right: 8,
+      backgroundColor: `${COLORS.backgroundPrimary}99`,
+      borderRadius: 10,
+      paddingHorizontal: 6,
+      paddingVertical: 2,
   },
-  meditationOverlay: {
+  meditationInfo: {
+    padding: 12,
+  },
+  meditationTitle: {
+    fontFamily: FONTS.bodyMedium,
+    fontSize: 14,
+    color: COLORS.textSecondary,
+    marginBottom: 3,
+  },
+  meditationDuration: {
+    fontFamily: FONTS.body,
+    fontSize: 12,
+    color: COLORS.textTertiary,
+  },
+  // --- Modal --- 
+  modalOverlay: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  modalView: {
+    width: '100%',
+    maxWidth: 400,
+    maxHeight: '80%',
+    backgroundColor: COLORS.backgroundSecondary, // Fundo sólido dentro do blur
+    borderRadius: 20,
+    padding: 25,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.25,
+    shadowRadius: 15,
+    elevation: 10,
+  },
+  modalTitle: {
+    fontFamily: FONTS.titleMedium,
+    fontSize: 20,
+    color: COLORS.textPrimary,
+    marginBottom: 10,
+    textAlign: 'center',
+  },
+  modalDescription: {
+    fontFamily: FONTS.body,
+    fontSize: 15,
+    color: COLORS.textTertiary,
+    marginBottom: 20,
+    textAlign: 'center',
+    lineHeight: 22,
+  },
+  modalSectionTitle: {
+    fontFamily: FONTS.bodySemiBold,
+    fontSize: 16,
+    color: COLORS.textSecondary,
+    marginBottom: 10,
+    alignSelf: 'flex-start',
+  },
+  tipsScrollView: {
+    width: '100%',
+    marginBottom: 20,
+    maxHeight: 200, // Limitar altura do scroll
+  },
+  modalText: {
+    fontFamily: FONTS.body,
+    fontSize: 15,
+    color: COLORS.textTertiary,
+    marginBottom: 8,
+    lineHeight: 22,
+  },
+  closeButton: {
+      backgroundColor: COLORS.accentPrimary,
+      borderRadius: 25,
+      paddingVertical: 12,
+      paddingHorizontal: 30,
+      marginTop: 10,
+  },
+  closeButtonText: {
+      fontFamily: FONTS.bodySemiBold,
+      color: COLORS.textPrimary,
+      fontSize: 16,
+  },
+  // --- Navbar (Reutilizado do Dashboard) --- 
+  navbarContainer: {
     position: 'absolute',
     bottom: 0,
     left: 0,
     right: 0,
-    padding: 12,
-    backgroundColor: 'rgba(10, 10, 15, 0.7)',
-  },
-  meditationTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#FFFFFF',
-    marginBottom: 4,
-  },
-  meditationDuration: {
-    fontSize: 12,
-    color: '#FFFFFF',
-    opacity: 0.7,
   },
   navbar: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    backgroundColor: 'rgba(10, 10, 15, 0.9)',
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    borderTopWidth: 1,
-    borderTopColor: 'rgba(255, 255, 255, 0.1)',
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    height: 75,
+    paddingBottom: Platform.OS === 'ios' ? 10 : 0,
+    borderTopWidth: 0,
   },
   navItem: {
     alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
+    height: '100%',
+    position: 'relative',
   },
-  navItemActive: {
-    opacity: 1,
+  navItemActiveIndicator: {
+      position: 'absolute',
+      top: 8,
+      width: 24,
+      height: 3,
+      backgroundColor: COLORS.accentPrimary,
+      borderRadius: 2,
   },
   navIcon: {
-    fontSize: 24,
-    marginBottom: 4,
-    color: '#FFFFFF',
+    // Usar Ionicons agora
+    marginBottom: 5,
   },
   navText: {
-    fontSize: 12,
-    color: '#FFFFFF',
-    opacity: 0.7,
+    fontFamily: FONTS.bodyMedium,
+    fontSize: 11,
+    color: COLORS.textTertiary,
   },
-  navbarSpace: {
-    height: 80,
+  navTextActive: {
+    color: COLORS.accentPrimary,
   },
 });
 
 export default CalendarScreen;
+

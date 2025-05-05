@@ -1,0 +1,63 @@
+[
+  {
+    "id": "med001",
+    "title": "Viagem a Júpiter",
+    "description": "Uma meditação guiada relaxante explorando as nuvens e luas de Júpiter.",
+    "duration_seconds": 600,
+    "category": "Sistema Solar",
+    "audio_url": "/home/ubuntu/AstroRhythm_Project/AstroRhythm_App/AstroRhythm/assets/audio/jupiter_journey.mp3",
+    "image_url": "/home/ubuntu/AstroRhythm_Project/AstroRhythm_App/AstroRhythm/assets/images/jupiter.jpg",
+    "is_premium": false,
+    "related_event_id": null,
+    "related_event_type": null
+  },
+  {
+    "id": "med002",
+    "title": "Galáxia de Andrômeda",
+    "description": "Contemple a vastidão da nossa vizinha galáctica, Andrômeda.",
+    "duration_seconds": 900,
+    "category": "Galáxias",
+    "audio_url": "/home/ubuntu/AstroRhythm_Project/AstroRhythm_App/AstroRhythm/assets/audio/andromeda_galaxy.mp3",
+    "image_url": "/home/ubuntu/AstroRhythm_Project/AstroRhythm_App/AstroRhythm/assets/images/andromeda.jpg",
+    "is_premium": false,
+    "related_event_id": null,
+    "related_event_type": null
+  },
+  {
+    "id": "med003",
+    "title": "Nebulosa de Órion",
+    "description": "Flutue pelo berçário estelar da Nebulosa de Órion.",
+    "duration_seconds": 900,
+    "category": "Nebulosas",
+    "audio_url": "/home/ubuntu/AstroRhythm_Project/AstroRhythm_App/AstroRhythm/assets/audio/orion_nebula.mp3",
+    "image_url": "/home/ubuntu/AstroRhythm_Project/AstroRhythm_App/AstroRhythm/assets/images/orion.jpg",
+    "is_premium": true,
+    "related_event_id": null,
+    "related_event_type": null
+  },
+  {
+    "id": "med004",
+    "title": "Chuva de Líridas",
+    "description": "Meditação especial para acompanhar a chuva de meteoros Líridas.",
+    "duration_seconds": 900,
+    "category": "Eventos Especiais",
+    "audio_url": "/home/ubuntu/AstroRhythm_Project/AstroRhythm_App/AstroRhythm/assets/audio/lyrids_shower.mp3",
+    "image_url": "/home/ubuntu/AstroRhythm_Project/AstroRhythm_App/AstroRhythm/assets/images/lyrids.jpg",
+    "is_premium": false,
+    "related_event_id": null, 
+    "related_event_type": "Chuva de Meteoros"
+  },
+    {
+    "id": "med005",
+    "title": "Energia da Lua Nova",
+    "description": "Conecte-se com a energia renovadora da Lua Nova.",
+    "duration_seconds": 1200,
+    "category": "Fases da Lua",
+    "audio_url": "/home/ubuntu/AstroRhythm_Project/AstroRhythm_App/AstroRhythm/assets/audio/new_moon_energy.mp3",
+    "image_url": "/home/ubuntu/AstroRhythm_Project/AstroRhythm_App/AstroRhythm/assets/images/new_moon.jpg",
+    "is_premium": false,
+    "related_event_id": null, 
+    "related_event_type": "Lua Nova"
+  }
+]
+
