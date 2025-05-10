@@ -1,3 +1,4 @@
+import { Ionicons } from '@expo/vector-icons';
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, ActivityIndicator, Linking, Platform } from 'react-native'; // Added Platform
 import { StatusBar } from 'expo-status-bar';
@@ -228,20 +229,20 @@ const DashboardScreen = () => {
            {/* Ícone Ativo */}
            <TouchableOpacity style={styles.navItem}>
              <View style={styles.navItemActiveIndicator} />
-             <Text style={[styles.navIcon, styles.navIconActive]}>🏠</Text>
+             <Ionicons name="home" size={24} color={COLORS.accentPrimary} style={styles.navIcon} />
              <Text style={[styles.navText, styles.navTextActive]}>Início</Text>
            </TouchableOpacity>
            {/* Ícones Inativos */}
            <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('Library')}> 
-             <Text style={styles.navIcon}>📚</Text>
+             <Ionicons name="library-outline" size={24} color={COLORS.textTertiary} style={styles.navIcon} />
              <Text style={styles.navText}>Biblioteca</Text>
            </TouchableOpacity>
            <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('Calendar')}>
-             <Text style={styles.navIcon}>📅</Text>
+             <Ionicons name="calendar-outline" size={24} color={COLORS.textTertiary} style={styles.navIcon} />
              <Text style={styles.navText}>Eventos</Text>
            </TouchableOpacity>
            <TouchableOpacity style={styles.navItem} disabled> 
-             <Text style={styles.navIcon}>👤</Text>
+             <Ionicons name="person-outline" size={24} color={COLORS.textTertiary} style={styles.navIcon} />
              <Text style={styles.navText}>Perfil</Text>
            </TouchableOpacity>
          </View>
