@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator, Platform, Image } from 'react-native'; // Added Platform, Image
+import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator, Platform, Image } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../navigation/types';
-import { Audio, AVPlaybackStatus, InterruptionModeIOS, InterruptionModeAndroid } from 'expo-av'; // Import interruption modes
+import { Audio, AVPlaybackStatus, InterruptionModeIOS, InterruptionModeAndroid } from 'expo-av';
 import Slider from '@react-native-community/slider';
-import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons'; // Import icons
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 
 // --- Cores (Reutilizando) ---
 const COLORS = {
@@ -35,7 +35,10 @@ const FONTS = {
 type PlayerScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Player'>;
 type PlayerScreenRouteProp = RouteProp<RootStackParamList, 'Player'>;
 
-// Função para formatar milissegundos
+// Variável global para armazenar a instância de som atualmente ativa
+let globalSoundInstance: Audio.Sound | null = null;
+let globalAudioUrl: string | null = null;
+
 const formatTime = (millis: number | undefined): string => {
   if (millis === undefined || isNaN(millis)) return '0:00';
   const totalSeconds = Math.max(0, Math.floor(millis / 1000));
@@ -52,10 +55,10 @@ const PlayerScreen = () => {
     title = 'Meditação Desconhecida',
     duration: durationString = '0 min',
     audio_url,
-    image_url // Receber image_url se passado
+    image_url
   } = route.params || {};
 
-  const [sound, setSound] = useState<Audio.Sound | null>(null);
+  // Estado local para status e UI, mas o som em si será gerenciado pela ref global
   const [status, setStatus] = useState<AVPlaybackStatus | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -63,81 +66,145 @@ const PlayerScreen = () => {
   const [seekValue, setSeekValue] = useState(0);
   const [isFavorite, setIsFavorite] = useState(false);
 
+  // Ref para esta instância específica, para limpeza no unmount
+  const soundRef = useRef<Audio.Sound | null>(null);
+
   const isPlaying = status?.isLoaded ? status.isPlaying : false;
   const positionMillis = status?.isLoaded ? status.positionMillis : 0;
   const durationMillis = status?.isLoaded ? status.durationMillis : undefined;
 
-  // Carregar áudio
   useEffect(() => {
     let isMounted = true;
-    const loadSound = async () => {
+
+    const setupAudio = async () => {
       if (!isMounted) return;
       setIsLoading(true);
       setError(null);
+
       if (!audio_url) {
-        setError("URL do áudio não fornecida.");
-        setIsLoading(false);
+        if (isMounted) {
+          setError("URL do áudio não fornecida.");
+          setIsLoading(false);
+        }
         return;
       }
+
       try {
+        // Configurações de áudio
         await Audio.setAudioModeAsync({
           allowsRecordingIOS: false,
-          interruptionModeIOS: InterruptionModeIOS.DoNotMix, // Não misturar com outros áudios
+          interruptionModeIOS: InterruptionModeIOS.DoNotMix,
           playsInSilentModeIOS: true,
           staysActiveInBackground: true,
           interruptionModeAndroid: InterruptionModeAndroid.DoNotMix,
-          shouldDuckAndroid: false, // Não diminuir volume de outros apps
+          shouldDuckAndroid: false,
           playThroughEarpieceAndroid: false,
         });
 
-        console.log('Loading Sound from:', audio_url);
-        const { sound: newSound, status: initialStatus } = await Audio.Sound.createAsync(
-           { uri: audio_url }, 
-           { shouldPlay: false } // Não começar a tocar automaticamente
-        );
+        // Se a URL do áudio for diferente da global ou não houver som global, ou o som global não estiver carregado
+        // Ou se o som global não for o mesmo que o soundRef desta instância (caso de re-navegação para a mesma tela com params diferentes)
+        let needsToLoadNewSound = false;
+        if (globalAudioUrl !== audio_url || !globalSoundInstance) {
+            needsToLoadNewSound = true;
+        } else {
+            const currentGlobalStatus = await globalSoundInstance.getStatusAsync();
+            if (!currentGlobalStatus.isLoaded) {
+                needsToLoadNewSound = true;
+            }
+        }
         
-        if (isMounted) {
-            setSound(newSound);
-            setStatus(initialStatus);
-            newSound.setOnPlaybackStatusUpdate((playbackStatus) => {
-                if (isMounted) {
+        if (needsToLoadNewSound) {
+            // Parar e descarregar o som global anterior, se existir
+            if (globalSoundInstance) {
+                console.log('Stopping and unloading previous global sound instance.');
+                await globalSoundInstance.stopAsync().catch(e => console.warn('Error stopping previous global sound:', e));
+                await globalSoundInstance.unloadAsync().catch(e => console.warn('Error unloading previous global sound:', e));
+                globalSoundInstance = null;
+                globalAudioUrl = null;
+            }
+
+            console.log('Loading new sound globally from:', audio_url);
+            const { sound: newSound, status: initialStatus } = await Audio.Sound.createAsync(
+               { uri: audio_url }, 
+               { shouldPlay: false } // Não tocar automaticamente
+            );
+            
+            if (isMounted) {
+                globalSoundInstance = newSound;
+                globalAudioUrl = audio_url;
+                soundRef.current = newSound; // Atribui à ref local também
+                setStatus(initialStatus);
+                newSound.setOnPlaybackStatusUpdate((playbackStatus) => {
+                    // Atualizar o status apenas se o som atual for o globalSoundInstance
+                    // E se o componente ainda estiver montado
+                    if (isMounted && soundRef.current === globalSoundInstance) {
+                        setStatus(playbackStatus);
+                    }
+                });
+            } else {
+                // Componente desmontado durante o carregamento, descarregar o novo som
+                console.log('Component unmounted during new sound load, unloading.');
+                newSound.unloadAsync().catch(e => console.warn('Error unloading new sound on unmount:', e));
+            }
+        } else if (globalSoundInstance && globalAudioUrl === audio_url) {
+            // Usar a instância global existente se a URL for a mesma
+            console.log('Using existing global sound instance for:', audio_url);
+            soundRef.current = globalSoundInstance;
+            const currentGlobalStatus = await globalSoundInstance.getStatusAsync();
+            if (isMounted) setStatus(currentGlobalStatus);
+            // Reatribuir o callback de status para esta instância, caso tenha sido sobrescrito
+            globalSoundInstance.setOnPlaybackStatusUpdate((playbackStatus) => {
+                if (isMounted && soundRef.current === globalSoundInstance) {
                     setStatus(playbackStatus);
                 }
             });
         }
+
       } catch (e) {
         console.error("Error loading sound:", e);
-        if (isMounted) setError("Erro ao carregar o áudio.");
+        if (isMounted) setError("Erro ao carregar o áudio. Verifique a URL e a conexão.");
       } finally {
         if (isMounted) setIsLoading(false);
       }
     };
 
-    loadSound();
+    setupAudio();
 
     return () => {
       isMounted = false;
-      console.log('Unloading Sound');
-      sound?.unloadAsync();
+      console.log('PlayerScreen cleanup for audio_url:', audio_url);
+      // Não descarregar o som global aqui, pois ele pode ser usado por outra tela do player
+      // A limpeza do som global ocorrerá quando um *novo* som for carregado
+      // ou se precisarmos de uma lógica de parada global ao sair do app.
+      // Apenas removemos o listener desta instância.
+      if (soundRef.current) {
+        soundRef.current.setOnPlaybackStatusUpdate(null);
+      }
+      // Se o som desta instância não for o som global atual (ex: um som antigo que não foi limpo)
+      // E se o som global atual não for o mesmo que o som desta instância (para evitar duplo unload)
+      if (soundRef.current && soundRef.current !== globalSoundInstance) {
+          console.log('Unloading soundRef as it is not the global instance');
+          soundRef.current.unloadAsync().catch(e => console.warn('Cleanup: Error unloading non-global soundRef:', e));
+      }
+      soundRef.current = null; // Limpa a ref local
     };
-  }, [audio_url]);
+  }, [audio_url]); // Re-executa quando audio_url muda
 
-  // Controles
   const handlePlayPause = async () => {
-    if (!sound || !status?.isLoaded) return;
+    if (!soundRef.current || !status?.isLoaded) return;
     try {
       if (isPlaying) {
-        await sound.pauseAsync();
+        await soundRef.current.pauseAsync();
       } else {
         if (status.didJustFinish) {
-          await sound.replayAsync();
+          await soundRef.current.replayAsync(); // ou setPositionAsync(0) e depois playAsync()
         } else {
-          await sound.playAsync();
+          await soundRef.current.playAsync();
         }
       }
     } catch (e) {
         console.error("Error playing/pausing sound:", e);
-        setError("Erro ao reproduzir/pausar.");
+        if (isMounted) setError("Erro ao reproduzir/pausar.");
     }
   };
 
@@ -150,37 +217,35 @@ const PlayerScreen = () => {
   };
 
   const handleSeekEnd = async (value: number) => {
-    if (!sound || !durationMillis || !status?.isLoaded) return;
+    if (!soundRef.current || !durationMillis || !status?.isLoaded) return;
     const seekPosition = value * durationMillis;
     try {
-        await sound.setPositionAsync(seekPosition);
+        await soundRef.current.setPositionAsync(seekPosition);
     } catch (e) {
         console.error("Error seeking sound:", e);
-        setError("Erro ao buscar posição.");
+        if (isMounted) setError("Erro ao buscar posição.");
     } finally {
         setIsSeeking(false);
     }
   };
 
   const handleSkip = async (seconds: number) => {
-      if (!sound || !status?.isLoaded || !durationMillis) return;
+      if (!soundRef.current || !status?.isLoaded || !durationMillis) return;
       const newPosition = Math.max(0, Math.min(durationMillis, positionMillis + (seconds * 1000)));
       try {
-          await sound.setPositionAsync(newPosition);
+          await soundRef.current.setPositionAsync(newPosition);
       } catch (e) {
           console.error("Error skipping sound:", e);
-          setError("Erro ao avançar/retroceder.");
+          if (isMounted) setError("Erro ao avançar/retroceder.");
       }
   };
 
-  const sliderValue = durationMillis ? positionMillis / durationMillis : 0;
+  const sliderValue = durationMillis && durationMillis > 0 ? positionMillis / durationMillis : 0;
   const displayValue = isSeeking ? seekValue : sliderValue;
 
   return (
     <View style={styles.container}>
       <StatusBar style="light" />
-
-      {/* Cabeçalho */}
       <View style={styles.header}>
         <TouchableOpacity style={styles.headerButton} onPress={() => navigation.goBack()}>
           <Ionicons name="chevron-down" size={28} color={COLORS.textSecondary} />
@@ -191,7 +256,6 @@ const PlayerScreen = () => {
         </TouchableOpacity>
       </View>
 
-      {/* Visualização */}
       <View style={styles.visualizationContainer}>
         <View style={styles.visualization}>
           {image_url ? (
@@ -202,7 +266,6 @@ const PlayerScreen = () => {
         </View>
       </View>
 
-      {/* Informações */}
       <View style={styles.meditationInfo}>
         <Text style={styles.meditationTitle} numberOfLines={1}>{title}</Text>
         <Text style={styles.meditationSubtitle}>
@@ -210,7 +273,6 @@ const PlayerScreen = () => {
         </Text>
       </View>
 
-      {/* Barra de Progresso */}
       <View style={styles.progressContainer}>
         <Slider
           style={styles.progressSlider}
@@ -223,7 +285,7 @@ const PlayerScreen = () => {
           onSlidingStart={handleSeekStart}
           onValueChange={handleSeekChange}
           onSlidingComplete={handleSeekEnd}
-          disabled={!status?.isLoaded || isLoading || error}
+          disabled={!status?.isLoaded || isLoading || !!error}
         />
         <View style={styles.timeInfo}>
           <Text style={styles.timeText}>{formatTime(positionMillis)}</Text>
@@ -231,41 +293,30 @@ const PlayerScreen = () => {
         </View>
       </View>
 
-      {/* Controles Principais */}
       {isLoading ? (
         <ActivityIndicator size="large" color={COLORS.textPrimary} style={styles.controlsPlaceholder} />
       ) : error ? (
          <Text style={[styles.errorText, styles.controlsPlaceholder]}>{error}</Text>
       ) : (
         <View style={styles.controls}>
-          {/* Botão Shuffle (desabilitado) */}
           <TouchableOpacity style={styles.controlButtonSmall} disabled>
             <Ionicons name="shuffle" size={24} color={COLORS.textTertiary} />
           </TouchableOpacity>
-          
-          {/* Retroceder 15s */}
           <TouchableOpacity style={styles.controlButton} onPress={() => handleSkip(-15)} disabled={!status?.isLoaded}>
             <MaterialCommunityIcons name="rewind-15" size={32} color={COLORS.textSecondary} />
           </TouchableOpacity>
-          
-          {/* Play/Pause */}
           <TouchableOpacity style={styles.playPauseButton} onPress={handlePlayPause} disabled={!status?.isLoaded}>
             <Ionicons name={isPlaying ? 'pause' : 'play'} size={36} color={COLORS.textPrimary} style={isPlaying ? {} : styles.playIconOffset} />
           </TouchableOpacity>
-          
-          {/* Avançar 15s */}
           <TouchableOpacity style={styles.controlButton} onPress={() => handleSkip(15)} disabled={!status?.isLoaded}>
             <MaterialCommunityIcons name="fast-forward-15" size={32} color={COLORS.textSecondary} />
           </TouchableOpacity>
-          
-          {/* Botão Repeat (desabilitado) */}
           <TouchableOpacity style={styles.controlButtonSmall} disabled>
             <Ionicons name="repeat" size={24} color={COLORS.textTertiary} />
           </TouchableOpacity>
         </View>
       )}
 
-      {/* Controles Adicionais (Simplificado) */}
       <View style={styles.additionalControls}>
         <TouchableOpacity style={styles.additionalButton} onPress={() => setIsFavorite(!isFavorite)}>
           <Ionicons name={isFavorite ? "heart" : "heart-outline"} size={26} color={isFavorite ? COLORS.accentTertiary : COLORS.textTertiary} />
@@ -284,13 +335,12 @@ const PlayerScreen = () => {
   );
 };
 
-// --- Estilos Refinados ---
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.backgroundPrimary,
     paddingHorizontal: 25,
-    paddingBottom: Platform.OS === 'ios' ? 30 : 20, // Padding inferior
+    paddingBottom: Platform.OS === 'ios' ? 30 : 20,
     justifyContent: 'space-between',
   },
   header: {
@@ -300,7 +350,7 @@ const styles = StyleSheet.create({
     marginTop: Platform.OS === 'ios' ? 55 : 45,
   },
   headerButton: {
-    padding: 8, // Área de toque
+    padding: 8,
   },
   headerTitle: {
     fontFamily: FONTS.bodyMedium,
@@ -312,17 +362,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginVertical: 25,
-    paddingHorizontal: 10, // Evitar que a imagem toque as bordas
+    paddingHorizontal: 10,
   },
   visualization: {
     width: '100%',
     aspectRatio: 1,
     backgroundColor: COLORS.backgroundSecondary,
-    borderRadius: 30, // Mais arredondado
+    borderRadius: 30,
     justifyContent: 'center',
     alignItems: 'center',
     overflow: 'hidden',
-    // Sombra sutil
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.2,
@@ -339,7 +388,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   meditationTitle: {
-    fontFamily: FONTS.titleMedium, // Usar fonte de título
+    fontFamily: FONTS.titleMedium,
     fontSize: 24,
     color: COLORS.textPrimary,
     marginBottom: 8,
@@ -369,7 +418,7 @@ const styles = StyleSheet.create({
     color: COLORS.textTertiary,
   },
   controlsPlaceholder: {
-      height: 80, // Altura aproximada dos controles
+      height: 80, 
       justifyContent: 'center',
       alignItems: 'center',
       marginBottom: 30,
@@ -386,7 +435,7 @@ const styles = StyleSheet.create({
   },
   controlButtonSmall: {
       padding: 10,
-      opacity: 0.6, // Desabilitado
+      opacity: 0.6, 
   },
   playPauseButton: {
     width: 75,
@@ -395,7 +444,6 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.accentPrimary,
     justifyContent: 'center',
     alignItems: 'center',
-    // Sombra
     shadowColor: COLORS.accentPrimary,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.4,
@@ -403,7 +451,7 @@ const styles = StyleSheet.create({
     elevation: 6,
   },
   playIconOffset: {
-      marginLeft: 4, // Ajuste visual do ícone play
+      marginLeft: 4, 
   },
   additionalControls: {
     flexDirection: 'row',
@@ -414,7 +462,7 @@ const styles = StyleSheet.create({
   },
   additionalButton: {
     padding: 10,
-    opacity: 0.7, // Levemente desabilitado por padrão
+    opacity: 0.7, 
   },
   errorText: {
       fontFamily: FONTS.body,
