@@ -33,16 +33,19 @@ Antes de começar, certifique-se de que você tem o seguinte instalado:
 
 Abra seu terminal e execute os comandos abaixo para ter o projeto rodando.
 
-```bash
 # 1) Clone o repositório
-git clone <URL-DO-REPO> astro-bomba
-
+```bash
+git clone https://github.com/Carluxxo/AstroRhythm.git
+```
 # 2) Navegue até a pasta do projeto
-cd astro-bomba
+```bash
+cd AstroRhythm
+```
 
 # 3) Instale as dependências
+```bash
 npm install
-````
+```
 
 ---
 
@@ -74,18 +77,18 @@ O objetivo deste fluxo é usar IAs para **editar e modificar** o código de form
 
    Copie e cole o texto abaixo na sua conversa com o ChatGPT. No final, adicione sua descrição detalhada das alterações.
 
-   ```text
-   Você se tornou um especialista em criação de prompts. Eu irei enviar um texto e você deve retornar em parágrafos: uma versão mais clara em português e outra em inglês, para que eu possa enviar a outra IA para editar o código.
+```text
+Você se tornou um especialista em criação de prompts. Eu irei enviar um texto e você deve retornar dois parágrafos: uma versão mais clara em português e outra em inglês, para que eu possa enviar a outra IA para editar o código.
 
-   Primeiro prompt: Ao processar, leia todos os arquivos da pasta design_guidelines para adquirir conhecimento. Não execute o código; sempre apenas edite sem remover nada. Não responda esta mensagem, apenas absorva o conhecimento.
+Instrução permanente: Antes de processar qualquer texto, leia todos os arquivos da pasta design_guidelines para adquirir conhecimento. Não execute o código; apenas analise e edite sem remover nada. Não responda a esta mensagem; apenas absorva o conteúdo.
 
-   Prompt: [Descreva aqui as alterações de UI / componentes que deseja — ex: "Ajustar espaçamento do header na tela Dashboard, trocar fonte para semibold, e corrigir overflow horizontal no componente MiniPlayer"]
-   ```
+Prompt:
+```
 
 2. **Use a versão em inglês no Gemini CLI**:
 
    * Instale o [Gemini CLI](https://github.com/google-gemini/gemini-cli) e siga as instruções para autenticação.
-   * Navegue até a raiz do seu projeto `astro-bomba`.
+   * Navegue até a raiz do seu projeto `AstroRhythm`.
 
    ```bash
    gemini
@@ -99,115 +102,77 @@ O objetivo deste fluxo é usar IAs para **editar e modificar** o código de form
 
 ### 📁 Estrutura Completa do Projeto
 
-Para ajudar na navegação, aqui está a estrutura completa do repositório, com a opção de expandir e recolher cada pasta.
-
 <details>
 <summary>📂 Astro Bomba</summary>
 
-<details>
-<summary>📂 assets</summary>
-<!-- Coloque aqui uma descrição ou lista de arquivos comuns em assets, se houver -->
-</details>
+```
+📂 Astro Bomba
+├─📂 assets
+├─📂 moon_phases
+│  └─📂 blue_moon
+│     ├─📄 first_quarter.png
+│     ├─📄 full_moon.png
+│     ├─📄 new_moon.png
+│     ├─📄 third_quarter.png
+│     ├─📄 waning_crescent.png
+│     ├─📄 waning_gibbous.png
+│     ├─📄 waxing_crescent.png
+│     └─📄 waxing_gibbous.png
+├─📄 adaptive-icon.png
+├─📄 favicon.png
+├─📄 icon.png
+├─📄 splash-icon.png
+├─📂 design_guidelines
+│  ├─📄 animations_transitions.md
+│  ├─📄 color_palette.md
+│  ├─📄 responsive_layout.md
+│  ├─📄 typography.md
+│  └─📄 ui_component_improvements.md
+├─📂 src
+│  ├─📂 components
+│  │  ├─📄 ApodModal.tsx
+│  │  ├─📄 CustomBottomNavbar.tsx
+│  │  ├─📄 EventModal.tsx
+│  │  ├─📄 MiniPlayer.tsx
+│  │  └─📄 MoonPhaseModal.tsx
+│  ├─📂 contexts
+│  │  └─📄 PlayerContext.tsx
+│  ├─📂 data
+│  │  ├─📄 astronomical_events.json
+│  │  ├─📄 meditations.json
+│  │  └─📄 moon_phases.json
+│  ├─📂 navigation
+│  │  ├─📄 AppNavigator.tsx
+│  │  └─📄 types.ts
+│  ├─📂 screens
+│  │  ├─📄 CalendarScreen.tsx
+│  │  ├─📄 DashboardScreen.tsx
+│  │  ├─📄 LibraryScreen.tsx
+│  │  ├─📄 LuaScreen.tsx
+│  │  ├─📄 OnboardingScreen.tsx
+│  │  ├─📄 PlayerScreen.tsx
+│  │  └─📄 ProfileScreen.tsx
+│  ├─📂 services
+│  │  └─📄 apodService.ts
+│  └─📂 utils
+│     └─📄 svg.d.ts
+├─📄 aaaaaaaaaaaaaaa.html
+├─📄 app.json
+├─📄 App.tsx
+├─📄 index.ts
+├─📄 metro.config.js
+├─📄 package-lock.json
+├─📄 package.json
+├─📄 README.md
+├─📄 todo.md
+└─📄 tsconfig.json
+```
 
-<details>
-<summary>📂 moon_phases</summary>
-<details>
-<summary>📂 blue_moon</summary>
-<p>📄 first_quarter.png</p>
-<p>📄 full_moon.png</p>
-<p>📄 new_moon.png</p>
-<p>📄 third_quarter.png</p>
-<p>📄 waning_crescent.png</p>
-<p>📄 waning_gibbous.png</p>
-<p>📄 waxing_crescent.png</p>
-<p>📄 waxing_gibbous.png</p>
-</details>
-</details>
-
-<p>📄 adaptive-icon.png</p>
-<p>📄 favicon.png</p>
-<p>📄 icon.png</p>
-<p>📄 splash-icon.png</p>
-
-<details>
-<summary>📂 design_guidelines</summary>
-<p>📄 animations_transitions.md</p>
-<p>📄 color_palette.md</p>
-<p>📄 responsive_layout.md</p>
-<p>📄 typography.md</p>
-<p>📄 ui_component_improvements.md</p>
-</details>
-
-<details>
-<summary>📂 src</summary>
-
-<details>
-<summary>📂 components</summary>
-<p>📄 ApodModal.tsx</p>
-<p>📄 CustomBottomNavbar.tsx</p>
-<p>📄 EventModal.tsx</p>
-<p>📄 MiniPlayer.tsx</p>
-<p>📄 MoonPhaseModal.tsx</p>
-</details>
-
-<details>
-<summary>📂 contexts</summary>
-<p>📄 PlayerContext.tsx</p>
-</details>
-
-<details>
-<summary>📂 data</summary>
-<p>📄 astronomical_events.json</p>
-<p>📄 meditations.json</p>
-<p>📄 moon_phases.json</p>
-</details>
-
-<details>
-<summary>📂 navigation</summary>
-<p>📄 AppNavigator.tsx</p>
-<p>📄 types.ts</p>
-</details>
-
-<details>
-<summary>📂 screens</summary>
-<p>📄 CalendarScreen.tsx</p>
-<p>📄 DashboardScreen.tsx</p>
-<p>📄 LibraryScreen.tsx</p>
-<p>📄 LuaScreen.tsx</p>
-<p>📄 OnboardingScreen.tsx</p>
-<p>📄 PlayerScreen.tsx</p>
-<p>📄 ProfileScreen.tsx</p>
-</details>
-
-<details>
-<summary>📂 services</summary>
-<p>📄 apodService.ts</p>
-</details>
-
-<details>
-<summary>📂 utils</summary>
-<p>📄 svg.d.ts</p>
-</details>
-
-<p>📄 aaaaaaaaaaaaaaa.html</p>
-<p>📄 app.json</p>
-<p>📄 App.tsx</p>
-<p>📄 index.ts</p>
-<p>📄 metro.config.js</p>
-<p>📄 package-lock.json</p>
-<p>📄 package.json</p>
-<p>📄 README.md</p>
-<p>📄 todo.md</p>
-<p>📄 tsconfig.json</p>
-
-</details>
 </details>
 
 ---
 
 ### ✅ Boas Práticas e Checklist
-
-Antes de commitar as alterações sugeridas pela IA, é crucial seguir este checklist para garantir a qualidade e estabilidade do código:
 
 * **Revise o código**: Use `git diff` para inspecionar todas as mudanças.
 * **Teste o aplicativo**: Execute a tela afetada manualmente no Expo Go.
@@ -229,7 +194,3 @@ Antes de commitar as alterações sugeridas pela IA, é crucial seguir este chec
 
 * Mantenha a pasta `design_guidelines` sempre atualizada. Ela é a base de conhecimento para a IA.
 * Siga o fluxo de trabalho para otimizar o desenvolvimento e focar em problemas de design e arquitetura, deixando as edições repetitivas para a automação.
-
-
-Quer que eu faça isso?
-```
