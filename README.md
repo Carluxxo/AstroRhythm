@@ -25,6 +25,9 @@ Antes de começar, certifique-se de que você tem o seguinte instalado:
   * **Git**: Essencial para clonar o repositório.
   * **Expo Go**: Baixe e instale este aplicativo no seu celular (Android ou iOS) para rodar e testar o app.
 
+> [\!NOTE]
+> Este guia assume que você tem um conhecimento básico de comandos de terminal.
+
 -----
 
 ### 🛠️ Instalação Rápida
@@ -57,6 +60,9 @@ Ao executar o comando, um **QR code** aparecerá no seu terminal. Use a câmera 
   * **Emulador Android**: Pressione a tecla `a` no terminal.
   * **Emulador iOS (macOS)**: Pressione a tecla `i`.
   * **Limpar cache**: Se encontrar problemas, use `npx expo start --clear`.
+
+> [\!TIP]
+> Se o aplicativo não carregar, tente reiniciar o Expo com a flag `--clear` para limpar o cache do Metro Bundler.
 
 -----
 
@@ -92,6 +98,9 @@ O objetivo deste fluxo é usar IAs para **editar e modificar** o código de form
 
 A IA irá analisar o contexto do projeto, especialmente a pasta `design_guidelines`, e aplicar as modificações no código.
 
+> [\!IMPORTANT]
+> A IA é uma ferramenta para auxiliar na edição e modificação de código existente, não para substituir a criação de novos arquivos ou a execução de código.
+
 -----
 
 ### 📁 Estrutura Completa do Projeto
@@ -99,17 +108,17 @@ A IA irá analisar o contexto do projeto, especialmente a pasta `design_guidelin
 Para ajudar na navegação, aqui está a estrutura completa do repositório, com a opção de expandir e recolher cada pasta.
 
 \<details\>
-\<summary\>📂 Astro Bomba\</summary\>
+\<summary\>📂 **Astro Bomba**\</summary\>
 
 \<details\>
-\<summary\>📂 assets\</summary\>
-\<\!-- Arquivos dentro de assets (se houver, adicione aqui) --\>
+\<summary\>📂 **assets**\</summary\>
+\<\!-- Coloque aqui uma descrição ou lista de arquivos comuns em assets, se houver --\>
 \</details\>
 
 \<details\>
-\<summary\>📂 moon\_phases\</summary\>
+\<summary\>📂 **moon\_phases**\</summary\>
 \<details\>
-\<summary\>📂 blue\_moon\</summary\>
+\<summary\>📂 **blue\_moon**\</summary\>
 \<p\>📄 first\_quarter.png\</p\>
 \<p\>📄 full\_moon.png\</p\>
 \<p\>📄 new\_moon.png\</p\>
@@ -127,7 +136,7 @@ Para ajudar na navegação, aqui está a estrutura completa do repositório, com
 \<p\>📄 splash-icon.png\</p\>
 
 \<details\>
-\<summary\>📂 design\_guidelines\</summary\>
+\<summary\>📂 **design\_guidelines**\</summary\>
 \<p\>📄 animations\_transitions.md\</p\>
 \<p\>📄 color\_palette.md\</p\>
 \<p\>📄 responsive\_layout.md\</p\>
@@ -136,9 +145,9 @@ Para ajudar na navegação, aqui está a estrutura completa do repositório, com
 \</details\>
 
 \<details\>
-\<summary\>📂 src\</summary\>
+\<summary\>📂 **src**\</summary\>
 \<details\>
-\<summary\>📂 components\</summary\>
+\<summary\>📂 **components**\</summary\>
 \<p\>📄 ApodModal.tsx\</p\>
 \<p\>📄 CustomBottomNavbar.tsx\</p\>
 \<p\>📄 EventModal.tsx\</p\>
@@ -146,22 +155,22 @@ Para ajudar na navegação, aqui está a estrutura completa do repositório, com
 \<p\>📄 MoonPhaseModal.tsx\</p\>
 \</details\>
 \<details\>
-\<summary\>📂 contexts\</summary\>
+\<summary\>📂 **contexts**\</summary\>
 \<p\>📄 PlayerContext.tsx\</p\>
 \</details\>
 \<details\>
-\<summary\>📂 data\</summary\>
+\<summary\>📂 **data**\</summary\>
 \<p\>📄 astronomical\_events.json\</p\>
 \<p\>📄 meditations.json\</p\>
 \<p\>📄 moon\_phases.json\</p\>
 \</details\>
 \<details\>
-\<summary\>📂 navigation\</summary\>
+\<summary\>📂 **navigation**\</summary\>
 \<p\>📄 AppNavigator.tsx\</p\>
 \<p\>📄 types.ts\</p\>
 \</details\>
 \<details\>
-\<summary\>📂 screens\</summary\>
+\<summary\>📂 **screens**\</summary\>
 \<p\>📄 CalendarScreen.tsx\</p\>
 \<p\>📄 DashboardScreen.tsx\</p\>
 \<p\>📄 LibraryScreen.tsx\</p\>
@@ -171,11 +180,11 @@ Para ajudar na navegação, aqui está a estrutura completa do repositório, com
 \<p\>📄 ProfileScreen.tsx\</p\>
 \</details\>
 \<details\>
-\<summary\>📂 services\</summary\>
+\<summary\>📂 **services**\</summary\>
 \<p\>📄 apodService.ts\</p\>
 \</details\>
 \<details\>
-\<summary\>📂 utils\</summary\>
+\<summary\>📂 **utils**\</summary\>
 \<p\>📄 svg.d.ts\</p\>
 \</details\>
 \</details\>
@@ -210,7 +219,9 @@ Antes de commitar as alterações sugeridas pela IA, é crucial seguir este chec
 
   * **Sempre revise o código** gerado pela IA antes de aceitar.
   * **Nunca compartilhe segredos** ou chaves de API nos prompts. Use variáveis de ambiente.
-  * **Verifique se a IA não removeu arquivos** ou partes críticas do código. O prompt mestre instrui a IA a não remover nada, mas a revisão humana é essencial.
+
+> [\!CAUTION]
+> Verifique se a IA não removeu arquivos ou partes críticas do código. O prompt mestre instrui a IA a não remover nada, mas a revisão humana é essencial para evitar resultados indesejados.
 
 -----
 
