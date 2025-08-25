@@ -1,95 +1,220 @@
-# AstroRhythm - Instruções de Instalação e Execução
+# 🚀 Astro Rhythm — Guia de Instalação, Fluxo de Trabalho e Automação com Gemini
 
-Este documento fornece as instruções necessárias para configurar e executar o projeto AstroRhythm em seu ambiente de desenvolvimento.
+Bem-vindo ao **Astro Rhythm**\! Este guia foi feito para te ajudar a configurar o projeto e a usar um fluxo de trabalho avançado com IAs, utilizando o Gemini CLI para editar e modificar o código de forma eficiente.
 
-## Pré-requisitos
+-----
 
-Antes de começar, certifique-se de ter o seguinte instalado em seu sistema:
+### 📚 Sumário
 
-- **Node.js**: Versão LTS recomendada (inclui npm). Você pode baixar em [nodejs.org](https://nodejs.org/).
-- **Expo CLI**: Interface de linha de comando para projetos Expo. Instale globalmente via npm:
-  ```bash
-  npm install -g expo-cli
-  ```
-- **Git**: Para clonar o repositório (se você estiver obtendo o código de um repositório Git).
-- **Um emulador Android ou iOS configurado**, ou um dispositivo físico para testar o aplicativo.
+  * [🔧 Pré-requisitos](https://www.google.com/search?q=%23-pr%25C3%25A9-requisitos)
+  * [🛠️ Instalação Rápida](https://www.google.com/search?q=%23%25EF%25B8%258F-instala%25C3%25A7%25C3%25A3o-r%25C3%25A1pida)
+  * [▶️ Rodando o Projeto (Expo)](https://www.google.com/search?q=%23%25EF%25B8%258F-rodando-o-projeto-expo)
+  * [✨ Fluxo de Trabalho com IA](https://www.google.com/search?q=%23%25EF%25B8%258F-fluxo-de-trabalho-com-ia)
+  * [📁 Estrutura Completa do Projeto](https://www.google.com/search?q=%23-estrutura-completa-do-projeto)
+  * [✅ Boas Práticas e Checklist](https://www.google.com/search?q=%23%25E2%259C%2585-boas-pr%25C3%25A1ticas-e-checklist)
+  * [🔐 Segurança e Responsabilidade](https://www.google.com/search?q=%23-seguran%25C3%25A7a-e-responsabilidade)
+  * [📌 Observações Finais](https://www.google.com/search?q=%23-observa%25C3%25A7%25C3%25B5es-finais)
 
-## Configuração do Projeto
+-----
 
-1.  **Descompacte o Código-Fonte:**
-    Se você recebeu o projeto como um arquivo `.tar.gz` (por exemplo, `AstroRhythm_corrigido.tar.gz`), descompacte-o em um diretório de sua escolha.
-    ```bash
-    tar -xzf AstroRhythm_corrigido.tar.gz -C /caminho/para/seu/diretorio_de_projetos
-    cd /caminho/para/seu/diretorio_de_projetos/Astro_v2 
-    ```
-    (Ajuste o nome do arquivo e o caminho conforme necessário. O diretório interno no .tar pode ser `Astro_v2` ou similar, dependendo de como foi compactado.)
+### 🔧 Pré-requisitos
 
-2.  **Instale as Dependências:**
-    Navegue até o diretório raiz do projeto (onde o arquivo `package.json` está localizado) e execute o seguinte comando para instalar todas as dependências necessárias:
-    ```bash
-    npm install
-    ```
-    Este comando lerá o arquivo `package.json` e baixará todas as bibliotecas listadas nas seções `dependencies` e `devDependencies`.
+Antes de começar, certifique-se de que você tem o seguinte instalado:
 
-## Executando o Aplicativo
+  * **Node.js**: A versão LTS é recomendada e já vem com `npm` e `npx`.
+  * **Git**: Essencial para clonar o repositório.
+  * **Expo Go**: Baixe e instale este aplicativo no seu celular (Android ou iOS) para rodar e testar o app.
 
-Após a instalação bem-sucedida das dependências, você pode iniciar o servidor de desenvolvimento do Expo com o seguinte comando:
+-----
+
+### 🛠️ Instalação Rápida
+
+Abra seu terminal e execute os comandos abaixo para ter o projeto rodando.
+
+````bash
+# 1) Clone o repositório
+git clone <URL-DO-REPO> astro-bomba
+```bash
+# 2) Navegue até a pasta do projeto
+cd astro-bomba
+```bash
+# 3) Instale as dependências
+npm install
+````
+
+-----
+
+### ▶️ Rodando o Projeto (Expo)
+
+Com as dependências instaladas, o próximo passo é iniciar o servidor de desenvolvimento do Expo.
 
 ```bash
 npx expo start
 ```
 
-Este comando iniciará o Metro Bundler e exibirá um QR code no terminal. Você pode então:
+Ao executar o comando, um **QR code** aparecerá no seu terminal. Use a câmera do seu celular para escaneá-lo e o aplicativo será aberto no **Expo Go**.
 
--   **No Android:**
-    -   Abra o aplicativo Expo Go em seu dispositivo Android (disponível na Play Store).
-    -   Escaneie o QR code exibido no terminal.
-    -   Alternativamente, se estiver usando um emulador Android, você pode pressionar `a` no terminal onde o Expo está rodando.
+  * **Emulador Android**: Pressione a tecla `a` no terminal.
+  * **Emulador iOS (macOS)**: Pressione a tecla `i`.
+  * **Limpar cache**: Se encontrar problemas, use `npx expo start --clear`.
 
--   **No iOS:**
-    -   Abra o aplicativo Câmera em seu dispositivo iOS e escaneie o QR code.
-    -   O Expo Go será aberto (se não estiver instalado, você será solicitado a instalá-lo pela App Store).
-    -   Alternativamente, se estiver usando um simulador iOS, você pode pressionar `i` no terminal onde o Expo está rodando.
+-----
 
--   **Na Web (para desenvolvimento e testes rápidos, algumas funcionalidades nativas podem não funcionar perfeitamente):**
-    -   Pressione `w` no terminal onde o Expo está rodando.
+### ✨ Fluxo de Trabalho com IA
 
-## Solução de Problemas Comuns
+O objetivo deste fluxo é usar IAs para **editar e modificar** o código de forma eficiente. Em vez de escrever o código do zero, você descreve as alterações desejadas e a IA as aplica diretamente.
 
--   **Erro de Cache do Metro Bundler:**
-    Se encontrar problemas estranhos, tente limpar o cache do Metro Bundler:
-    ```bash
-    npx expo start --clear
+#### **Fluxo de Prompts: ChatGPT → Gemini CLI**
+
+1.  **Crie o prompt mestre para o ChatGPT**:
+    Copie e cole o texto abaixo na sua conversa com o ChatGPT. No final, adicione sua descrição detalhada das alterações.
+
+    ```
+    Você se tornou um especialista em criação de prompts. Eu irei enviar um texto e você deve retornar em parágrafos: uma versão mais clara em português e outra em inglês, para que eu possa enviar a outra IA para editar o código.
+
+    Primeiro prompt: Ao processar, leia todos os arquivos da pasta design_guidelines para adquirir conhecimento. Não execute o código; sempre apenas edite sem remover nada. Não responda esta mensagem, apenas absorva o conhecimento.
+
+    Prompt: [Descreva aqui as alterações de UI / componentes que deseja — ex: "Ajustar espaçamento do header na tela Dashboard, trocar fonte para semibold, e corrigir overflow horizontal no componente MiniPlayer"]
     ```
 
--   **Problemas com `node_modules` ou `package-lock.json`:**
-    Se suspeitar de problemas com as dependências, você pode tentar remover a pasta `node_modules` e o arquivo `package-lock.json` (ou `yarn.lock` se estiver usando Yarn) e reinstalar:
+2.  **Use a versão em inglês no Gemini CLI**:
+
+      * Instale o [Gemini CLI](https://github.com/google-gemini/gemini-cli) e siga as instruções para autenticação.
+      * Navegue até a raiz do seu projeto `astro-bomba`.
+
+    <!-- end list -->
+
     ```bash
-    rm -rf node_modules package-lock.json 
-npm install
+    gemini
     ```
 
--   **Verifique a Versão do Expo CLI:**
-    Certifique-se de que sua `expo-cli` está atualizada:
-    ```bash
-    npm install -g expo-cli
-    ```
+      * Copie e cole a versão em inglês do prompt (gerada pelo ChatGPT) diretamente no Gemini CLI.
 
-## Estrutura do Projeto (Visão Geral)
+A IA irá analisar o contexto do projeto, especialmente a pasta `design_guidelines`, e aplicar as modificações no código.
 
--   `/src`: Contém todo o código-fonte principal do aplicativo.
-    -   `/assets`: Fontes, imagens e outros ativos estáticos.
-    -   `/components`: Componentes reutilizáveis da UI.
-    -   `/contexts`: Contextos React para gerenciamento de estado global (ex: PlayerContext).
-    -   `/data`: Arquivos JSON com dados mock/estáticos (meditações, eventos).
-    -   `/navigation`: Configuração da navegação (React Navigation).
-    -   `/screens`: Componentes de tela principais do aplicativo.
-    -   `/services`: Lógica para interagir com APIs externas (ex: APOD, tradução).
-    -   `/styles`: Estilos globais ou temas (se aplicável).
-    -   `/utils`: Funções utilitárias.
--   `App.tsx`: Ponto de entrada principal do aplicativo.
--   `package.json`: Lista as dependências do projeto e scripts.
--   `tsconfig.json`: Configurações do compilador TypeScript.
+-----
 
-Se precisar de mais assistência, não hesite em perguntar!
+### 📁 Estrutura Completa do Projeto
 
+Para ajudar na navegação, aqui está a estrutura completa do repositório, com a opção de expandir e recolher cada pasta.
+
+\<details\>
+\<summary\>📂 Astro Bomba\</summary\>
+
+\<details\>
+\<summary\>📂 assets\</summary\>
+\<\!-- Arquivos dentro de assets (se houver, adicione aqui) --\>
+\</details\>
+
+\<details\>
+\<summary\>📂 moon\_phases\</summary\>
+\<details\>
+\<summary\>📂 blue\_moon\</summary\>
+\<p\>📄 first\_quarter.png\</p\>
+\<p\>📄 full\_moon.png\</p\>
+\<p\>📄 new\_moon.png\</p\>
+\<p\>📄 third\_quarter.png\</p\>
+\<p\>📄 waning\_crescent.png\</p\>
+\<p\>📄 waning\_gibbous.png\</p\>
+\<p\>📄 waxing\_crescent.png\</p\>
+\<p\>📄 waxing\_gibbous.png\</p\>
+\</details\>
+\</details\>
+
+\<p\>📄 adaptive-icon.png\</p\>
+\<p\>📄 favicon.png\</p\>
+\<p\>📄 icon.png\</p\>
+\<p\>📄 splash-icon.png\</p\>
+
+\<details\>
+\<summary\>📂 design\_guidelines\</summary\>
+\<p\>📄 animations\_transitions.md\</p\>
+\<p\>📄 color\_palette.md\</p\>
+\<p\>📄 responsive\_layout.md\</p\>
+\<p\>📄 typography.md\</p\>
+\<p\>📄 ui\_component\_improvements.md\</p\>
+\</details\>
+
+\<details\>
+\<summary\>📂 src\</summary\>
+\<details\>
+\<summary\>📂 components\</summary\>
+\<p\>📄 ApodModal.tsx\</p\>
+\<p\>📄 CustomBottomNavbar.tsx\</p\>
+\<p\>📄 EventModal.tsx\</p\>
+\<p\>📄 MiniPlayer.tsx\</p\>
+\<p\>📄 MoonPhaseModal.tsx\</p\>
+\</details\>
+\<details\>
+\<summary\>📂 contexts\</summary\>
+\<p\>📄 PlayerContext.tsx\</p\>
+\</details\>
+\<details\>
+\<summary\>📂 data\</summary\>
+\<p\>📄 astronomical\_events.json\</p\>
+\<p\>📄 meditations.json\</p\>
+\<p\>📄 moon\_phases.json\</p\>
+\</details\>
+\<details\>
+\<summary\>📂 navigation\</summary\>
+\<p\>📄 AppNavigator.tsx\</p\>
+\<p\>📄 types.ts\</p\>
+\</details\>
+\<details\>
+\<summary\>📂 screens\</summary\>
+\<p\>📄 CalendarScreen.tsx\</p\>
+\<p\>📄 DashboardScreen.tsx\</p\>
+\<p\>📄 LibraryScreen.tsx\</p\>
+\<p\>📄 LuaScreen.tsx\</p\>
+\<p\>📄 OnboardingScreen.tsx\</p\>
+\<p\>📄 PlayerScreen.tsx\</p\>
+\<p\>📄 ProfileScreen.tsx\</p\>
+\</details\>
+\<details\>
+\<summary\>📂 services\</summary\>
+\<p\>📄 apodService.ts\</p\>
+\</details\>
+\<details\>
+\<summary\>📂 utils\</summary\>
+\<p\>📄 svg.d.ts\</p\>
+\</details\>
+\</details\>
+
+\<p\>📄 aaaaaaaaaaaaaaa.html\</p\>
+\<p\>📄 app.json\</p\>
+\<p\>📄 App.tsx\</p\>
+\<p\>📄 index.ts\</p\>
+\<p\>📄 metro.config.js\</p\>
+\<p\>📄 package-lock.json\</p\>
+\<p\>📄 package.json\</p\>
+\<p\>📄 README.md\</p\>
+\<p\>📄 todo.md\</p\>
+\<p\>📄 tsconfig.json\</p\>
+
+\</details\>
+
+-----
+
+### ✅ Boas Práticas e Checklist
+
+Antes de commitar as alterações sugeridas pela IA, é crucial seguir este checklist para garantir a qualidade e estabilidade do código:
+
+  * **Revise o código**: Use `git diff` para inspecionar todas as mudanças.
+  * **Teste o aplicativo**: Execute a tela afetada manualmente no Expo Go.
+  * **Documente o prompt**: Adicione uma nota no commit ou Pull Request com o prompt usado.
+  * **Faça commits claros**: Use mensagens descritivas como `fix:`, `feat:` ou `chore:`.
+
+-----
+
+### 🔐 Segurança e Responsabilidade
+
+  * **Sempre revise o código** gerado pela IA antes de aceitar.
+  * **Nunca compartilhe segredos** ou chaves de API nos prompts. Use variáveis de ambiente.
+  * **Verifique se a IA não removeu arquivos** ou partes críticas do código. O prompt mestre instrui a IA a não remover nada, mas a revisão humana é essencial.
+
+-----
+
+### 📌 Observações Finais
+
+  * Mantenha a pasta `design_guidelines` sempre atualizada. Ela é a base de conhecimento para a IA.
+  * Siga o fluxo de trabalho para otimizar o desenvolvimento e focar em problemas de design e arquitetura, deixando as edições repetitivas para a automação.
