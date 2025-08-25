@@ -33,16 +33,16 @@ Antes de começar, certifique-se de que você tem o seguinte instalado:
 
 Abra seu terminal e execute os comandos abaixo para ter o projeto rodando.
 
-# 1) Clone o repositório
+## 1) Clone o repositório
 ```bash
 git clone https://github.com/Carluxxo/AstroRhythm.git
 ```
-# 2) Navegue até a pasta do projeto
+## 2) Navegue até a pasta do projeto
 ```bash
 cd AstroRhythm
 ```
 
-# 3) Instale as dependências
+## 3) Instale as dependências
 ```bash
 npm install
 ```
