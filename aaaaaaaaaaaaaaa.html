@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fases da Lua</title>
+<script src="https://cdn.jsdelivr.net/npm/snapsvg@0.5.1/dist/snap.svg-min.js"></script>
+<style>
+  body { background: #010111; color: #fff; font-family: sans-serif; text-align: center; padding: 20px; }
+  .moon-container { display: flex; justify-content: center; flex-wrap: wrap; gap: 40px; margin-bottom: 40px; }
+  .moon-block { display: flex; flex-direction: column; align-items: center; }
+  svg { width: 120px; height: 120px; color: #ccdbef; }
+  .purple svg { color: #8A4FFF; }
+  button { margin-top: 10px; padding: 5px 10px; background: #4b617d; border: none; color: #fff; cursor: pointer; border-radius: 4px; }
+  button:hover { background: #6b81a0; }
+  .phase-label { margin-top: 10px; font-size: 0.9rem; }
+</style>
+</head>
+<body>
+
+<h1>Fases da Lua</h1>
+<div class="moon-container" id="moonContainerBlue"></div>
+<div class="moon-container purple" id="moonContainerPurple"></div>
+
+<script>
+const phases = [
+  {name: "Lua Nova", value: 0, fileName: "new_moon"},
+  {name: "Crescente Côncava", value: 0.125, fileName: "waxing_crescent"},
+  {name: "Quarto Crescente", value: 0.25, fileName: "first_quarter"},
+  {name: "Crescente Gibosa", value: 0.375, fileName: "waxing_gibbous"},
+  {name: "Lua Cheia", value: 0.5, fileName: "full_moon"},
+  {name: "Minguante Gibosa", value: 0.625, fileName: "waning_gibbous"},
+  {name: "Quarto Minguante", value: 0.75, fileName: "third_quarter"},
+  {name: "Minguante Côncava", value: 0.875, fileName: "waning_crescent"}
+];
+
+// ---------- Criação do SVG ----------
+function createMoonSVG(id) {
+  return `
+<svg id="${id}" viewBox="-6 -6 12 12" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="moon-blur-filter"><feGaussianBlur stdDeviation="0.3"></feGaussianBlur></filter>
+    <filter id="moon-inset-shadow">
+      <feOffset dx="0" dy="0"></feOffset>
+      <feGaussianBlur stdDeviation="1" result="offset-blur"></feGaussianBlur>
+      <feComposite operator="out" in="SourceGraphic" in2="offset-blur" result="inverse"></feComposite>
+      <feFlood flood-color="currentColor" flood-opacity="1" result="color"></feFlood>
+      <feComposite operator="in" in="color" in2="inverse" result="shadow"></feComposite>
+      <feComposite operator="over" in="shadow" in2="SourceGraphic"></feComposite>
+    </filter>
+    <filter id="moonNoise" x="-50%" y="-50%" width="200%" height="200%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.7" numOctaves="5" result="noise"/>
+      <feColorMatrix in="noise" type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0.1 0.1 0.1 1 0" result="coloredNoise"/>
+      <feComposite in="SourceGraphic" in2="coloredNoise" operator="in" result="maskedNoise"/>
+      <feBlend in="maskedNoise" in2="SourceGraphic" mode="multiply"/>
+    </filter>
+  </defs>
+  <g><circle r="5" fill="currentColor" filter="url(#moonNoise)"></circle></g>
+</svg>
+  `;
+}
+
+// ---------- Manipulação das fases ----------
+function makeMoonSVG(moon, phase) {
+  moon.select("g").attr({"filter": "url(#moon-inset-shadow)"});
+  if (phase === 0.5) return moon;
+  let phasex, cx, r, r_mask, c_mask, c_mask1, g_mask, g;
+  if (phase <= 0.25 || phase >= 0.75) {
+    phasex = (phase <= 0.25) ? phase : 1 - phase;
+    cx = 18*phasex/(1.01-4*phasex);
+    r = cx + 6/(Math.pow(cx, 1.25)/6+6/5);
+    r_mask = moon.rect(-5, -5, 10, 10).attr({fill: 'white'});
+    c_mask = moon.circle(cx, 0, r).attr({fill: 'black', filter: "url(#moon-blur-filter)"});
+    g_mask = moon.group(r_mask, c_mask);
+    g = moon.select("g"); g.attr({mask: g_mask});
+    if (phase <= 0.25) g.attr({"transform":"scale(-1,1)"});
+  } else {
+    phasex = (phase <= 0.5) ? -phase + 0.5 : phase - 0.5;
+    cx = 18*phasex/(1.01-4*phasex);
+    r = cx + 6/(Math.pow(cx, 1.25)/6+6/6);
+    c_mask = moon.circle(0,0,5).attr({fill:'black'});
+    c_mask1 = moon.circle(cx,0,r).attr({fill:'white', filter:"url(#moon-blur-filter)"});
+    g_mask = moon.group(c_mask,c_mask1);
+    g = moon.select("g"); g.attr({mask:g_mask});
+    if (phase>0.5) g.attr({"transform":"scale(-1,1)"});
+  }
+  return moon;
+}
+
+// ---------- Helpers ----------
+function rgbToHex(rgb){
+  const m = rgb.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/i);
+  if(!m) return null;
+  return `#${parseInt(m[1],10).toString(16).padStart(2,'0')}${parseInt(m[2],10).toString(16).padStart(2,'0')}${parseInt(m[3],10).toString(16).padStart(2,'0')}`;
+}
+function inlineCurrentColor(svgEl, clone){
+  const hex = rgbToHex(getComputedStyle(svgEl).color)||"#fff";
+  clone.querySelectorAll('[fill="currentColor"]').forEach(n=>n.setAttribute('fill',hex));
+  clone.querySelectorAll('feFlood[flood-color="currentColor"]').forEach(n=>n.setAttribute('flood-color',hex));
+}
+function ensureDefs(clone){
+  let defs = clone.querySelector('defs');
+  if(!defs){ defs = document.createElementNS('http://www.w3.org/2000/svg','defs'); clone.insertBefore(defs, clone.firstChild);}
+  return defs;
+}
+function inlineMasks(clone){
+  const defs = ensureDefs(clone);
+  const maskedNodes = clone.querySelectorAll('[mask]');
+  const added = new Set();
+  maskedNodes.forEach(node=>{
+    const val = node.getAttribute('mask');
+    const m = val && val.match(/url\(#([^)]+)\)/);
+    if(!m) return;
+    const maskId = m[1];
+    if(added.has(maskId)) return;
+    const sourceMask = document.getElementById(maskId);
+    if(sourceMask){ defs.appendChild(sourceMask.cloneNode(true)); added.add(maskId);}
+  });
+}
+function addNamespaces(clone){ clone.setAttribute('xmlns','http://www.w3.org/2000/svg'); clone.setAttribute('xmlns:xlink','http://www.w3.org/1999/xlink'); }
+
+// ---------- Download PNG ----------
+function downloadSVGAsPNG(svgEl,fileName,scale=4){
+  const serializer = new XMLSerializer();
+  const source = serializer.serializeToString(svgEl);
+  const blob = new Blob([source],{type:'image/svg+xml;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const img = new Image();
+  img.onload = function(){
+    const canvas = document.createElement('canvas');
+    canvas.width = img.width*scale;
+    canvas.height = img.height*scale;
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.drawImage(img,0,0,canvas.width,canvas.height);
+    canvas.toBlob(function(pngBlob){
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(pngBlob);
+      a.download = fileName+'.png';
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+  };
+  img.src = url;
+}
+
+// ---------- Geração das linhas ----------
+function generateMoonLine(containerId){
+  const container=document.getElementById(containerId);
+  phases.forEach((phaseObj,index)=>{
+    const moonId = containerId+"_moon"+index;
+    const block=document.createElement("div");
+    block.className="moon-block";
+    block.innerHTML = createMoonSVG(moonId)+`<div class="phase-label">${phaseObj.name}</div><button>Baixar PNG</button>`;
+    container.appendChild(block);
+    const moon = Snap("#"+moonId);
+    makeMoonSVG(moon, phaseObj.value);
+    const button = block.querySelector("button");
+    button.addEventListener("click", ()=>{
+      const svgEl=document.getElementById(moonId);
+      const clone=svgEl.cloneNode(true);
+      addNamespaces(clone);
+      ensureDefs(clone);
+      inlineCurrentColor(svgEl,clone);
+      inlineMasks(clone);
+      downloadSVGAsPNG(clone,phaseObj.fileName);
+    });
+  });
+}
+
+// ---------- Executa ----------
+generateMoonLine("moonContainerBlue");
+generateMoonLine("moonContainerPurple");
+</script>
+
+</body>
+</html>

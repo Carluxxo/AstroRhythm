@@ -1,0 +1,832 @@
+[
+  {
+    "id": "1",
+    "day": 2,
+    "month": 1,
+    "year": 2025,
+    "title": "-** Lua, Vênus e Saturno formarão um belo trio celeste no começo da noite, na direção oeste.",
+    "description": "-** Lua, Vênus e Saturno formarão um belo trio celeste no começo da noite, na direção oeste.",
+    "color": "#6b3fa0",
+    "viewing_tips": [
+      "Procure um local com pouca poluição luminosa (afastado da cidade).",
+      "Tenha uma visão clara do horizonte, sem prédios ou árvores altas.",
+      "Use aplicativos (Star Walk 2, Sky Tonight, Stellarium) para localizar os astros.",
+      "Permita que seus olhos se ajustem à escuridão por cerca de 15-20 minutos.",
+      "Planetas como Vênus, Marte, Júpiter e Saturno são geralmente visíveis a olho nu.",
+      "Para Urano e Netuno, binóculos ou telescópios são necessários.",
+      "Consulte um app de astronomia para saber os horários exatos de visibilidade e a posição no céu."
+    ]
+  },
+  {
+    "id": "2",
+    "day": 20,
+    "month": 1,
+    "year": 2025,
+    "title": "-** Conjunção entre Vênus e Saturno no começo da noite, direção oeste, na constelação de Aquário.",
+    "description": "-** Conjunção entre Vênus e Saturno no começo da noite, direção oeste, na constelação de Aquário.",
+    "color": "#6b3fa0",
+    "viewing_tips": [
+      "Procure um local com pouca poluição luminosa (afastado da cidade).",
+      "Tenha uma visão clara do horizonte, sem prédios ou árvores altas.",
+      "Use aplicativos (Star Walk 2, Sky Tonight, Stellarium) para localizar os astros.",
+      "Permita que seus olhos se ajustem à escuridão por cerca de 15-20 minutos.",
+      "Planetas como Vênus, Marte, Júpiter e Saturno são geralmente visíveis a olho nu.",
+      "Para Urano e Netuno, binóculos ou telescópios são necessários.",
+      "Consulte um app de astronomia para saber os horários exatos de visibilidade e a posição no céu."
+    ]
+  },
+  {
+    "id": "3",
+    "day": 31,
+    "month": 1,
+    "year": 2025,
+    "title": "-** Lua, Vênus e Saturno formarão um belo trio celeste no começo da noite, direção oeste",
+    "description": "-** Lua, Vênus e Saturno formarão um belo trio celeste no começo da noite, direção oeste",
+    "color": "#6b3fa0",
+    "viewing_tips": [
+      "Procure um local com pouca poluição luminosa (afastado da cidade).",
+      "Tenha uma visão clara do horizonte, sem prédios ou árvores altas.",
+      "Use aplicativos (Star Walk 2, Sky Tonight, Stellarium) para localizar os astros.",
+      "Permita que seus olhos se ajustem à escuridão por cerca de 15-20 minutos.",
+      "Planetas como Vênus, Marte, Júpiter e Saturno são geralmente visíveis a olho nu.",
+      "Para Urano e Netuno, binóculos ou telescópios são necessários.",
+      "Consulte um app de astronomia para saber os horários exatos de visibilidade e a posição no céu."
+    ]
+  },
+  {
+    "id": "4",
+    "day": 5,
+    "month": 3,
+    "year": 2025,
+    "title": "- Conjunção entre Vênus e Mercúrio durante o crepúsculo, direção oeste. Os astros estão muito próximos ao horizonte.",
+    "description": "- Conjunção entre Vênus e Mercúrio durante o crepúsculo, direção oeste. Os astros estão muito próximos ao horizonte.",
+    "color": "#6b3fa0",
+    "viewing_tips": [
+      "Procure um local com pouca poluição luminosa (afastado da cidade).",
+      "Tenha uma visão clara do horizonte, sem prédios ou árvores altas.",
+      "Use aplicativos (Star Walk 2, Sky Tonight, Stellarium) para localizar os astros.",
+      "Permita que seus olhos se ajustem à escuridão por cerca de 15-20 minutos.",
+      "Planetas como Vênus, Marte, Júpiter e Saturno são geralmente visíveis a olho nu.",
+      "Para Urano e Netuno, binóculos ou telescópios são necessários.",
+      "Consulte um app de astronomia para saber os horários exatos de visibilidade e a posição no céu."
+    ]
+  },
+  {
+    "id": "5",
+    "day": 14,
+    "month": 3,
+    "year": 2025,
+    "title": "Eclipse Lunar Total (Lua de Sangue)",
+    "description": "Eclipse lunar total visível na América do Norte e do Sul.",
+    "color": "#ff6347",
+    "viewing_tips": [
+      "Procure um local com pouca poluição luminosa (afastado da cidade).",
+      "Tenha uma visão clara do horizonte, sem prédios ou árvores altas.",
+      "Use aplicativos (Star Walk 2, Sky Tonight, Stellarium) para localizar os astros.",
+      "Permita que seus olhos se ajustem à escuridão por cerca de 15-20 minutos.",
+      "**Seguro para observar a olho nu!** Não requer equipamento especial.",
+      "Binóculos ou telescópios podem realçar detalhes e a coloração avermelhada (",
+      "Lua de Sangue",
+      ").",
+      "Fique confortável com um cobertor ou cadeira."
+    ]
+  },
+  {
+    "id": "6",
+    "day": 29,
+    "month": 3,
+    "year": 2025,
+    "title": "Eclipse Solar Parcial",
+    "description": "Eclipse solar parcial visível na Europa, norte da Ásia, noroeste da África, América do Norte e norte da América do Sul.",
+    "color": "#4682b4",
+    "viewing_tips": [
+      "**SEGURANÇA PRIMEIRO! NUNCA olhe diretamente para o Sol sem proteção adequada.**",
+      "Use **óculos de eclipse certificados (ISO 12312-2)** ou métodos de **projeção indireta**.",
+      "**NÃO use** óculos de sol comuns, chapas de raio-X, filmes fotográficos ou filtros caseiros.",
+      "Se usar filtros certificados, observe por no máximo 15 segundos e faça pausas de 3 minutos.",
+      "Use protetor solar e hidrate-se."
+    ]
+  },
+  {
+    "id": "7",
+    "day": 4,
+    "month": 4,
+    "year": 2025,
+    "title": "Lua Crescente",
+    "description": "Boa fase para nutrir seus projetos com mais sensibilidade e atenção. Além disso, ideal para cuidar da casa, da alimentação e das emoções.",
+    "color": "#add8e6",
+    "viewing_tips": [
+      "Procure um local com pouca poluição luminosa (afastado da cidade).",
+      "Tenha uma visão clara do horizonte, sem prédios ou árvores altas.",
+      "Use aplicativos (Star Walk 2, Sky Tonight, Stellarium) para localizar os astros.",
+      "Permita que seus olhos se ajustem à escuridão por cerca de 15-20 minutos.",
+      "As fases da Lua são facilmente visíveis a olho nu.",
+      "Luas Cheias e Superluas são particularmente brilhantes.",
+      "A Lua Nova oferece céus mais escuros, ideais para observar outros objetos."
+    ]
+  },
+  {
+    "id": "8",
+    "day": 12,
+    "month": 4,
+    "year": 2025,
+    "title": "Lua Cheia",
+    "description": "Excelente para trabalhar equilíbrio nas relações e buscar harmonia interior. Pode trazer emoções mais expostas.",
+    "color": "#ffcc66",
+    "viewing_tips": [
+      "Procure um local com pouca poluição luminosa (afastado da cidade).",
+      "Tenha uma visão clara do horizonte, sem prédios ou árvores altas.",
+      "Use aplicativos (Star Walk 2, Sky Tonight, Stellarium) para localizar os astros.",
+      "Permita que seus olhos se ajustem à escuridão por cerca de 15-20 minutos.",
+      "As fases da Lua são facilmente visíveis a olho nu.",
+      "Luas Cheias e Superluas são particularmente brilhantes.",
+      "A Lua Nova oferece céus mais escuros, ideais para observar outros objetos."
+    ]
+  },
+  {
+    "id": "9",
+    "day": 19,
+    "month": 4,
+    "year": 2025,
+    "title": "Vênus, Saturno e Mercúrio formarão um belo trio planetário antes do amanhecer, direção leste, na constelação de Peixes. O planeta Netuno também estará no mesmo campo de visão.",
+    "description": "Vênus, Saturno e Mercúrio formarão um belo trio planetário antes do amanhecer, direção leste, na constelação de Peixes. O planeta Netuno também estará no mesmo campo de visão.",
+    "color": "#6b3fa0",
+    "viewing_tips": [
+      "Procure um local com pouca poluição luminosa (afastado da cidade).",
+      "Tenha uma visão clara do horizonte, sem prédios ou árvores altas.",
+      "Use aplicativos (Star Walk 2, Sky Tonight, Stellarium) para localizar os astros.",
+      "Permita que seus olhos se ajustem à escuridão por cerca de 15-20 minutos.",
+      "Planetas como Vênus, Marte, Júpiter e Saturno são geralmente visíveis a olho nu.",
+      "Para Urano e Netuno, binóculos ou telescópios são necessários.",
+      "Consulte um app de astronomia para saber os horários exatos de visibilidade e a posição no céu."
+    ]
+  },
+  {
+    "id": "10",
+    "day": 20,
+    "month": 4,
+    "year": 2025,
+    "title": "Lua Minguante",
+    "description": "Bom momento para se desapegar de padrões rígidos e abrir espaço para ideias mais livres e originais.",
+    "color": "#c0c0c0",
+    "viewing_tips": [
+      "Procure um local com pouca poluição luminosa (afastado da cidade).",
+      "Tenha uma visão clara do horizonte, sem prédios ou árvores altas.",
+      "Use aplicativos (Star Walk 2, Sky Tonight, Stellarium) para localizar os astros.",
+      "Permita que seus olhos se ajustem à escuridão por cerca de 15-20 minutos.",
+      "As fases da Lua são facilmente visíveis a olho nu.",
+      "Luas Cheias e Superluas são particularmente brilhantes.",
+      "A Lua Nova oferece céus mais escuros, ideais para observar outros objetos."
+    ]
+  },
+  {
+    "id": "11",
+    "day": 25,
+    "month": 4,
+    "year": 2025,
+    "title": "Conjunção entre Lua, Vênus, Saturno e Mercúrio antes do amanhecer, direção leste, nas constelações de Peixes e Baleia. Um dos mais belos encontros de 2025.",
+    "description": "Conjunção entre Lua, Vênus, Saturno e Mercúrio antes do amanhecer, direção leste, nas constelações de Peixes e Baleia. Um dos mais belos encontros de 2025.",
+    "color": "#6b3fa0",
+    "viewing_tips": [
+      "Procure um local com pouca poluição luminosa (afastado da cidade).",
+      "Tenha uma visão clara do horizonte, sem prédios ou árvores altas.",
+      "Use aplicativos (Star Walk 2, Sky Tonight, Stellarium) para localizar os astros.",
+      "Permita que seus olhos se ajustem à escuridão por cerca de 15-20 minutos.",
+      "Planetas como Vênus, Marte, Júpiter e Saturno são geralmente visíveis a olho nu.",
+      "Para Urano e Netuno, binóculos ou telescópios são necessários.",
+      "Consulte um app de astronomia para saber os horários exatos de visibilidade e a posição no céu."
+    ]
+  },
+  {
+    "id": "12",
+    "day": 28,
+    "month": 4,
+    "year": 2025,
+    "title": "- Conjunção entre Vênus e Saturno, antes do amanhecer, direção leste, na constelação de Peixes.",
+    "description": "- Conjunção entre Vênus e Saturno, antes do amanhecer, direção leste, na constelação de Peixes.",
+    "color": "#6b3fa0",
+    "viewing_tips": [
+      "Procure um local com pouca poluição luminosa (afastado da cidade).",
+      "Tenha uma visão clara do horizonte, sem prédios ou árvores altas.",
+      "Use aplicativos (Star Walk 2, Sky Tonight, Stellarium) para localizar os astros.",
+      "Permita que seus olhos se ajustem à escuridão por cerca de 15-20 minutos.",
+      "Planetas como Vênus, Marte, Júpiter e Saturno são geralmente visíveis a olho nu.",
+      "Para Urano e Netuno, binóculos ou telescópios são necessários.",
+      "Consulte um app de astronomia para saber os horários exatos de visibilidade e a posição no céu."
+    ]
+  },
+  {
+    "id": "13",
+    "day": 4,
+    "month": 5,
+    "year": 2025,
+    "title": "Lua Crescente",
+    "description": "Incentiva a confiança e a criatividade. Coloque sua luz no mundo com autenticidade, mas sem cair em vaidades.",
+    "color": "#add8e6",
+    "viewing_tips": [
+      "Procure um local com pouca poluição luminosa (afastado da cidade).",
+      "Tenha uma visão clara do horizonte, sem prédios ou árvores altas.",
+      "Use aplicativos (Star Walk 2, Sky Tonight, Stellarium) para localizar os astros.",
+      "Permita que seus olhos se ajustem à escuridão por cerca de 15-20 minutos.",
+      "As fases da Lua são facilmente visíveis a olho nu.",
+      "Luas Cheias e Superluas são particularmente brilhantes.",
+      "A Lua Nova oferece céus mais escuros, ideais para observar outros objetos."
+    ]
+  },
+  {
+    "id": "14",
+    "day": 12,
+    "month": 5,
+    "year": 2025,
+    "title": "Lua Cheia",
+    "description": "Fase intensa, ideal para encarar verdades profundas e lidar com transformações emocionais.",
+    "color": "#ffcc66",
+    "viewing_tips": [
+      "Procure um local com pouca poluição luminosa (afastado da cidade).",
+      "Tenha uma visão clara do horizonte, sem prédios ou árvores altas.",
+      "Use aplicativos (Star Walk 2, Sky Tonight, Stellarium) para localizar os astros.",
+      "Permita que seus olhos se ajustem à escuridão por cerca de 15-20 minutos.",
+      "As fases da Lua são facilmente visíveis a olho nu.",
+      "Luas Cheias e Superluas são particularmente brilhantes.",
+      "A Lua Nova oferece céus mais escuros, ideais para observar outros objetos."
+    ]
+  },
+  {
+    "id": "15",
+    "day": 20,
+    "month": 5,
+    "year": 2025,
+    "title": "Lua Minguante",
+    "description": "Momento para se refletir sobre suas relações interpessoais ou participações em grupos, assim como finalizar alguma formulação de um **plano ou planejamento** que você vem fazendo.",
+    "color": "#c0c0c0",
+    "viewing_tips": [
+      "Procure um local com pouca poluição luminosa (afastado da cidade).",
+      "Tenha uma visão clara do horizonte, sem prédios ou árvores altas.",
+      "Use aplicativos (Star Walk 2, Sky Tonight, Stellarium) para localizar os astros.",
+      "Permita que seus olhos se ajustem à escuridão por cerca de 15-20 minutos.",
+      "As fases da Lua são facilmente visíveis a olho nu.",
+      "Luas Cheias e Superluas são particularmente brilhantes.",
+      "A Lua Nova oferece céus mais escuros, ideais para observar outros objetos."
+    ]
+  },
+  {
+    "id": "16",
+    "day": 27,
+    "month": 5,
+    "year": 2025,
+    "title": "Lua Nova",
+    "description": "Hora de abrir espaço para novas ideias e conversas. Período favorável para escrever, estudar ou iniciar projetos mentais.",
+    "color": "#47d6a0",
+    "viewing_tips": [
+      "Procure um local com pouca poluição luminosa (afastado da cidade).",
+      "Tenha uma visão clara do horizonte, sem prédios ou árvores altas.",
+      "Use aplicativos (Star Walk 2, Sky Tonight, Stellarium) para localizar os astros.",
+      "Permita que seus olhos se ajustem à escuridão por cerca de 15-20 minutos.",
+      "As fases da Lua são facilmente visíveis a olho nu.",
+      "Luas Cheias e Superluas são particularmente brilhantes.",
+      "A Lua Nova oferece céus mais escuros, ideais para observar outros objetos."
+    ]
+  },
+  {
+    "id": "17",
+    "day": 3,
+    "month": 6,
+    "year": 2025,
+    "title": "Lua Crescente",
+    "description": "Organize planos com atenção aos detalhes. Excelente para retomar rotinas saudáveis e cuidar da saúde.",
+    "color": "#add8e6",
+    "viewing_tips": [
+      "Procure um local com pouca poluição luminosa (afastado da cidade).",
+      "Tenha uma visão clara do horizonte, sem prédios ou árvores altas.",
+      "Use aplicativos (Star Walk 2, Sky Tonight, Stellarium) para localizar os astros.",
+      "Permita que seus olhos se ajustem à escuridão por cerca de 15-20 minutos.",
+      "As fases da Lua são facilmente visíveis a olho nu.",
+      "Luas Cheias e Superluas são particularmente brilhantes.",
+      "A Lua Nova oferece céus mais escuros, ideais para observar outros objetos."
+    ]
+  },
+  {
+    "id": "18",
+    "day": 11,
+    "month": 6,
+    "year": 2025,
+    "title": "Lua Cheia",
+    "description": "Traz entusiasmo e vontade de expandir horizontes. Boa fase para buscar conhecimento e se aventurar em algo novo.",
+    "color": "#ffcc66",
+    "viewing_tips": [
+      "Procure um local com pouca poluição luminosa (afastado da cidade).",
+      "Tenha uma visão clara do horizonte, sem prédios ou árvores altas.",
+      "Use aplicativos (Star Walk 2, Sky Tonight, Stellarium) para localizar os astros.",
+      "Permita que seus olhos se ajustem à escuridão por cerca de 15-20 minutos.",
+      "As fases da Lua são facilmente visíveis a olho nu.",
+      "Luas Cheias e Superluas são particularmente brilhantes.",
+      "A Lua Nova oferece céus mais escuros, ideais para observar outros objetos."
+    ]
+  },
+  {
+    "id": "19",
+    "day": 18,
+    "month": 6,
+    "year": 2025,
+    "title": "Lua Minguante",
+    "description": "Fase de introspecção e finalização. Bom para resolver pendências emocionais e se preparar para o novo ciclo.",
+    "color": "#c0c0c0",
+    "viewing_tips": [
+      "Procure um local com pouca poluição luminosa (afastado da cidade).",
+      "Tenha uma visão clara do horizonte, sem prédios ou árvores altas.",
+      "Use aplicativos (Star Walk 2, Sky Tonight, Stellarium) para localizar os astros.",
+      "Permita que seus olhos se ajustem à escuridão por cerca de 15-20 minutos.",
+      "As fases da Lua são facilmente visíveis a olho nu.",
+      "Luas Cheias e Superluas são particularmente brilhantes.",
+      "A Lua Nova oferece céus mais escuros, ideais para observar outros objetos."
+    ]
+  },
+  {
+    "id": "20",
+    "day": 26,
+    "month": 6,
+    "year": 2025,
+    "title": "Lua Nova",
+    "description": "Ideal para iniciar projetos ligados ao lar e à família. Fase de nutrição emocional e conexão com as raízes.",
+    "color": "#47d6a0",
+    "viewing_tips": [
+      "Procure um local com pouca poluição luminosa (afastado da cidade).",
+      "Tenha uma visão clara do horizonte, sem prédios ou árvores altas.",
+      "Use aplicativos (Star Walk 2, Sky Tonight, Stellarium) para localizar os astros.",
+      "Permita que seus olhos se ajustem à escuridão por cerca de 15-20 minutos.",
+      "As fases da Lua são facilmente visíveis a olho nu.",
+      "Luas Cheias e Superluas são particularmente brilhantes.",
+      "A Lua Nova oferece céus mais escuros, ideais para observar outros objetos."
+    ]
+  },
+  {
+    "id": "21",
+    "day": 2,
+    "month": 7,
+    "year": 2025,
+    "title": "Lua Crescente",
+    "description": "Fase para expressar sua criatividade e brilho pessoal. Bom momento para se divertir e se conectar com sua criança interior.",
+    "color": "#add8e6",
+    "viewing_tips": [
+      "Procure um local com pouca poluição luminosa (afastado da cidade).",
+      "Tenha uma visão clara do horizonte, sem prédios ou árvores altas.",
+      "Use aplicativos (Star Walk 2, Sky Tonight, Stellarium) para localizar os astros.",
+      "Permita que seus olhos se ajustem à escuridão por cerca de 15-20 minutos.",
+      "As fases da Lua são facilmente visíveis a olho nu.",
+      "Luas Cheias e Superluas são particularmente brilhantes.",
+      "A Lua Nova oferece céus mais escuros, ideais para observar outros objetos."
+    ]
+  },
+  {
+    "id": "22",
+    "day": 10,
+    "month": 7,
+    "year": 2025,
+    "title": "Lua Cheia",
+    "description": "Traz foco na disciplina e responsabilidade. Bom para estruturar planos de longo prazo e lidar com questões práticas.",
+    "color": "#ffcc66",
+    "viewing_tips": [
+      "Procure um local com pouca poluição luminosa (afastado da cidade).",
+      "Tenha uma visão clara do horizonte, sem prédios ou árvores altas.",
+      "Use aplicativos (Star Walk 2, Sky Tonight, Stellarium) para localizar os astros.",
+      "Permita que seus olhos se ajustem à escuridão por cerca de 15-20 minutos.",
+      "As fases da Lua são facilmente visíveis a olho nu.",
+      "Luas Cheias e Superluas são particularmente brilhantes.",
+      "A Lua Nova oferece céus mais escuros, ideais para observar outros objetos."
+    ]
+  },
+  {
+    "id": "23",
+    "day": 18,
+    "month": 7,
+    "year": 2025,
+    "title": "Lua Minguante",
+    "description": "Momento para finalizar projetos criativos e se desapegar de dramas desnecessários. Fase de autoavaliação.",
+    "color": "#c0c0c0",
+    "viewing_tips": [
+      "Procure um local com pouca poluição luminosa (afastado da cidade).",
+      "Tenha uma visão clara do horizonte, sem prédios ou árvores altas.",
+      "Use aplicativos (Star Walk 2, Sky Tonight, Stellarium) para localizar os astros.",
+      "Permita que seus olhos se ajustem à escuridão por cerca de 15-20 minutos.",
+      "As fases da Lua são facilmente visíveis a olho nu.",
+      "Luas Cheias e Superluas são particularmente brilhantes.",
+      "A Lua Nova oferece céus mais escuros, ideais para observar outros objetos."
+    ]
+  },
+  {
+    "id": "24",
+    "day": 25,
+    "month": 7,
+    "year": 2025,
+    "title": "Lua Nova",
+    "description": "Início de ciclo focado na organização e saúde. Bom para planejar rotinas e cuidar do bem-estar físico e mental.",
+    "color": "#47d6a0",
+    "viewing_tips": [
+      "Procure um local com pouca poluição luminosa (afastado da cidade).",
+      "Tenha uma visão clara do horizonte, sem prédios ou árvores altas.",
+      "Use aplicativos (Star Walk 2, Sky Tonight, Stellarium) para localizar os astros.",
+      "Permita que seus olhos se ajustem à escuridão por cerca de 15-20 minutos.",
+      "As fases da Lua são facilmente visíveis a olho nu.",
+      "Luas Cheias e Superluas são particularmente brilhantes.",
+      "A Lua Nova oferece céus mais escuros, ideais para observar outros objetos."
+    ]
+  },
+  {
+    "id": "25",
+    "day": 1,
+    "month": 8,
+    "year": 2025,
+    "title": "Lua Crescente",
+    "description": "Fase para buscar equilíbrio nas relações e harmonia estética. Bom momento para cuidar da aparência e dos relacionamentos.",
+    "color": "#add8e6",
+    "viewing_tips": [
+      "Procure um local com pouca poluição luminosa (afastado da cidade).",
+      "Tenha uma visão clara do horizonte, sem prédios ou árvores altas.",
+      "Use aplicativos (Star Walk 2, Sky Tonight, Stellarium) para localizar os astros.",
+      "Permita que seus olhos se ajustem à escuridão por cerca de 15-20 minutos.",
+      "As fases da Lua são facilmente visíveis a olho nu.",
+      "Luas Cheias e Superluas são particularmente brilhantes.",
+      "A Lua Nova oferece céus mais escuros, ideais para observar outros objetos."
+    ]
+  },
+  {
+    "id": "26",
+    "day": 9,
+    "month": 8,
+    "year": 2025,
+    "title": "Lua Cheia",
+    "description": "Traz foco em ideais humanitários e inovação. Bom para projetos em grupo e pensar no futuro coletivo.",
+    "color": "#ffcc66",
+    "viewing_tips": [
+      "Procure um local com pouca poluição luminosa (afastado da cidade).",
+      "Tenha uma visão clara do horizonte, sem prédios ou árvores altas.",
+      "Use aplicativos (Star Walk 2, Sky Tonight, Stellarium) para localizar os astros.",
+      "Permita que seus olhos se ajustem à escuridão por cerca de 15-20 minutos.",
+      "As fases da Lua são facilmente visíveis a olho nu.",
+      "Luas Cheias e Superluas são particularmente brilhantes.",
+      "A Lua Nova oferece céus mais escuros, ideais para observar outros objetos."
+    ]
+  },
+  {
+    "id": "27",
+    "day": 16,
+    "month": 8,
+    "year": 2025,
+    "title": "Lua Minguante",
+    "description": "Fase para finalizar planejamentos e se desapegar de rotinas que não servem mais. Bom para organizar a mente.",
+    "color": "#c0c0c0",
+    "viewing_tips": [
+      "Procure um local com pouca poluição luminosa (afastado da cidade).",
+      "Tenha uma visão clara do horizonte, sem prédios ou árvores altas.",
+      "Use aplicativos (Star Walk 2, Sky Tonight, Stellarium) para localizar os astros.",
+      "Permita que seus olhos se ajustem à escuridão por cerca de 15-20 minutos.",
+      "As fases da Lua são facilmente visíveis a olho nu.",
+      "Luas Cheias e Superluas são particularmente brilhantes.",
+      "A Lua Nova oferece céus mais escuros, ideais para observar outros objetos."
+    ]
+  },
+  {
+    "id": "28",
+    "day": 24,
+    "month": 8,
+    "year": 2025,
+    "title": "Lua Nova",
+    "description": "Início de ciclo com foco na intensidade emocional e transformações. Bom para investigar assuntos profundos.",
+    "color": "#47d6a0",
+    "viewing_tips": [
+      "Procure um local com pouca poluição luminosa (afastado da cidade).",
+      "Tenha uma visão clara do horizonte, sem prédios ou árvores altas.",
+      "Use aplicativos (Star Walk 2, Sky Tonight, Stellarium) para localizar os astros.",
+      "Permita que seus olhos se ajustem à escuridão por cerca de 15-20 minutos.",
+      "As fases da Lua são facilmente visíveis a olho nu.",
+      "Luas Cheias e Superluas são particularmente brilhantes.",
+      "A Lua Nova oferece céus mais escuros, ideais para observar outros objetos."
+    ]
+  },
+  {
+    "id": "29",
+    "day": 31,
+    "month": 8,
+    "year": 2025,
+    "title": "Lua Crescente",
+    "description": "Fase para expandir conhecimentos e buscar aventuras. Bom momento para planejar viagens ou iniciar estudos.",
+    "color": "#add8e6",
+    "viewing_tips": [
+      "Procure um local com pouca poluição luminosa (afastado da cidade).",
+      "Tenha uma visão clara do horizonte, sem prédios ou árvores altas.",
+      "Use aplicativos (Star Walk 2, Sky Tonight, Stellarium) para localizar os astros.",
+      "Permita que seus olhos se ajustem à escuridão por cerca de 15-20 minutos.",
+      "As fases da Lua são facilmente visíveis a olho nu.",
+      "Luas Cheias e Superluas são particularmente brilhantes.",
+      "A Lua Nova oferece céus mais escuros, ideais para observar outros objetos."
+    ]
+  },
+  {
+    "id": "30",
+    "day": 7,
+    "month": 9,
+    "year": 2025,
+    "title": "Eclipse Lunar Total (Superlua de Sangue)",
+    "description": "Eclipse lunar total durante uma Superlua, visível na Europa, Ásia, Austrália, África e América do Sul.",
+    "color": "#ff6347",
+    "viewing_tips": [
+      "Procure um local com pouca poluição luminosa (afastado da cidade).",
+      "Tenha uma visão clara do horizonte, sem prédios ou árvores altas.",
+      "Use aplicativos (Star Walk 2, Sky Tonight, Stellarium) para localizar os astros.",
+      "Permita que seus olhos se ajustem à escuridão por cerca de 15-20 minutos.",
+      "**Seguro para observar a olho nu!** Não requer equipamento especial.",
+      "Binóculos ou telescópios podem realçar detalhes e a coloração avermelhada (",
+      "Lua de Sangue",
+      ").",
+      "A Superlua fará o eclipse parecer maior e mais brilhante.",
+      "Fique confortável com um cobertor ou cadeira."
+    ]
+  },
+  {
+    "id": "31",
+    "day": 15,
+    "month": 9,
+    "year": 2025,
+    "title": "Lua Minguante",
+    "description": "Fase para finalizar projetos ligados ao lar e à família. Bom para organizar a casa e resolver pendências emocionais.",
+    "color": "#c0c0c0",
+    "viewing_tips": [
+      "Procure um local com pouca poluição luminosa (afastado da cidade).",
+      "Tenha uma visão clara do horizonte, sem prédios ou árvores altas.",
+      "Use aplicativos (Star Walk 2, Sky Tonight, Stellarium) para localizar os astros.",
+      "Permita que seus olhos se ajustem à escuridão por cerca de 15-20 minutos.",
+      "As fases da Lua são facilmente visíveis a olho nu.",
+      "Luas Cheias e Superluas são particularmente brilhantes.",
+      "A Lua Nova oferece céus mais escuros, ideais para observar outros objetos."
+    ]
+  },
+  {
+    "id": "32",
+    "day": 21,
+    "month": 9,
+    "year": 2025,
+    "title": "Eclipse Solar Parcial",
+    "description": "Eclipse solar parcial visível no sul da Austrália, Antártica.",
+    "color": "#4682b4",
+    "viewing_tips": [
+      "**SEGURANÇA PRIMEIRO! NUNCA olhe diretamente para o Sol sem proteção adequada.**",
+      "Use **óculos de eclipse certificados (ISO 12312-2)** ou métodos de **projeção indireta**.",
+      "**NÃO use** óculos de sol comuns, chapas de raio-X, filmes fotográficos ou filtros caseiros.",
+      "Se usar filtros certificados, observe por no máximo 15 segundos e faça pausas de 3 minutos.",
+      "Use protetor solar e hidrate-se."
+    ]
+  },
+  {
+    "id": "33",
+    "day": 22,
+    "month": 9,
+    "year": 2025,
+    "title": "Lua Nova",
+    "description": "Início de ciclo com foco na carreira e ambições. Bom para definir metas profissionais e trabalhar na imagem pública.",
+    "color": "#47d6a0",
+    "viewing_tips": [
+      "Procure um local com pouca poluição luminosa (afastado da cidade).",
+      "Tenha uma visão clara do horizonte, sem prédios ou árvores altas.",
+      "Use aplicativos (Star Walk 2, Sky Tonight, Stellarium) para localizar os astros.",
+      "Permita que seus olhos se ajustem à escuridão por cerca de 15-20 minutos.",
+      "As fases da Lua são facilmente visíveis a olho nu.",
+      "Luas Cheias e Superluas são particularmente brilhantes.",
+      "A Lua Nova oferece céus mais escuros, ideais para observar outros objetos."
+    ]
+  },
+  {
+    "id": "34",
+    "day": 29,
+    "month": 9,
+    "year": 2025,
+    "title": "Lua Crescente",
+    "description": "Fase para inovar e pensar no futuro. Bom momento para projetos em grupo e atividades humanitárias.",
+    "color": "#add8e6",
+    "viewing_tips": [
+      "Procure um local com pouca poluição luminosa (afastado da cidade).",
+      "Tenha uma visão clara do horizonte, sem prédios ou árvores altas.",
+      "Use aplicativos (Star Walk 2, Sky Tonight, Stellarium) para localizar os astros.",
+      "Permita que seus olhos se ajustem à escuridão por cerca de 15-20 minutos.",
+      "As fases da Lua são facilmente visíveis a olho nu.",
+      "Luas Cheias e Superluas são particularmente brilhantes.",
+      "A Lua Nova oferece céus mais escuros, ideais para observar outros objetos."
+    ]
+  },
+  {
+    "id": "35",
+    "day": 7,
+    "month": 10,
+    "year": 2025,
+    "title": "Lua Cheia",
+    "description": "Traz sensibilidade e intuição aguçadas. Bom para atividades artísticas, espirituais e de autocuidado.",
+    "color": "#ffcc66",
+    "viewing_tips": [
+      "Procure um local com pouca poluição luminosa (afastado da cidade).",
+      "Tenha uma visão clara do horizonte, sem prédios ou árvores altas.",
+      "Use aplicativos (Star Walk 2, Sky Tonight, Stellarium) para localizar os astros.",
+      "Permita que seus olhos se ajustem à escuridão por cerca de 15-20 minutos.",
+      "As fases da Lua são facilmente visíveis a olho nu.",
+      "Luas Cheias e Superluas são particularmente brilhantes.",
+      "A Lua Nova oferece céus mais escuros, ideais para observar outros objetos."
+    ]
+  },
+  {
+    "id": "36",
+    "day": 14,
+    "month": 10,
+    "year": 2025,
+    "title": "Lua Minguante",
+    "description": "Fase para finalizar projetos criativos e se desapegar de dramas desnecessários. Bom para autoavaliação e descanso.",
+    "color": "#c0c0c0",
+    "viewing_tips": [
+      "Procure um local com pouca poluição luminosa (afastado da cidade).",
+      "Tenha uma visão clara do horizonte, sem prédios ou árvores altas.",
+      "Use aplicativos (Star Walk 2, Sky Tonight, Stellarium) para localizar os astros.",
+      "Permita que seus olhos se ajustem à escuridão por cerca de 15-20 minutos.",
+      "As fases da Lua são facilmente visíveis a olho nu.",
+      "Luas Cheias e Superluas são particularmente brilhantes.",
+      "A Lua Nova oferece céus mais escuros, ideais para observar outros objetos."
+    ]
+  },
+  {
+    "id": "37",
+    "day": 22,
+    "month": 10,
+    "year": 2025,
+    "title": "Lua Nova",
+    "description": "Início de ciclo com foco na ação e iniciativa. Bom para começar projetos pessoais e afirmar sua identidade.",
+    "color": "#47d6a0",
+    "viewing_tips": [
+      "Procure um local com pouca poluição luminosa (afastado da cidade).",
+      "Tenha uma visão clara do horizonte, sem prédios ou árvores altas.",
+      "Use aplicativos (Star Walk 2, Sky Tonight, Stellarium) para localizar os astros.",
+      "Permita que seus olhos se ajustem à escuridão por cerca de 15-20 minutos.",
+      "As fases da Lua são facilmente visíveis a olho nu.",
+      "Luas Cheias e Superluas são particularmente brilhantes.",
+      "A Lua Nova oferece céus mais escuros, ideais para observar outros objetos."
+    ]
+  },
+  {
+    "id": "38",
+    "day": 29,
+    "month": 10,
+    "year": 2025,
+    "title": "Lua Crescente",
+    "description": "Fase para focar em segurança material e prazeres sensoriais. Bom momento para cuidar das finanças e do corpo.",
+    "color": "#add8e6",
+    "viewing_tips": [
+      "Procure um local com pouca poluição luminosa (afastado da cidade).",
+      "Tenha uma visão clara do horizonte, sem prédios ou árvores altas.",
+      "Use aplicativos (Star Walk 2, Sky Tonight, Stellarium) para localizar os astros.",
+      "Permita que seus olhos se ajustem à escuridão por cerca de 15-20 minutos.",
+      "As fases da Lua são facilmente visíveis a olho nu.",
+      "Luas Cheias e Superluas são particularmente brilhantes.",
+      "A Lua Nova oferece céus mais escuros, ideais para observar outros objetos."
+    ]
+  },
+  {
+    "id": "39",
+    "day": 5,
+    "month": 11,
+    "year": 2025,
+    "title": "Lua Cheia",
+    "description": "Traz foco na comunicação e aprendizado. Bom para interações sociais, estudos e trocas de ideias.",
+    "color": "#ffcc66",
+    "viewing_tips": [
+      "Procure um local com pouca poluição luminosa (afastado da cidade).",
+      "Tenha uma visão clara do horizonte, sem prédios ou árvores altas.",
+      "Use aplicativos (Star Walk 2, Sky Tonight, Stellarium) para localizar os astros.",
+      "Permita que seus olhos se ajustem à escuridão por cerca de 15-20 minutos.",
+      "As fases da Lua são facilmente visíveis a olho nu.",
+      "Luas Cheias e Superluas são particularmente brilhantes.",
+      "A Lua Nova oferece céus mais escuros, ideais para observar outros objetos."
+    ]
+  },
+  {
+    "id": "40",
+    "day": 13,
+    "month": 11,
+    "year": 2025,
+    "title": "Lua Minguante",
+    "description": "Fase para finalizar projetos ligados à organização e saúde. Bom para limpar a casa, o corpo e a mente.",
+    "color": "#c0c0c0",
+    "viewing_tips": [
+      "Procure um local com pouca poluição luminosa (afastado da cidade).",
+      "Tenha uma visão clara do horizonte, sem prédios ou árvores altas.",
+      "Use aplicativos (Star Walk 2, Sky Tonight, Stellarium) para localizar os astros.",
+      "Permita que seus olhos se ajustem à escuridão por cerca de 15-20 minutos.",
+      "As fases da Lua são facilmente visíveis a olho nu.",
+      "Luas Cheias e Superluas são particularmente brilhantes.",
+      "A Lua Nova oferece céus mais escuros, ideais para observar outros objetos."
+    ]
+  },
+  {
+    "id": "41",
+    "day": 20,
+    "month": 11,
+    "year": 2025,
+    "title": "Lua Nova",
+    "description": "Início de ciclo com foco no lar e na família. Bom para cuidar da casa, das emoções e fortalecer laços afetivos.",
+    "color": "#47d6a0",
+    "viewing_tips": [
+      "Procure um local com pouca poluição luminosa (afastado da cidade).",
+      "Tenha uma visão clara do horizonte, sem prédios ou árvores altas.",
+      "Use aplicativos (Star Walk 2, Sky Tonight, Stellarium) para localizar os astros.",
+      "Permita que seus olhos se ajustem à escuridão por cerca de 15-20 minutos.",
+      "As fases da Lua são facilmente visíveis a olho nu.",
+      "Luas Cheias e Superluas são particularmente brilhantes.",
+      "A Lua Nova oferece céus mais escuros, ideais para observar outros objetos."
+    ]
+  },
+  {
+    "id": "42",
+    "day": 28,
+    "month": 11,
+    "year": 2025,
+    "title": "Lua Crescente",
+    "description": "Fase para expressar sua criatividade e brilho pessoal. Bom momento para se divertir e se conectar com sua criança interior.",
+    "color": "#add8e6",
+    "viewing_tips": [
+      "Procure um local com pouca poluição luminosa (afastado da cidade).",
+      "Tenha uma visão clara do horizonte, sem prédios ou árvores altas.",
+      "Use aplicativos (Star Walk 2, Sky Tonight, Stellarium) para localizar os astros.",
+      "Permita que seus olhos se ajustem à escuridão por cerca de 15-20 minutos.",
+      "As fases da Lua são facilmente visíveis a olho nu.",
+      "Luas Cheias e Superluas são particularmente brilhantes.",
+      "A Lua Nova oferece céus mais escuros, ideais para observar outros objetos."
+    ]
+  },
+  {
+    "id": "43",
+    "day": 5,
+    "month": 12,
+    "year": 2025,
+    "title": "Lua Cheia",
+    "description": "Traz foco na organização e saúde. Bom para cuidar do corpo, da mente e estabelecer rotinas eficientes.",
+    "color": "#ffcc66",
+    "viewing_tips": [
+      "Procure um local com pouca poluição luminosa (afastado da cidade).",
+      "Tenha uma visão clara do horizonte, sem prédios ou árvores altas.",
+      "Use aplicativos (Star Walk 2, Sky Tonight, Stellarium) para localizar os astros.",
+      "Permita que seus olhos se ajustem à escuridão por cerca de 15-20 minutos.",
+      "As fases da Lua são facilmente visíveis a olho nu.",
+      "Luas Cheias e Superluas são particularmente brilhantes.",
+      "A Lua Nova oferece céus mais escuros, ideais para observar outros objetos."
+    ]
+  },
+  {
+    "id": "44",
+    "day": 13,
+    "month": 12,
+    "year": 2025,
+    "title": "Lua Minguante",
+    "description": "Fase para finalizar projetos ligados a relacionamentos e parcerias. Bom para buscar equilíbrio e resolver conflitos.",
+    "color": "#c0c0c0",
+    "viewing_tips": [
+      "Procure um local com pouca poluição luminosa (afastado da cidade).",
+      "Tenha uma visão clara do horizonte, sem prédios ou árvores altas.",
+      "Use aplicativos (Star Walk 2, Sky Tonight, Stellarium) para localizar os astros.",
+      "Permita que seus olhos se ajustem à escuridão por cerca de 15-20 minutos.",
+      "As fases da Lua são facilmente visíveis a olho nu.",
+      "Luas Cheias e Superluas são particularmente brilhantes.",
+      "A Lua Nova oferece céus mais escuros, ideais para observar outros objetos."
+    ]
+  },
+  {
+    "id": "45",
+    "day": 20,
+    "month": 12,
+    "year": 2025,
+    "title": "Lua Nova",
+    "description": "Início de ciclo com foco na intensidade emocional e transformações. Bom para investigar assuntos profundos e lidar com o poder.",
+    "color": "#47d6a0",
+    "viewing_tips": [
+      "Procure um local com pouca poluição luminosa (afastado da cidade).",
+      "Tenha uma visão clara do horizonte, sem prédios ou árvores altas.",
+      "Use aplicativos (Star Walk 2, Sky Tonight, Stellarium) para localizar os astros.",
+      "Permita que seus olhos se ajustem à escuridão por cerca de 15-20 minutos.",
+      "As fases da Lua são facilmente visíveis a olho nu.",
+      "Luas Cheias e Superluas são particularmente brilhantes.",
+      "A Lua Nova oferece céus mais escuros, ideais para observar outros objetos."
+    ]
+  },
+  {
+    "id": "46",
+    "day": 28,
+    "month": 12,
+    "year": 2025,
+    "title": "Lua Crescente",
+    "description": "Fase para expandir conhecimentos e buscar aventuras. Bom momento para planejar viagens ou iniciar estudos filosóficos.",
+    "color": "#add8e6",
+    "viewing_tips": [
+      "Procure um local com pouca poluição luminosa (afastado da cidade).",
+      "Tenha uma visão clara do horizonte, sem prédios ou árvores altas.",
+      "Use aplicativos (Star Walk 2, Sky Tonight, Stellarium) para localizar os astros.",
+      "Permita que seus olhos se ajustem à escuridão por cerca de 15-20 minutos.",
+      "As fases da Lua são facilmente visíveis a olho nu.",
+      "Luas Cheias e Superluas são particularmente brilhantes.",
+      "A Lua Nova oferece céus mais escuros, ideais para observar outros objetos."
+    ]
+  }
+]
+
