@@ -1,8 +1,9 @@
+// src/services/apodService.ts
 import { createClient } from '@supabase/supabase-js';
 import { REACT_APP_SUPABASE_URL, REACT_APP_SUPABASE_ANON_KEY } from '@env';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { toZonedTime } from 'date-fns-tz';
-import { addDays, setHours, getYear, getMonth, getDate } from 'date-fns';
+import * as dateFnsTz from 'date-fns-tz';
+import { parseISO, addDays, format } from 'date-fns';
 import { Image as ExpoImage } from 'expo-image';
 
 // Conexão com Supabase
@@ -16,16 +17,16 @@ if (!supabaseUrl || !supabaseAnonKey) {
 const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 export interface ApodData {
-    copyright?: string;
-    date: string;
-    explanation: string;
-    hdurl?: string;
-    media_type: "image" | "video";
-    service_version: string;
-    title: string;
-    url: string;
-    translated_title?: string;
-    translated_explanation?: string;
+  copyright?: string;
+  date: string; // espera 'YYYY-MM-DD' ou ISO
+  explanation: string;
+  hdurl?: string;
+  media_type: 'image' | 'video';
+  service_version: string;
+  title: string;
+  url: string;
+  translated_title?: string;
+  translated_explanation?: string;
 }
 
 const APOD_CACHE_KEY = 'apod_data_cache';
@@ -33,60 +34,98 @@ const APOD_CACHE_DATE_KEY = 'apod_cache_date';
 const TIMEZONE_SAO_PAULO = 'America/Sao_Paulo';
 
 /**
- * Verifica se o cache precisa ser atualizado com base na data do cache e na hora de São Paulo.
- * @param {string | null} cachedDate - A data do cache no formato 'YYYY-MM-DD'.
- * @returns {boolean} - Retorna true se o cache precisar ser atualizado.
+ * Gera o instante UTC correspondente a "06:00" no fuso America/Sao_Paulo do dia informado.
+ * Estratégia:
+ * 1) tenta usar date-fns-tz.zonedTimeToUtc em runtime (se disponível)
+ * 2) se não disponível, usa fallback simples assumindo -03:00 (06:00 BRT => 09:00 UTC)
+ *
+ * OBS: o fallback é adequado para uso moderno (Brasil sem horário de verão). Se você precisa de
+ * precisão histórica com DST, alinhe a versão do date-fns-tz que exporte zonedTimeToUtc.
  */
-function shouldUpdateCache(cachedDate: string | null): boolean {
-  if (!cachedDate) {
-    console.log("Cache: Não encontrado. Necessário buscar novos dados.");
-    return true;
+function thresholdUtcForSaopauloDate(nextDay: Date): Date {
+  const nextDayStr = format(nextDay, 'yyyy-MM-dd');
+
+  // checa dinamicamente se a função existe em runtime
+  const maybeFn: any =
+    (dateFnsTz as any).zonedTimeToUtc ??
+    (dateFnsTz as any).default?.zonedTimeToUtc ??
+    (dateFnsTz as any)['zonedTimeToUtc'];
+
+  if (typeof maybeFn === 'function') {
+    try {
+      // usa a função da lib (retorna um Date UTC)
+      return maybeFn(`${nextDayStr} 06:00:00`, TIMEZONE_SAO_PAULO);
+    } catch (err) {
+      console.warn('date-fns-tz.zonedTimeToUtc existia mas falhou ao executar, caindo no fallback:', err);
+    }
+  } else {
+    console.debug('date-fns-tz.zonedTimeToUtc não disponível em runtime; usando fallback -03:00.');
   }
 
-  // 1. Obtém a data e hora atuais no fuso horário de São Paulo
-  const nowSaoPaulo = toZonedTime(new Date(), TIMEZONE_SAO_PAULO);
-
-  // 2. Converte a data do cache para um objeto Date no fuso de São Paulo
-  const [year, month, day] = cachedDate.split('-').map(Number);
-  const cacheDateSaoPaulo = toZonedTime(new Date(year, month - 1, day), TIMEZONE_SAO_PAULO);
-  
-  // 3. Calcula a data/hora limite para a atualização (6h da manhã do dia seguinte)
-  const nextDay = addDays(cacheDateSaoPaulo, 1);
-  const updateThreshold = setHours(nextDay, 6);
-
-  // 4. Compara a hora atual em São Paulo com a hora limite
-  if (nowSaoPaulo.getTime() >= updateThreshold.getTime()) {
-    console.log(`Cache: Data ${cachedDate} expirou. Será atualizado.`);
-    return true;
-  }
-
-  console.log(`Cache: Data ${cachedDate} ainda é válido.`);
-  return false;
+  // --- Fallback: assume offset -03:00 (BRT sem DST) ---
+  // 06:00 em São Paulo (UTC-3) equivale a 09:00 UTC no mesmo dia.
+  const y = nextDay.getUTCFullYear();
+  const m = nextDay.getUTCMonth(); // já em UTC pra Date.UTC usar corretamente
+  const d = nextDay.getUTCDate();
+  // Date.UTC(year, monthIndex, day, hour, minute, second)
+  return new Date(Date.UTC(y, m, d, 9, 0, 0)); // 09:00 UTC == 06:00 BRT (-03:00)
 }
 
 /**
- * Busca os dados do APOD do Supabase, gerencia o cache e retorna os dados.
- * @returns {Promise<ApodData>} - Os dados do APOD mais recentes.
+ * Retorna true se o cache precisar ser atualizado.
+ * Lógica: apenas atualiza quando já passou das 06:00 (horário de São Paulo) do dia seguinte à data do cache.
+ * Ex: cache '2025-08-27' só expira a partir de 2025-08-28 06:00 (America/Sao_Paulo).
  */
-export async function getAPODData(): Promise<ApodData> {
+function shouldUpdateCache(cachedDate: string | null): boolean {
+  if (!cachedDate) {
+    console.log('Cache: Não encontrado. Necessário buscar novos dados.');
+    return true;
+  }
+
   try {
-    const cachedDate = await AsyncStorage.getItem(APOD_CACHE_DATE_KEY);
-    const cachedRawData = await AsyncStorage.getItem(APOD_CACHE_KEY);
+    const parsed = parseISO(cachedDate); // cria Date referente à meia-noite da data (no contexto do parse)
+    const nextDay = addDays(parsed, 1);
 
-    if (cachedRawData && !shouldUpdateCache(cachedDate)) {
-      console.log("Usando dados do cache do AsyncStorage.");
-      const data: ApodData = JSON.parse(cachedRawData);
-      return data;
+    const thresholdUtc = thresholdUtcForSaopauloDate(nextDay);
+    const now = new Date();
+
+    if (now.getTime() >= thresholdUtc.getTime()) {
+      console.log(
+        `Cache: Data ${cachedDate} expirou (>= ${format(nextDay, 'yyyy-MM-dd')} 06:00 ${TIMEZONE_SAO_PAULO}). Será atualizado.`
+      );
+      return true;
     }
 
-    console.log("Buscando novos dados do Supabase...");
+    console.log(
+      `Cache: Data ${cachedDate} ainda é válido (válido até ${format(nextDay, 'yyyy-MM-dd')} 06:00 ${TIMEZONE_SAO_PAULO}).`
+    );
+    return false;
+  } catch (err) {
+    console.warn('Erro ao verificar validade do cache, forçando atualização.', err);
+    return true;
+  }
+}
 
-    if (cachedRawData) {
-      console.log("Limpando cache antigo do AsyncStorage...");
-      await AsyncStorage.removeItem(APOD_CACHE_KEY);
-      await AsyncStorage.removeItem(APOD_CACHE_DATE_KEY);
-    }
-    
+/**
+ * Limpa o cache local do APOD.
+ */
+export async function clearApodCache(): Promise<void> {
+  try {
+    await AsyncStorage.removeItem(APOD_CACHE_KEY);
+    await AsyncStorage.removeItem(APOD_CACHE_DATE_KEY);
+    console.log('Cache do APOD limpo manualmente.');
+  } catch (err) {
+    console.warn('Falha ao limpar cache do APOD:', err);
+  }
+}
+
+/**
+ * Força atualização (ignora validade do cache) e retorna dados recentes.
+ */
+export async function forceUpdateApodData(): Promise<ApodData> {
+  try {
+    console.log('Forçando atualização dos dados do APOD (ignorando cache)...');
+
     const { data, error } = await supabase
       .from('apod')
       .select('*')
@@ -95,28 +134,106 @@ export async function getAPODData(): Promise<ApodData> {
       .single();
 
     if (error) {
-      console.error("Erro ao buscar dados do Supabase:", error);
-      throw new Error("Não foi possível buscar os dados do Supabase.");
+      console.error('Erro ao forçar fetch do Supabase:', error);
+      throw error;
     }
-
     if (!data) {
-      throw new Error("Nenhum dado encontrado no Supabase.");
+      throw new Error('Nenhum dado encontrado no Supabase ao forçar atualização.');
     }
 
-    // Pré-carrega a imagem usando expo-image antes de salvar os dados
+    // normalizar date para 'YYYY-MM-DD'
+    let apodDate = String(data.date || '');
+    try {
+      apodDate = format(parseISO(apodDate), 'yyyy-MM-dd');
+    } catch {
+      // fallback: manter o que veio
+    }
+
     if (data.media_type === 'image') {
-      console.log("Pré-carregando a nova imagem do APOD...");
-      await ExpoImage.prefetch(data.url);
+      try {
+        // @ts-ignore - tipagem do expo-image pode variar
+        await ExpoImage.prefetch(data.url);
+      } catch (prefetchErr) {
+        console.warn('Falha ao pré-carregar a imagem do APOD (não fatal):', prefetchErr);
+      }
     }
 
     await AsyncStorage.setItem(APOD_CACHE_KEY, JSON.stringify(data));
-    await AsyncStorage.setItem(APOD_CACHE_DATE_KEY, data.date);
-    console.log("Dados e imagem salvos no cache do AsyncStorage.");
+    await AsyncStorage.setItem(APOD_CACHE_DATE_KEY, apodDate);
+    console.log('Dados e imagem salvos no cache do AsyncStorage (forçado).');
 
     return data as ApodData;
-
   } catch (err) {
-    console.error("Erro geral no serviço de APOD:", err);
+    console.error('Erro ao forçar atualização do APOD:', err);
+    throw err;
+  }
+}
+
+/**
+ * Busca os dados do APOD do Supabase, gerencia o cache e retorna os dados.
+ */
+export async function getAPODData(): Promise<ApodData> {
+  try {
+    const cachedDate = await AsyncStorage.getItem(APOD_CACHE_DATE_KEY);
+    const cachedRawData = await AsyncStorage.getItem(APOD_CACHE_KEY);
+
+    // Usar cache se existir e ainda for válido
+    if (cachedRawData && !shouldUpdateCache(cachedDate)) {
+      console.log('Usando dados do cache do AsyncStorage.');
+      const data: ApodData = JSON.parse(cachedRawData);
+      return data;
+    }
+
+    console.log('Buscando novos dados do Supabase...');
+
+    // NÃO removemos o cache aqui — manteremos o fallback caso o fetch falhe.
+    const { data, error } = await supabase
+      .from('apod')
+      .select('*')
+      .order('date', { ascending: false })
+      .limit(1)
+      .single();
+
+    if (error) {
+      console.error('Erro ao buscar dados do Supabase:', error);
+      if (cachedRawData) {
+        console.log('Usando cache antigo como fallback devido ao erro no Supabase.');
+        return JSON.parse(cachedRawData) as ApodData;
+      }
+      throw new Error('Não foi possível buscar os dados do Supabase e não há cache disponível.');
+    }
+
+    if (!data) {
+      throw new Error('Nenhum dado encontrado no Supabase.');
+    }
+
+    // normalizar date para 'YYYY-MM-DD'
+    let apodDate = String(data.date || '');
+    try {
+      apodDate = format(parseISO(apodDate), 'yyyy-MM-dd');
+    } catch {
+      // fallback: manter o que veio
+    }
+
+    // Pré-carrega a imagem (se for image). Se der erro aqui, não abortamos; apenas logamos.
+    if (data.media_type === 'image') {
+      try {
+        // @ts-ignore - tipagem do expo-image pode variar
+        console.log('Pré-carregando a nova imagem do APOD...');
+        await ExpoImage.prefetch(data.url);
+      } catch (prefetchErr) {
+        console.warn('Falha ao pré-carregar a imagem do APOD (não fatal):', prefetchErr);
+      }
+    }
+
+    // Salva apenas após fetch bem sucedido
+    await AsyncStorage.setItem(APOD_CACHE_KEY, JSON.stringify(data));
+    await AsyncStorage.setItem(APOD_CACHE_DATE_KEY, apodDate);
+    console.log('Dados e imagem salvos no cache do AsyncStorage.');
+
+    return data as ApodData;
+  } catch (err) {
+    console.error('Erro geral no serviço de APOD:', err);
     throw err;
   }
 }
