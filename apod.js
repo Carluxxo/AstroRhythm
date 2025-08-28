@@ -1,8 +1,7 @@
-require('dotenv').config();
 const fetch = require('node-fetch');
 const { createClient } = require('@supabase/supabase-js');
 
-// Conexão com Supabase
+// Conexão com Supabase (pega variáveis do GitHub Actions via process.env)
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_ANON_KEY);
 
 // Função para traduzir textos curtos (como title) usando Groq
