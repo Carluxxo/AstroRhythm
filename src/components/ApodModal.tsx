@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Modal, View, Text, StyleSheet, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
 import { BlurView } from 'expo-blur';
-import { X } from 'phosphor-react-native';
 import { Image as ExpoImage } from 'expo-image';
 import { ApodData } from '../services/apodService'; // Assuming ApodData interface is exported
 
@@ -10,21 +9,21 @@ const COLORS = {
   baseSecondaryDark: '#111528',
   textPrimary: '#FFFFFF',
   textSecondary: '#E0E0E0',
-  textTertiary: '#A0A0B0', // For the X icon or subtle text
+  textTertiary: '#A0A0B0',
   accentPrimary: '#8A4FFF',
 };
 
 // Typography from design_guidelines/typography.md
 const TYPOGRAPHY = {
-  titleFontFamily: 'SpaceGrotesk-Bold', // Placeholder - ensure loaded
-  bodyFontFamily: 'Inter-Regular',      // Placeholder - ensure loaded
+  titleFontFamily: 'SpaceGrotesk-Bold',
+  bodyFontFamily: 'Inter-Regular',
   modalTitleSize: 22,
   modalBodySize: 15,
-  modalLineHeight: 1.5 * 15, // Approx 22.5
+  modalLineHeight: 1.5 * 15,
 };
 
-const ICON_SIZE_CLOSE = 28;
 const screenHeight = Dimensions.get('window').height;
+const screenWidth = Dimensions.get('window').width;
 
 interface ApodModalProps {
   visible: boolean;
@@ -33,6 +32,8 @@ interface ApodModalProps {
 }
 
 const ApodModal: React.FC<ApodModalProps> = ({ visible, onClose, apodData }) => {
+  const [aspectRatio, setAspectRatio] = useState<number | undefined>(undefined);
+
   if (!apodData) {
     return null;
   }
@@ -42,37 +43,47 @@ const ApodModal: React.FC<ApodModalProps> = ({ visible, onClose, apodData }) => 
 
   return (
     <Modal
-      animationType="fade" // Or "slide" as per original design_guidelines for modals
+      animationType="fade"
       transparent={true}
       visible={visible}
       onRequestClose={onClose}
     >
       <BlurView intensity={90} tint="dark" style={styles.blurOverlay}>
         <View style={styles.modalContainer}>
-          <TouchableOpacity style={styles.closeButton} onPress={onClose}>
-            <X size={ICON_SIZE_CLOSE} color={COLORS.textSecondary} weight="bold" />
-          </TouchableOpacity>
           <Text style={styles.titleText}>{displayTitle}</Text>
 
           {apodData.media_type === 'image' && (
-            <ExpoImage 
-              source={{ uri: apodData.hdurl || apodData.url }} 
-              style={styles.image} 
-              contentFit="contain" // Corrected
+            <ExpoImage
+              source={{ uri: apodData.hdurl || apodData.url }}
+              style={[
+                styles.image,
+                aspectRatio ? { aspectRatio } : { height: screenHeight * 0.35 },
+              ]}
+              contentFit="cover"
+              onLoad={({ source }) => {
+                if (source?.width && source?.height) {
+                  setAspectRatio(source.width / source.height);
+                }
+              }}
             />
           )}
-          {/* Add video support here if needed, e.g., using Expo's Video component */}
+
           {apodData.media_type === 'video' && (
             <View style={styles.videoPlaceholder}>
-                <Text style={styles.videoPlaceholderText}>Vídeo: {apodData.title}</Text>
-                <Text style={styles.videoPlaceholderLink}>URL: {apodData.url}</Text>
-                <Text style={styles.videoPlaceholderInfo}>(Visualização de vídeo no modal a ser implementada)</Text>
+              <Text style={styles.videoPlaceholderText}>Vídeo: {apodData.title}</Text>
+              <Text style={styles.videoPlaceholderLink}>URL: {apodData.url}</Text>
+              <Text style={styles.videoPlaceholderInfo}>(Visualização de vídeo no modal a ser implementada)</Text>
             </View>
           )}
 
           <ScrollView style={styles.textContainer} contentContainerStyle={styles.scrollContentContainer}>
             <Text style={styles.explanationText}>{displayExplanation}</Text>
           </ScrollView>
+
+          {/* Botão fechar centralizado no rodapé */}
+          <TouchableOpacity style={styles.closeButton} onPress={onClose} activeOpacity={0.8}>
+            <Text style={styles.closeButtonText}>Fechar</Text>
+          </TouchableOpacity>
         </View>
       </BlurView>
     </Modal>
@@ -87,8 +98,8 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     width: '90%',
-    maxHeight: screenHeight * 0.85, // Max 85% of screen height
-    backgroundColor: 'rgba(30, 34, 69, 0.85)', // #1E2245 with opacity for glassmorphism base
+    maxHeight: screenHeight * 0.85,
+    backgroundColor: 'rgba(30, 34, 69, 0.85)',
     borderRadius: 20,
     padding: 20,
     alignItems: 'center',
@@ -98,18 +109,11 @@ const styles = StyleSheet.create({
     shadowRadius: 10,
     elevation: 10,
   },
-  closeButton: {
-    position: 'absolute',
-    top: 15,
-    right: 15,
-    zIndex: 1, // Ensure it's above other content
-    padding: 5, // Increase tap area
-  },
   image: {
     width: '100%',
-    height: screenHeight * 0.35, // Adjust as needed
-    borderRadius: 15,
+    borderRadius: 12,
     marginBottom: 15,
+    backgroundColor: '#000',
   },
   videoPlaceholder: {
     width: '100%',
@@ -143,16 +147,18 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     width: '100%',
-    maxHeight: screenHeight * 0.3, // Max height for text content
+    maxHeight: screenHeight * 0.35,
+    marginBottom: 20,
   },
   scrollContentContainer: {
-    paddingBottom: 20, // Ensure last bit of text is scrollable and visible
+    paddingBottom: 20,
   },
   titleText: {
     fontSize: TYPOGRAPHY.modalTitleSize,
     fontFamily: TYPOGRAPHY.titleFontFamily,
     color: COLORS.textPrimary,
-    marginBottom: 10,
+    marginBottom: 15,
+    marginTop: 10,
     textAlign: 'center',
   },
   explanationText: {
@@ -161,6 +167,20 @@ const styles = StyleSheet.create({
     color: COLORS.textSecondary,
     lineHeight: TYPOGRAPHY.modalLineHeight,
     textAlign: 'left',
+  },
+  closeButton: {
+    marginTop: 0,
+    backgroundColor: COLORS.accentPrimary,
+    paddingVertical: 12,
+    paddingHorizontal: 40,
+    borderRadius: 25,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  closeButtonText: {
+    color: COLORS.textPrimary,
+    fontSize: 16,
+    fontFamily: 'Inter-Medium',
   },
 });
 
