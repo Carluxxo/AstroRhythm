@@ -33,19 +33,10 @@ const APOD_CACHE_KEY = 'apod_data_cache';
 const APOD_CACHE_DATE_KEY = 'apod_cache_date';
 const TIMEZONE_SAO_PAULO = 'America/Sao_Paulo';
 
-/**
- * Gera o instante UTC correspondente a "06:00" no fuso America/Sao_Paulo do dia informado.
- * Estratégia:
- * 1) tenta usar date-fns-tz.zonedTimeToUtc em runtime (se disponível)
- * 2) se não disponível, usa fallback simples assumindo -03:00 (06:00 BRT => 09:00 UTC)
- *
- * OBS: o fallback é adequado para uso moderno (Brasil sem horário de verão). Se você precisa de
- * precisão histórica com DST, alinhe a versão do date-fns-tz que exporte zonedTimeToUtc.
- */
+
 function thresholdUtcForSaopauloDate(nextDay: Date): Date {
   const nextDayStr = format(nextDay, 'yyyy-MM-dd');
 
-  // checa dinamicamente se a função existe em runtime
   const maybeFn: any =
     (dateFnsTz as any).zonedTimeToUtc ??
     (dateFnsTz as any).default?.zonedTimeToUtc ??
@@ -53,7 +44,6 @@ function thresholdUtcForSaopauloDate(nextDay: Date): Date {
 
   if (typeof maybeFn === 'function') {
     try {
-      // usa a função da lib (retorna um Date UTC)
       return maybeFn(`${nextDayStr} 06:00:00`, TIMEZONE_SAO_PAULO);
     } catch (err) {
       console.warn('date-fns-tz.zonedTimeToUtc existia mas falhou ao executar, caindo no fallback:', err);
@@ -62,8 +52,6 @@ function thresholdUtcForSaopauloDate(nextDay: Date): Date {
     console.debug('date-fns-tz.zonedTimeToUtc não disponível em runtime; usando fallback -03:00.');
   }
 
-  // --- Fallback: assume offset -03:00 (BRT sem DST) ---
-  // 06:00 em São Paulo (UTC-3) equivale a 09:00 UTC no mesmo dia.
   const y = nextDay.getUTCFullYear();
   const m = nextDay.getUTCMonth(); // já em UTC pra Date.UTC usar corretamente
   const d = nextDay.getUTCDate();
@@ -71,11 +59,6 @@ function thresholdUtcForSaopauloDate(nextDay: Date): Date {
   return new Date(Date.UTC(y, m, d, 9, 0, 0)); // 09:00 UTC == 06:00 BRT (-03:00)
 }
 
-/**
- * Retorna true se o cache precisar ser atualizado.
- * Lógica: apenas atualiza quando já passou das 06:00 (horário de São Paulo) do dia seguinte à data do cache.
- * Ex: cache '2025-08-27' só expira a partir de 2025-08-28 06:00 (America/Sao_Paulo).
- */
 function shouldUpdateCache(cachedDate: string | null): boolean {
   if (!cachedDate) {
     console.log('Cache: Não encontrado. Necessário buscar novos dados.');
@@ -106,9 +89,6 @@ function shouldUpdateCache(cachedDate: string | null): boolean {
   }
 }
 
-/**
- * Limpa o cache local do APOD.
- */
 export async function clearApodCache(): Promise<void> {
   try {
     await AsyncStorage.removeItem(APOD_CACHE_KEY);
@@ -119,9 +99,6 @@ export async function clearApodCache(): Promise<void> {
   }
 }
 
-/**
- * Força atualização (ignora validade do cache) e retorna dados recentes.
- */
 export async function forceUpdateApodData(): Promise<ApodData> {
   try {
     console.log('Forçando atualização dos dados do APOD (ignorando cache)...');
@@ -169,9 +146,6 @@ export async function forceUpdateApodData(): Promise<ApodData> {
   }
 }
 
-/**
- * Busca os dados do APOD do Supabase, gerencia o cache e retorna os dados.
- */
 export async function getAPODData(): Promise<ApodData> {
   try {
     const cachedDate = await AsyncStorage.getItem(APOD_CACHE_DATE_KEY);
