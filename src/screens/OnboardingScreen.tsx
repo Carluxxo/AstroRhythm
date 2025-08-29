@@ -14,7 +14,7 @@ const OnboardingScreen = () => {
     <View style={styles.container}>
       <StatusBar style="light" />
       <ImageBackground
-        source={{ uri: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?q=80&w=1000' }} // Consider local asset
+        source={{ uri: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?q=80&w=2111' }} // Consider local asset
         style={styles.background}
         resizeMode="cover"
       >
