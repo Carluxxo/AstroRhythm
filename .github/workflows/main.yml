@@ -3,8 +3,8 @@ name: Daily Task
 
 on:
   schedule:
-    # Executa todos os dias às 2:00 da manhã no horário de São Paulo (BRT)
-    - cron: '0 2 * * *'
+    # Executa todos os dias às 6:00 da manhã no horário de São Paulo (BRT)
+    - cron: '04 5 * * *'
   workflow_dispatch: # Permite execução manual no GitHub Actions
 
 jobs:
