@@ -16,10 +16,12 @@ import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList, PlayerScreenParams } from "../navigation/types";
 import { Image as ExpoImage } from 'expo-image';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Services and Components
 import { getAPODData, ApodData } from "../services/apodService";
 import ApodModal from "../components/ApodModal";
+import { supabase } from "../services/supabaseClient";
 
 // Importar dados (serão substituídos ou complementados)
 import meditationJsonData from "../data/meditations.json";
@@ -94,14 +96,64 @@ const DashboardScreen = () => {
   const [apodError, setApodError] = useState<string | null>(null);
   const [isApodModalVisible, setIsApodModalVisible] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
+  const [userName, setUserName] = useState("Explorador");
+  const [loadingUserName, setLoadingUserName] = useState(true);
 
-  const [greeting, setGreeting] = useState("Olá, Explorador");
+  // Função para buscar o nome do usuário
+  const fetchUserName = useCallback(async () => {
+    try {
+      // Primeiro verifica se temos o nome em cache
+      const cachedName = await AsyncStorage.getItem('userName');
+      
+      if (cachedName) {
+        setUserName(cachedName);
+        setLoadingUserName(false);
+        return;
+      }
+
+      // Se não tem em cache, busca do banco de dados
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (session?.user) {
+        // Busca os dados do usuário - usando método mais seguro
+        const { data: userData, error } = await supabase
+          .from('profiles')
+          .select('username')
+          .eq('id', session.user.id)
+          .maybeSingle(); // Usando maybeSingle em vez de single
+
+        if (error) {
+          console.error('Erro ao buscar nome do usuário:', error);
+          // Se não encontrar na tabela profiles, tenta pegar do user_metadata
+          const username = session.user.user_metadata?.username || 'Explorador';
+          setUserName(username);
+          await AsyncStorage.setItem('userName', username);
+        } else if (userData) {
+          setUserName(userData.username);
+          await AsyncStorage.setItem('userName', userData.username);
+        } else {
+          // Se não encontrar dados, usa user_metadata
+          const username = session.user.user_metadata?.username || 'Explorador';
+          setUserName(username);
+          await AsyncStorage.setItem('userName', username);
+        }
+      }
+    } catch (error) {
+      console.error('Erro ao buscar nome do usuário:', error);
+      setUserName('Explorador');
+    } finally {
+      setLoadingUserName(false);
+    }
+  }, []);
+
+  // Buscar o nome do usuário ao montar o componente
+  useEffect(() => {
+    fetchUserName();
+  }, [fetchUserName]);
+
   const [currentDayInfo, setCurrentDayInfo] = useState("");
-
   const [upcomingEvents, setUpcomingEvents] = useState<AstronomicalEvent[]>([]);
-  const [recommendedMeditations, setRecommendedMeditations] = useState<
-    Meditation[]
-  >([]);
+  const [recommendedMeditations, setRecommendedMeditations] = useState<Meditation[]>([]);
 
   const fetchDashboardData = useCallback(async (forceRefreshApod = false) => {
     setApodLoading(true);
@@ -298,7 +350,11 @@ const DashboardScreen = () => {
         }
       >
         <View style={styles.header}>
-          <Text style={styles.greeting}>{greeting}</Text>
+          {loadingUserName ? (
+            <ActivityIndicator size="small" color={COLORS.accentPrimary} />
+          ) : (
+            <Text style={styles.greeting}>Olá, {userName}</Text>
+          )}
           <Text style={styles.date}>{currentDayInfo}</Text>
         </View>
 
@@ -367,7 +423,7 @@ const DashboardScreen = () => {
                       <ExpoImage
                         source={{ uri: item.image_url }}
                         style={styles.meditationImage}
-                        contentFit="cover" // FIX
+                        contentFit="cover"
                       />
                     ) : (
                       <View

@@ -1,8 +1,8 @@
-// src/navigation/AppNavigator.tsx
-
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { View, ActivityIndicator, StyleSheet } from 'react-native';
+import { supabase } from '../services/supabaseClient';
 import { RootStackParamList } from './types';
 
 import OnboardingScreen from '../screens/OnboardingScreen';
@@ -12,36 +12,85 @@ import CalendarScreen from '../screens/CalendarScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import PlayerScreen from '../screens/PlayerScreen';
 import LuaScreen from '../screens/LuaScreen';
+import CreateAccountScreen from '../screens/CreateAccountScreen';
+import WaitConfirm from '../screens/WaitConfirm';
 import CustomBottomNavbar from '../components/CustomBottomNavbar';
+import LoginAccountScreen from '../screens/LoginAccountScreen'
 
 const Stack = createStackNavigator<RootStackParamList>();
-const Tab = createBottomTabNavigator<RootStackParamList>();
+const Tab = createBottomTabNavigator();
 
-const MainTabNavigator = () => (
-  <Tab.Navigator
-    tabBar={props => <CustomBottomNavbar {...props} />}
-    screenOptions={{ headerShown: false }}
-  >
-    <Tab.Screen name="Dashboard" component={DashboardScreen} options={{ tabBarLabel: 'Início' }} />
-    <Tab.Screen name="Library"   component={LibraryScreen}   options={{ tabBarLabel: 'Biblioteca' }} />
-    <Tab.Screen name="Calendar"  component={CalendarScreen}  options={{ tabBarLabel: 'Calendário' }} />
-    <Tab.Screen name="Lua"       component={LuaScreen}       options={{ tabBarLabel: 'Lua' }} />
-    <Tab.Screen name="Profile"   component={ProfileScreen}   options={{ tabBarLabel: 'Perfil' }} />
-  </Tab.Navigator>
-);
+const MainTabNavigator = () => {
+  return (
+    <Tab.Navigator
+      tabBar={props => <CustomBottomNavbar {...props} />}
+      screenOptions={{ headerShown: false }}
+    >
+      <Tab.Screen name="Dashboard" component={DashboardScreen} />
+      <Tab.Screen name="Library" component={LibraryScreen} />
+      <Tab.Screen name="Calendar" component={CalendarScreen} />
+      <Tab.Screen name="Lua" component={LuaScreen} />
+      <Tab.Screen name="Profile" component={ProfileScreen} />
+    </Tab.Navigator>
+  );
+};
 
-const AppNavigator = () => (
-  <Stack.Navigator
-    initialRouteName="Onboarding"
-    screenOptions={{
-      headerShown: false,
-      cardStyle: { backgroundColor: '#050810' },
-    }}
-  >
-    <Stack.Screen name="Onboarding" component={OnboardingScreen} />
-    <Stack.Screen name="MainTabs"    component={MainTabNavigator} />
-    <Stack.Screen name="Player"      component={PlayerScreen} />
-  </Stack.Navigator>
-);
+const AppNavigator = () => {
+  const [session, setSession] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const checkSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      setSession(session);
+      setLoading(false);
+    };
+
+    checkSession();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#8A4FFF" />
+      </View>
+    );
+  }
+
+  return (
+    <Stack.Navigator
+      screenOptions={{ headerShown: false, cardStyle: { backgroundColor: '#050810' } }}
+    >
+      {session && session.user ? (
+        <>
+          <Stack.Screen name="MainTabs" component={MainTabNavigator} />
+          <Stack.Screen name="Player" component={PlayerScreen} />
+        </>
+      ) : (
+        <>
+          <Stack.Screen name="Onboarding" component={OnboardingScreen} />
+          <Stack.Screen name="CreateAccount" component={CreateAccountScreen} />
+          <Stack.Screen name="WaitConfirm" component={WaitConfirm} />
+          <Stack.Screen name="LoginAccount" component={LoginAccountScreen} />
+        </>
+      )}
+    </Stack.Navigator>
+  );
+};
+
+const styles = StyleSheet.create({
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#050810',
+  },
+});
 
 export default AppNavigator;

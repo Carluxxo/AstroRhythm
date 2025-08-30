@@ -1,3 +1,5 @@
+// src/screens/OnboardingScreen.tsx
+
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ImageBackground } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
@@ -20,7 +22,6 @@ const OnboardingScreen = () => {
       >
         <View style={styles.overlay}>
           <View style={styles.logoContainer}>
-            {/* TODO: Replace emoji with an actual logo component or image if available */}
             <Text style={styles.logo}>✨ AstroRhythm</Text> 
             <Text style={styles.tagline}>Meditação Inspirada no Cosmos</Text>
           </View>
@@ -32,14 +33,14 @@ const OnboardingScreen = () => {
           <View style={styles.buttonContainer}>
             <TouchableOpacity 
               style={styles.primaryButton}
-              onPress={()  => navigation.navigate('MainTabs')} // Corrected Navigation
+              onPress={() => navigation.navigate('CreateAccount')} // Navega para tela de login/registro
             >
               <Text style={styles.primaryButtonText}>Começar Jornada</Text>
             </TouchableOpacity>
             
             <TouchableOpacity 
               style={styles.secondaryButton}
-              onPress={() => navigation.navigate('MainTabs')} // Corrected Navigation (assuming same destination for now)
+              onPress={() => navigation.navigate('LoginAccount')} // Navega para tela de login
             >
               <Text style={styles.secondaryButtonText}>Já tenho uma conta</Text>
             </TouchableOpacity>
@@ -63,7 +64,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(10, 10, 15, 0.7)',
     padding: 24,
     justifyContent: 'space-between',
-    paddingTop: 60, // Consider SafeAreaView
+    paddingTop: 60,
     paddingBottom: 50,
   },
   logoContainer: {
@@ -72,20 +73,17 @@ const styles = StyleSheet.create({
   },
   logo: {
     fontSize: 32,
-    // fontFamily: FONTS.title, // Ensure fonts are loaded if used here
-    fontWeight: 'bold', // Fallback if font not loaded
+    fontWeight: 'bold',
     color: '#FFFFFF',
     marginBottom: 8,
   },
   tagline: {
     fontSize: 18,
-    // fontFamily: FONTS.body, // Ensure fonts are loaded
     color: '#FFFFFF',
     textAlign: 'center',
   },
   description: {
     fontSize: 16,
-    // fontFamily: FONTS.body, // Ensure fonts are loaded
     color: '#FFFFFF',
     textAlign: 'center',
     lineHeight: 24,
@@ -96,7 +94,7 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   primaryButton: {
-    backgroundColor: '#6B3FA0', // Consider using COLORS from a central theme file
+    backgroundColor: '#8A4FFF', // Cor primária de destaque
     paddingVertical: 16,
     borderRadius: 50,
     alignItems: 'center',
@@ -104,12 +102,11 @@ const styles = StyleSheet.create({
   primaryButtonText: {
     color: '#FFFFFF',
     fontSize: 16,
-    // fontFamily: FONTS.bodySemiBold, // Ensure fonts are loaded
-    fontWeight: 'bold', // Fallback
+    fontWeight: 'bold',
   },
   secondaryButton: {
     borderWidth: 1,
-    borderColor: '#6B3FA0', // Consider using COLORS
+    borderColor: '#8A4FFF',
     paddingVertical: 16,
     borderRadius: 50,
     alignItems: 'center',
@@ -117,9 +114,7 @@ const styles = StyleSheet.create({
   secondaryButtonText: {
     color: '#FFFFFF',
     fontSize: 16,
-    // fontFamily: FONTS.bodyMedium, // Ensure fonts are loaded
   },
 });
 
 export default OnboardingScreen;
-

@@ -3,7 +3,7 @@ import { createClient } from '@supabase/supabase-js';
 import { REACT_APP_SUPABASE_URL, REACT_APP_SUPABASE_ANON_KEY } from '@env';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as dateFnsTz from 'date-fns-tz';
-import { parseISO, addDays, format } from 'date-fns';
+import { parseISO, addDays, format, addSeconds } from 'date-fns';
 import { Image as ExpoImage } from 'expo-image';
 
 // Conexão com Supabase
@@ -33,7 +33,6 @@ const APOD_CACHE_KEY = 'apod_data_cache';
 const APOD_CACHE_DATE_KEY = 'apod_cache_date';
 const TIMEZONE_SAO_PAULO = 'America/Sao_Paulo';
 
-
 function thresholdUtcForSaopauloDate(nextDay: Date): Date {
   const nextDayStr = format(nextDay, 'yyyy-MM-dd');
 
@@ -44,7 +43,9 @@ function thresholdUtcForSaopauloDate(nextDay: Date): Date {
 
   if (typeof maybeFn === 'function') {
     try {
-      return maybeFn(`${nextDayStr} 06:00:00`, TIMEZONE_SAO_PAULO);
+      // Calcula 02:00 em São Paulo e soma +1 segundo
+      const d = maybeFn(`${nextDayStr} 02:00:00`, TIMEZONE_SAO_PAULO);
+      return addSeconds(d, 1);
     } catch (err) {
       console.warn('date-fns-tz.zonedTimeToUtc existia mas falhou ao executar, caindo no fallback:', err);
     }
@@ -53,10 +54,10 @@ function thresholdUtcForSaopauloDate(nextDay: Date): Date {
   }
 
   const y = nextDay.getUTCFullYear();
-  const m = nextDay.getUTCMonth(); // já em UTC pra Date.UTC usar corretamente
+  const m = nextDay.getUTCMonth();
   const d = nextDay.getUTCDate();
-  // Date.UTC(year, monthIndex, day, hour, minute, second)
-  return new Date(Date.UTC(y, m, d, 9, 0, 0)); // 09:00 UTC == 06:00 BRT (-03:00)
+  // 05:00 UTC == 02:00 BRT; soma +1 segundo
+  return new Date(Date.UTC(y, m, d, 5, 0, 1));
 }
 
 function shouldUpdateCache(cachedDate: string | null): boolean {
@@ -66,7 +67,7 @@ function shouldUpdateCache(cachedDate: string | null): boolean {
   }
 
   try {
-    const parsed = parseISO(cachedDate); // cria Date referente à meia-noite da data (no contexto do parse)
+    const parsed = parseISO(cachedDate);
     const nextDay = addDays(parsed, 1);
 
     const thresholdUtc = thresholdUtcForSaopauloDate(nextDay);
@@ -74,13 +75,13 @@ function shouldUpdateCache(cachedDate: string | null): boolean {
 
     if (now.getTime() >= thresholdUtc.getTime()) {
       console.log(
-        `Cache: Data ${cachedDate} expirou (>= ${format(nextDay, 'yyyy-MM-dd')} 06:00 ${TIMEZONE_SAO_PAULO}). Será atualizado.`
+        `Cache: Data ${cachedDate} expirou (>= ${format(nextDay, 'yyyy-MM-dd')} 02:00:01 ${TIMEZONE_SAO_PAULO}). Será atualizado.`
       );
       return true;
     }
 
     console.log(
-      `Cache: Data ${cachedDate} ainda é válido (válido até ${format(nextDay, 'yyyy-MM-dd')} 06:00 ${TIMEZONE_SAO_PAULO}).`
+      `Cache: Data ${cachedDate} ainda é válido (válido até ${format(nextDay, 'yyyy-MM-dd')} 02:00:01 ${TIMEZONE_SAO_PAULO}).`
     );
     return false;
   } catch (err) {
@@ -151,7 +152,6 @@ export async function getAPODData(): Promise<ApodData> {
     const cachedDate = await AsyncStorage.getItem(APOD_CACHE_DATE_KEY);
     const cachedRawData = await AsyncStorage.getItem(APOD_CACHE_KEY);
 
-    // Usar cache se existir e ainda for válido
     if (cachedRawData && !shouldUpdateCache(cachedDate)) {
       console.log('Usando dados do cache do AsyncStorage.');
       const data: ApodData = JSON.parse(cachedRawData);
@@ -160,7 +160,6 @@ export async function getAPODData(): Promise<ApodData> {
 
     console.log('Buscando novos dados do Supabase...');
 
-    // NÃO removemos o cache aqui — manteremos o fallback caso o fetch falhe.
     const { data, error } = await supabase
       .from('apod')
       .select('*')
@@ -181,18 +180,14 @@ export async function getAPODData(): Promise<ApodData> {
       throw new Error('Nenhum dado encontrado no Supabase.');
     }
 
-    // normalizar date para 'YYYY-MM-DD'
     let apodDate = String(data.date || '');
     try {
       apodDate = format(parseISO(apodDate), 'yyyy-MM-dd');
-    } catch {
-      // fallback: manter o que veio
-    }
+    } catch {}
 
-    // Pré-carrega a imagem (se for image). Se der erro aqui, não abortamos; apenas logamos.
     if (data.media_type === 'image') {
       try {
-        // @ts-ignore - tipagem do expo-image pode variar
+        // @ts-ignore
         console.log('Pré-carregando a nova imagem do APOD...');
         await ExpoImage.prefetch(data.url);
       } catch (prefetchErr) {
@@ -200,7 +195,6 @@ export async function getAPODData(): Promise<ApodData> {
       }
     }
 
-    // Salva apenas após fetch bem sucedido
     await AsyncStorage.setItem(APOD_CACHE_KEY, JSON.stringify(data));
     await AsyncStorage.setItem(APOD_CACHE_DATE_KEY, apodDate);
     console.log('Dados e imagem salvos no cache do AsyncStorage.');

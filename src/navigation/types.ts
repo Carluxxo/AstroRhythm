@@ -1,3 +1,5 @@
+// src/navigation/types.ts
+
 export interface PlayerScreenParams {
   id: string;
   title: string;
@@ -9,11 +11,14 @@ export interface PlayerScreenParams {
 
 export type RootStackParamList = {
   Onboarding: undefined;
-  MainTabs: undefined; // This is the navigator for Dashboard, Library, Calendar, Profile
+  CreateAccount: undefined; // Tela de criação de conta
+  MainTabs: undefined;      // Navegador para Dashboard, Library, Calendar, Profile
   Dashboard: undefined;
   Library: undefined;
   Player: PlayerScreenParams;
+  LoginAccount: undefined;
   Calendar: undefined;
-  Profile: undefined; // Added Profile to RootStack as it's part of MainTabs
+  Profile: undefined;
   Lua: undefined;
+  WaitConfirm: undefined
 };

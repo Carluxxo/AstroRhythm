@@ -1,10 +1,12 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, Platform } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, Platform, Alert, ActivityIndicator } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../navigation/types';
-import { Ionicons, Feather } from '@expo/vector-icons'; // Feather for more icon options
+import { Ionicons, Feather } from '@expo/vector-icons';
+import { supabase } from '../services/supabaseClient';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // --- Cores ---
 const COLORS = {
@@ -32,17 +34,90 @@ type ProfileScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Prof
 
 const ProfileScreen = () => {
   const navigation = useNavigation<ProfileScreenNavigationProp>();
+  const [loading, setLoading] = useState(false);
+  const [userData, setUserData] = useState({
+    userName: "Explorador Cósmico",
+    joinDate: "Desde Abril, 2025",
+    meditationsCompleted: 12,
+    timeMeditating: "3h 45min"
+  });
 
-  // Placeholder data
-  const userName = "Explorador Cósmico";
-  const meditationsCompleted = 12;
-  const timeMeditating = "3h 45min";
-  const joinDate = "Desde Abril, 2025";
+  // Buscar dados do usuário ao carregar a tela
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        // Buscar dados do usuário do AsyncStorage
+        const cachedUserData = await AsyncStorage.getItem('userData');
+        if (cachedUserData) {
+          setUserData(JSON.parse(cachedUserData));
+        }
+        
+        // Buscar dados adicionais do Supabase se necessário
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session?.user) {
+          // Buscar dados específicos do usuário se necessário
+        }
+      } catch (error) {
+        console.error('Erro ao buscar dados do usuário:', error);
+      }
+    };
+    
+    fetchUserData();
+  }, []);
 
-  const handleLogout = () => {
-    // Simulate logout - In a real app, clear tokens, navigate to Auth flow
-    console.log("Logout pressed");
-    navigation.navigate('Dashboard'); // Or a Login screen if it existed
+  const handleLogout = async () => {
+    setLoading(true);
+    try {
+      // 1. Fazer logout do Supabase
+      const { error } = await supabase.auth.signOut();
+      
+      if (error) {
+        Alert.alert('Erro', 'Não foi possível fazer logout. Tente novamente.');
+        console.error('Erro no logout:', error.message);
+        return;
+      }
+      
+      // 2. Limpar TODO o cache do AsyncStorage
+      const allKeys = await AsyncStorage.getAllKeys();
+      
+      // Filtrar chaves que NÃO devem ser removidas (se houver alguma)
+      // Por exemplo, se quiser manter configurações específicas do app
+      const keysToRemove = allKeys.filter(key => 
+        !key.startsWith('ExpoImage') && // Mantém cache do Expo Image
+        !key.startsWith('@expo') // Mantém outras chaves do Expo se necessário
+      );
+      
+      // Remover todas as chaves selecionadas
+      if (keysToRemove.length > 0) {
+        await AsyncStorage.multiRemove(keysToRemove);
+      }
+      
+      console.log('Cache limpo com sucesso. Chaves removidas:', keysToRemove);
+      
+    } catch (err) {
+      Alert.alert('Erro', 'Ocorreu um erro inesperado ao fazer logout.');
+      console.error('Erro no logout:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const confirmLogout = () => {
+    Alert.alert(
+      "Sair da Conta",
+      "Tem certeza que deseja sair da sua conta? Todos os dados locais serão removidos.",
+      [
+        {
+          text: "Cancelar",
+          style: "cancel"
+        },
+        { 
+          text: "Sair", 
+          onPress: handleLogout,
+          style: "destructive"
+        }
+      ]
+    );
   };
 
   return (
@@ -54,26 +129,25 @@ const ProfileScreen = () => {
             <Ionicons name="arrow-back" size={28} color={COLORS.textPrimary} />
           </TouchableOpacity>
           <Text style={styles.pageTitle}>Meu Perfil</Text>
-          <View style={{width: 28}} />{/* Spacer for centering title */}
+          <View style={{width: 28}} />
         </View>
 
         <View style={styles.profileHeaderContainer}>
           <View style={styles.avatarContainer}>
-            {/* Placeholder for Avatar Image - using an icon for now */}
             <Feather name="user" size={60} color={COLORS.accentPrimary} />
           </View>
-          <Text style={styles.userName}>{userName}</Text>
-          <Text style={styles.joinDate}>{joinDate}</Text>
+          <Text style={styles.userName}>{userData.userName}</Text>
+          <Text style={styles.joinDate}>{userData.joinDate}</Text>
         </View>
 
         <View style={styles.statsContainer}>
           <View style={styles.statItem}>
-            <Text style={styles.statValue}>{meditationsCompleted}</Text>
+            <Text style={styles.statValue}>{userData.meditationsCompleted}</Text>
             <Text style={styles.statLabel}>Meditações Concluídas</Text>
           </View>
           <View style={styles.statSeparator} />
           <View style={styles.statItem}>
-            <Text style={styles.statValue}>{timeMeditating}</Text>
+            <Text style={styles.statValue}>{userData.timeMeditating}</Text>
             <Text style={styles.statLabel}>Tempo Meditando</Text>
           </View>
         </View>
@@ -98,13 +172,22 @@ const ProfileScreen = () => {
           </TouchableOpacity>
         </View>
 
-        <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-          <Feather name="log-out" size={20} color={COLORS.error} style={styles.menuIcon} />
-          <Text style={styles.logoutButtonText}>Sair da Conta</Text>
+        <TouchableOpacity 
+          style={[styles.logoutButton, loading && styles.logoutButtonDisabled]} 
+          onPress={confirmLogout}
+          disabled={loading}
+        >
+          {loading ? (
+            <ActivityIndicator color={COLORS.error} />
+          ) : (
+            <>
+              <Feather name="log-out" size={20} color={COLORS.error} style={styles.menuIcon} />
+              <Text style={styles.logoutButtonText}>Sair da Conta</Text>
+            </>
+          )}
         </TouchableOpacity>
 
       </ScrollView>
-      {/* CustomBottomNavbar is rendered by AppNavigator */}
     </View>
   );
 };
@@ -115,7 +198,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.backgroundPrimary,
   },
   scrollContentContainer: {
-    paddingBottom: 120, // Space for navbar and some breathing room
+    paddingBottom: 120,
   },
   header: {
     flexDirection: 'row',
@@ -229,6 +312,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: COLORS.error + '80',
   },
+  logoutButtonDisabled: {
+    opacity: 0.7,
+  },
   logoutButtonText: {
     fontFamily: FONTS.bodySemiBold,
     fontSize: 16,
@@ -238,4 +324,3 @@ const styles = StyleSheet.create({
 });
 
 export default ProfileScreen;
-
