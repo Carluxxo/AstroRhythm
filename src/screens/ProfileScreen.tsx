@@ -37,25 +37,65 @@ const ProfileScreen = () => {
   const [loading, setLoading] = useState(false);
   const [userData, setUserData] = useState({
     userName: "Explorador Cósmico",
-    joinDate: "Desde Abril, 2025",
+    joinDate: "Carregando...",
     meditationsCompleted: 12,
     timeMeditating: "3h 45min"
   });
+
+  // Função para formatar a data com inicial do mês maiúscula
+  const formatJoinDate = (dateString: string) => {
+    const date = new Date(dateString);
+    const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long' };
+    let formatted = date.toLocaleDateString('pt-BR', options);
+    // Coloca a inicial do mês maiúscula
+    formatted = formatted.replace(/^([a-zà-ú])/i, (match) => match.toUpperCase());
+    // Troca "Mês de Ano" por "Mês, Ano"
+    formatted = formatted.replace(/ de /i, ', ');
+    return `Desde: ${formatted}`;
+  };
 
   // Buscar dados do usuário ao carregar a tela
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         // Buscar dados do usuário do AsyncStorage
-        const cachedUserData = await AsyncStorage.getItem('userData');
+        const cachedUserData = await AsyncStorage.getItem('userProfileData');
         if (cachedUserData) {
           setUserData(JSON.parse(cachedUserData));
         }
         
-        // Buscar dados adicionais do Supabase se necessário
+        // Buscar dados do Supabase
         const { data: { session } } = await supabase.auth.getSession();
         if (session?.user) {
-          // Buscar dados específicos do usuário se necessário
+          // Buscar username da tabela profiles
+          const { data: profileData, error: profileError } = await supabase
+            .from('profiles')
+            .select('username, created_at')
+            .eq('id', session.user.id)
+            .single();
+
+          if (!profileError && profileData) {
+            const newUserData = {
+              userName: profileData.username || "Explorador Cósmico",
+              joinDate: formatJoinDate(profileData.created_at || session.user.created_at),
+              meditationsCompleted: 12,
+              timeMeditating: "3h 45min"
+            };
+            
+            setUserData(newUserData);
+            await AsyncStorage.setItem('userProfileData', JSON.stringify(newUserData));
+          } else {
+            // Fallback para user_metadata se profiles não existir
+            const newUserData = {
+              userName: session.user.user_metadata?.username || "Explorador Cósmico",
+              joinDate: formatJoinDate(session.user.created_at),
+              meditationsCompleted: 12,
+              timeMeditating: "3h 45min"
+            };
+            
+            setUserData(newUserData);
+            await AsyncStorage.setItem('userProfileData', JSON.stringify(newUserData));
+          }
         }
       } catch (error) {
         console.error('Erro ao buscar dados do usuário:', error);
@@ -81,7 +121,6 @@ const ProfileScreen = () => {
       const allKeys = await AsyncStorage.getAllKeys();
       
       // Filtrar chaves que NÃO devem ser removidas (se houver alguma)
-      // Por exemplo, se quiser manter configurações específicas do app
       const keysToRemove = allKeys.filter(key => 
         !key.startsWith('ExpoImage') && // Mantém cache do Expo Image
         !key.startsWith('@expo') // Mantém outras chaves do Expo se necessário

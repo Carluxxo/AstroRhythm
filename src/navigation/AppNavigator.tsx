@@ -26,11 +26,11 @@ const MainTabNavigator = () => {
       tabBar={props => <CustomBottomNavbar {...props} />}
       screenOptions={{ headerShown: false }}
     >
-      <Tab.Screen name="Dashboard" component={DashboardScreen} />
-      <Tab.Screen name="Library" component={LibraryScreen} />
-      <Tab.Screen name="Calendar" component={CalendarScreen} />
+      <Tab.Screen name="Início" component={DashboardScreen} />
+      <Tab.Screen name="Coleção" component={LibraryScreen} />
+      <Tab.Screen name="Agenda" component={CalendarScreen} />
       <Tab.Screen name="Lua" component={LuaScreen} />
-      <Tab.Screen name="Profile" component={ProfileScreen} />
+      <Tab.Screen name="Perfil" component={ProfileScreen} />
     </Tab.Navigator>
   );
 };

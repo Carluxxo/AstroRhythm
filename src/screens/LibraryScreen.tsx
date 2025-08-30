@@ -9,13 +9,14 @@ import {
   Alert,
   Platform,
   FlatList,
+  SafeAreaView,
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList, PlayerScreenParams } from "../navigation/types";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
-import { Image as ExpoImage } from 'expo-image'; // Imported ExpoImage
+import { Image as ExpoImage } from 'expo-image';
 
 import meditationJsonData from "../data/meditations.json";
 import { usePlayer, Track } from "../contexts/PlayerContext";
@@ -78,22 +79,43 @@ const LibraryScreen = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  // Mapeamento de ícones para categorias - CORRIGIDO
+  const getCategoryIcon = (category: string) => {
+    const iconMap: Record<string, { name: string; library: 'Ionicons' | 'MaterialCommunityIcons' }> = {
+      "Todos": { name: "grid", library: "Ionicons" },
+      "Favoritos": { name: "heart", library: "Ionicons" },
+      "Premium": { name: "crown", library: "MaterialCommunityIcons" },
+      "Gratuito": { name: "lock-open", library: "Ionicons" },
+      "Galáxias": { name: "planet", library: "Ionicons" },
+      "Sistema Solar": { name: "orbit", library: "MaterialCommunityIcons" }, // Ícone corrigido
+      "Nebulosas": { name: "cloud", library: "Ionicons" },
+      "Fases da Lua": { name: "moon", library: "Ionicons" }, // Ícone da lua corrigido
+      "Eventos Cósmicos": { name: "atom", library: "MaterialCommunityIcons" }, // Ícone alternativo
+    };
+
+    return iconMap[category] || { name: "star", library: "Ionicons" };
+  };
+
   // Load initial data and favorites
   useEffect(() => {
     const initialize = async () => {
       setLoading(true);
       try {
-        await loadFavorites(); // Ensure favorites are loaded from storage via context
+        await loadFavorites();
         const loadedMeditations = meditationJsonData.map(m => ({
           ...m,
-          audio_url: m.audio_url || "", // Ensure audio_url is always a string
+          audio_url: m.audio_url || "",
           duration_seconds: m.duration_seconds || 0,
         })) as Meditation[];
         setMeditations(loadedMeditations);
+        
+        // Get unique categories from meditations
         const uniqueCategories = Array.from(
           new Set(loadedMeditations.map(item => item.category))
         );
-        setCategories(["Todos", ...uniqueCategories, "Favoritos"]);
+        
+        // Add Premium and Gratuito as special categories
+        setCategories(["Todos", "Favoritos", "Premium", "Gratuito", ...uniqueCategories]);
         setError(null);
 
         // Pre-fetch images to cache them
@@ -120,6 +142,12 @@ const LibraryScreen = () => {
     if (selectedCategory === "Todos") return meditations;
     if (selectedCategory === "Favoritos") {
       return meditations.filter(med => isFavorite(med.id));
+    }
+    if (selectedCategory === "Premium") {
+      return meditations.filter(item => item.is_premium);
+    }
+    if (selectedCategory === "Gratuito") {
+      return meditations.filter(item => !item.is_premium);
     }
     return meditations.filter(item => item.category === selectedCategory);
   }, [meditations, selectedCategory, isFavorite]);
@@ -162,28 +190,39 @@ const LibraryScreen = () => {
     await toggleFavorite(trackDataForFavorite);
   }, [toggleFavorite]);
 
-  const renderCategoryItem = ({ item }: { item: string }) => (
-    <TouchableOpacity
-      style={[
-        styles.categoryButton,
-        selectedCategory === item
-          ? styles.categoryButtonActive
-          : styles.categoryButtonInactive,
-      ]}
-      onPress={() => setSelectedCategory(item)}
-    >
-      <Text
+  const renderCategoryItem = ({ item }: { item: string }) => {
+    const iconInfo = getCategoryIcon(item);
+    const IconComponent = iconInfo.library === "Ionicons" ? Ionicons : MaterialCommunityIcons;
+    
+    return (
+      <TouchableOpacity
         style={[
-          styles.categoryText,
+          styles.categoryButton,
           selectedCategory === item
-            ? styles.categoryTextActive
-            : styles.categoryTextInactive,
+            ? styles.categoryButtonActive
+            : styles.categoryButtonInactive,
         ]}
+        onPress={() => setSelectedCategory(item)}
       >
-        {item}
-      </Text>
-    </TouchableOpacity>
-  );
+        <IconComponent
+          name={iconInfo.name as any}
+          size={16}
+          color={selectedCategory === item ? COLORS.textPrimary : COLORS.textSecondary}
+          style={styles.categoryIcon}
+        />
+        <Text
+          style={[
+            styles.categoryText,
+            selectedCategory === item
+              ? styles.categoryTextActive
+              : styles.categoryTextInactive,
+          ]}
+        >
+          {item}
+        </Text>
+      </TouchableOpacity>
+    );
+  };
 
   const renderMeditationItem = ({ item }: { item: Meditation }) => (
     <TouchableOpacity
@@ -192,10 +231,10 @@ const LibraryScreen = () => {
     >
       <View style={styles.meditationImageContainer}>
         {item.image_url ? (
-          <ExpoImage // Updated to ExpoImage
+          <ExpoImage
             source={{ uri: item.image_url }}
             style={styles.meditationImage}
-            contentFit="cover" // Updated prop
+            contentFit="cover"
           />
         ) : (
           <View
@@ -272,7 +311,7 @@ const LibraryScreen = () => {
   }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <StatusBar style="light" />
       <ScrollView
         stickyHeaderIndices={[1]}
@@ -287,7 +326,7 @@ const LibraryScreen = () => {
           </Text>
         </View>
 
-        {/* Sticky Categories Header */}
+        {/* Sticky Categories Header - CORRIGIDO: Adicionado paddingTop para evitar sobreposição */}
         <View style={styles.stickyCategoriesContainer}>
           <FlatList
             horizontal
@@ -308,10 +347,10 @@ const LibraryScreen = () => {
             >
               <View style={styles.featuredImageContainer}>
                 {featuredMeditation.image_url ? (
-                  <ExpoImage // Updated to ExpoImage
+                  <ExpoImage
                     source={{ uri: featuredMeditation.image_url }}
                     style={styles.featuredImage}
-                    contentFit="cover" // Updated prop
+                    contentFit="cover"
                   />
                 ) : (
                   <View
@@ -370,6 +409,10 @@ const LibraryScreen = () => {
               ? "Todas as Jornadas"
               : selectedCategory === "Favoritos"
               ? "Seus Favoritos"
+              : selectedCategory === "Premium"
+              ? "Conteúdo Premium"
+              : selectedCategory === "Gratuito"
+              ? "Conteúdo Gratuito"
               : `Explorando ${selectedCategory}`}
           </Text>
           {filteredMeditations.length > 0 ? (
@@ -379,7 +422,7 @@ const LibraryScreen = () => {
               keyExtractor={item => item.id}
               numColumns={2}
               columnWrapperStyle={styles.meditationGridColumnWrapper}
-              scrollEnabled={false} // Handled by parent ScrollView
+              scrollEnabled={false}
             />
           ) : (
             <View style={styles.emptyStateContainer}>
@@ -391,6 +434,10 @@ const LibraryScreen = () => {
               <Text style={styles.noItemsText}>
                 {selectedCategory === "Favoritos"
                   ? "Você ainda não marcou nenhuma meditação como favorita. Explore e toque no coração para salvar!"
+                  : selectedCategory === "Premium"
+                  ? "Nenhum conteúdo premium encontrado."
+                  : selectedCategory === "Gratuito"
+                  ? "Nenhum conteúdo gratuito encontrado."
                   : "Nenhuma meditação encontrada nesta categoria."}
               </Text>
               {selectedCategory === "Favoritos" && (
@@ -406,7 +453,7 @@ const LibraryScreen = () => {
           )}
         </View>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -424,10 +471,10 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollContentContainer: {
-    paddingBottom: 100, // Space for navbar
+    paddingBottom: 100,
   },
   header: {
-    marginTop: Platform.OS === "ios" ? 60 : 50,
+    marginTop: Platform.OS === "ios" ? 20 : 30, // Reduzido para iOS
     marginBottom: 20,
     paddingHorizontal: 20,
   },
@@ -445,13 +492,16 @@ const styles = StyleSheet.create({
   stickyCategoriesContainer: {
     backgroundColor: COLORS.backgroundPrimary,
     paddingVertical: 10,
+    paddingTop: Platform.OS === "ios" ? 10 : 10, // Adicionado paddingTop para evitar sobreposição
   },
   categoriesContent: {
     paddingHorizontal: 20,
     gap: 10,
   },
   categoryButton: {
-    paddingHorizontal: 18,
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 16,
     paddingVertical: 10,
     borderRadius: 20,
     borderWidth: 1,
@@ -463,6 +513,9 @@ const styles = StyleSheet.create({
   categoryButtonInactive: {
     backgroundColor: COLORS.backgroundSecondary,
     borderColor: COLORS.borderSubtle,
+  },
+  categoryIcon: {
+    marginRight: 6,
   },
   categoryText: {
     fontFamily: FONTS.bodyMedium,

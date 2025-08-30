@@ -89,15 +89,15 @@ const CustomBottomNavbar: React.FC<BottomTabBarProps> = ({ state, descriptors, n
           const renderIcon = () => {
             const color = isFocused ? COLORS.primaryHighlight : COLORS.textNeutralMedium;
             switch (route.name) {
-              case 'Dashboard':
+              case 'Início':
                 return <House size={ICON_SIZE} color={color} weight={isFocused ? 'fill' : 'regular'} />;
-              case 'Library':
+              case 'Coleção':
                 return <Books size={ICON_SIZE} color={color} weight={isFocused ? 'fill' : 'regular'} />;
-              case 'Calendar':
+              case 'Agenda':
                 return <CalendarBlank size={ICON_SIZE} color={color} weight={isFocused ? 'fill' : 'regular'} />;
               case 'Lua':
                 return <Moon size={ICON_SIZE} color={color} weight={isFocused ? 'fill' : 'regular'} />;
-              case 'Profile':
+              case 'Perfil':
                 return <User size={ICON_SIZE} color={color} weight={isFocused ? 'fill' : 'regular'} />;
               default:
                 return null;
