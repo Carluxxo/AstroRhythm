@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import React, { useState, useEffect, useMemo, useCallback, useContext } from "react";
 import {
   View,
   Text,
@@ -6,7 +6,6 @@ import {
   ScrollView,
   TouchableOpacity,
   ActivityIndicator,
-  Alert,
   Platform,
   FlatList,
   SafeAreaView,
@@ -20,6 +19,8 @@ import { Image as ExpoImage } from 'expo-image';
 
 import meditationJsonData from "../data/meditations.json";
 import { usePlayer, Track } from "../contexts/PlayerContext";
+import Premium from "../components/Premium";
+import { useNavbar } from "../contexts/NavbarContext"; // Importar o contexto
 
 const COLORS = {
   backgroundPrimary: "#050810",
@@ -65,9 +66,9 @@ type LibraryScreenNavigationProp = StackNavigationProp<
 
 const LibraryScreen = () => {
   const navigation = useNavigation<LibraryScreenNavigationProp>();
+  const { hideNavbar, showNavbar } = useNavbar(); // Usar o contexto da navbar
   const {
     currentTrack,
-    playTrack,
     isPlaying,
     isFavorite,
     toggleFavorite,
@@ -78,8 +79,9 @@ const LibraryScreen = () => {
   const [selectedCategory, setSelectedCategory] = useState("Todos");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showPremiumModal, setShowPremiumModal] = useState(false);
 
-  // Mapeamento de ícones para categorias - CORRIGIDO
+  // Mapeamento de ícones para categorias
   const getCategoryIcon = (category: string) => {
     const iconMap: Record<string, { name: string; library: 'Ionicons' | 'MaterialCommunityIcons' }> = {
       "Todos": { name: "grid", library: "Ionicons" },
@@ -87,10 +89,10 @@ const LibraryScreen = () => {
       "Premium": { name: "crown", library: "MaterialCommunityIcons" },
       "Gratuito": { name: "lock-open", library: "Ionicons" },
       "Galáxias": { name: "planet", library: "Ionicons" },
-      "Sistema Solar": { name: "orbit", library: "MaterialCommunityIcons" }, // Ícone corrigido
+      "Sistema Solar": { name: "orbit", library: "MaterialCommunityIcons" },
       "Nebulosas": { name: "cloud", library: "Ionicons" },
-      "Fases da Lua": { name: "moon", library: "Ionicons" }, // Ícone da lua corrigido
-      "Eventos Cósmicos": { name: "atom", library: "MaterialCommunityIcons" }, // Ícone alternativo
+      "Fases da Lua": { name: "moon", library: "Ionicons" },
+      "Eventos Cósmicos": { name: "atom", library: "MaterialCommunityIcons" },
     };
 
     return iconMap[category] || { name: "star", library: "Ionicons" };
@@ -161,11 +163,10 @@ const LibraryScreen = () => {
 
   const handleMeditationPress = (item: Meditation) => {
     if (item.is_premium) {
-      Alert.alert(
-        "Conteúdo Premium",
-        "Esta meditação é exclusiva para assinantes AstroRhythm Premium. Desbloqueie o acesso a todo o nosso catálogo cósmico!",
-        [{ text: "Entendido" }]
-      );
+      // Esconder a navbar com animação
+      hideNavbar();
+      // Abrir modal Premium após a navbar estar escondida
+      setTimeout(() => setShowPremiumModal(true), 300);
     } else {
       const params: PlayerScreenParams = {
         id: item.id,
@@ -176,6 +177,12 @@ const LibraryScreen = () => {
       };
       navigation.navigate("Player", params);
     }
+  };
+
+  const handleClosePremiumModal = () => {
+    setShowPremiumModal(false);
+    // Mostrar a navbar com animação após fechar o modal
+    showNavbar();
   };
 
   const handleToggleFavorite = useCallback(async (track: Meditation) => {
@@ -326,7 +333,7 @@ const LibraryScreen = () => {
           </Text>
         </View>
 
-        {/* Sticky Categories Header - CORRIGIDO: Adicionado paddingTop para evitar sobreposição */}
+        {/* Sticky Categories Header */}
         <View style={styles.stickyCategoriesContainer}>
           <FlatList
             horizontal
@@ -453,6 +460,12 @@ const LibraryScreen = () => {
           )}
         </View>
       </ScrollView>
+
+      {/* Modal Premium */}
+      <Premium 
+        visible={showPremiumModal} 
+        onClose={handleClosePremiumModal} 
+      />
     </SafeAreaView>
   );
 };
@@ -474,7 +487,7 @@ const styles = StyleSheet.create({
     paddingBottom: 100,
   },
   header: {
-    marginTop: Platform.OS === "ios" ? 20 : 30, // Reduzido para iOS
+    marginTop: Platform.OS === "ios" ? 20 : 30,
     marginBottom: 20,
     paddingHorizontal: 20,
   },
@@ -492,7 +505,7 @@ const styles = StyleSheet.create({
   stickyCategoriesContainer: {
     backgroundColor: COLORS.backgroundPrimary,
     paddingVertical: 10,
-    paddingTop: Platform.OS === "ios" ? 10 : 10, // Adicionado paddingTop para evitar sobreposição
+    paddingTop: Platform.OS === "ios" ? 10 : 10,
   },
   categoriesContent: {
     paddingHorizontal: 20,

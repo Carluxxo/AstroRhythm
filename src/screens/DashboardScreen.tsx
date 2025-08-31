@@ -1,3 +1,5 @@
+// DashboardScreen.tsx (código completo corrigido)
+
 import { Ionicons } from "@expo/vector-icons";
 import React, { useState, useEffect, useCallback } from "react";
 import {
@@ -12,7 +14,7 @@ import {
   RefreshControl,
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList, PlayerScreenParams } from "../navigation/types";
 import { Image as ExpoImage } from 'expo-image';
@@ -21,6 +23,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 // Services and Components
 import { getAPODData, ApodData } from "../services/apodService";
 import ApodModal from "../components/ApodModal";
+import Premium from "../components/Premium";
 import { supabase } from "../services/supabaseClient";
 
 // Importar dados (serão substituídos ou complementados)
@@ -91,6 +94,7 @@ type DashboardScreenNavigationProp = StackNavigationProp<
 
 const DashboardScreen = () => {
   const navigation = useNavigation<DashboardScreenNavigationProp>();
+  const route = useRoute();
   const [apodData, setApodData] = useState<ApodData | null>(null);
   const [apodLoading, setApodLoading] = useState(true);
   const [apodError, setApodError] = useState<string | null>(null);
@@ -98,6 +102,29 @@ const DashboardScreen = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [userName, setUserName] = useState("Explorador");
   const [loadingUserName, setLoadingUserName] = useState(true);
+  const [showPremiumModal, setShowPremiumModal] = useState(false);
+
+  // Verificar se deve mostrar o modal Premium para novos usuários
+  useEffect(() => {
+    const checkShouldShowPremium = async () => {
+      try {
+        const shouldShow = await AsyncStorage.getItem('shouldShowPremium');
+        if (shouldShow === 'true') {
+          // Adicionar um pequeno delay para garantir que a UI esteja carregada
+          setTimeout(() => {
+            setShowPremiumModal(true);
+          }, 1500);
+          
+          // Remover a flag para não mostrar novamente
+          await AsyncStorage.removeItem('shouldShowPremium');
+        }
+      } catch (error) {
+        console.error('Erro ao verificar se deve mostrar premium:', error);
+      }
+    };
+
+    checkShouldShowPremium();
+  }, []);
 
   // Função para buscar o nome do usuário
   const fetchUserName = useCallback(async () => {
@@ -191,7 +218,7 @@ const DashboardScreen = () => {
           title: string;
           description: string;
           color: string;
-          viewing_tips: string[];
+  viewing_tips: string[];
         }[]
       )
         .map((event) => ({
@@ -464,6 +491,12 @@ const DashboardScreen = () => {
         visible={isApodModalVisible}
         onClose={() => setIsApodModalVisible(false)}
         apodData={apodData}
+      />
+
+      {/* Modal Premium */}
+      <Premium 
+        visible={showPremiumModal} 
+        onClose={() => setShowPremiumModal(false)} 
       />
     </View>
   );

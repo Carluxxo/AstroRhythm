@@ -1,8 +1,9 @@
 import React, { useRef, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Dimensions, Animated } from 'react-native';
 import { BlurView } from 'expo-blur';
-import { House, Books, CalendarBlank, Moon, User } from 'phosphor-react-native'; // Assuming these are the icons needed
+import { House, Books, CalendarBlank, Moon, User } from 'phosphor-react-native';
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
+import { useNavbar } from '../contexts/NavbarContext'; // Importar o hook do contexto
 
 // Colors from design_guidelines/color_palette.md
 const COLORS = {
@@ -16,16 +17,28 @@ const COLORS = {
 
 // Typography from design_guidelines/typography.md
 const TYPOGRAPHY = {
-  labelFontFamily: 'Inter-Regular', // Assuming Inter-Regular is available or mapped
+  labelFontFamily: 'Inter-Regular',
   labelFontSize: 11,
   labelFontFamilyMedium: 'Inter-Medium',
 };
 
 const ICON_SIZE = 24;
+const NAVBAR_HEIGHT = 65;
 
 const CustomBottomNavbar: React.FC<BottomTabBarProps> = ({ state, descriptors, navigation }) => {
+  const { navbarVisible, navbarAnim } = useNavbar(); // Usar o hook do contexto
+  
+  // Interpolação para mover a navbar para baixo
+  const translateY = navbarAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0, NAVBAR_HEIGHT + 20], // Move a navbar para baixo (altura + margem)
+  });
+  
+  // Se a navbar não estiver visível, não renderizar nada
+  if (!navbarVisible) return null;
+
   return (
-    <View style={styles.container}>
+    <Animated.View style={[styles.container, { transform: [{ translateY }] }]}>
       <BlurView intensity={80} tint="dark" style={styles.blurViewContainer}>
         {state.routes.map((route, index) => {
           const { options } = descriptors[route.key];
@@ -140,7 +153,7 @@ const CustomBottomNavbar: React.FC<BottomTabBarProps> = ({ state, descriptors, n
           );
         })}
       </BlurView>
-    </View>
+    </Animated.View>
   );
 };
 
@@ -160,7 +173,7 @@ const styles = StyleSheet.create({
   },
   blurViewContainer: {
     flexDirection: 'row',
-    height: 65, // Adjust height as needed
+    height: NAVBAR_HEIGHT, // Use constant for height
     alignItems: 'center',
     justifyContent: 'space-around',
     // backgroundColor: 'rgba(17, 21, 40, 0.7)', // Fallback or tint for BlurView (#111528 with opacity)
@@ -171,7 +184,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingVertical: 8,
   },
-
   labelText: {
     fontSize: TYPOGRAPHY.labelFontSize,
     fontFamily: TYPOGRAPHY.labelFontFamily,
