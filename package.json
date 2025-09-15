@@ -1,18 +1,20 @@
 {
-  "name": "apod-fetcher",
-  "version": "1.0.0",
-  "description": "Script para buscar e salvar dados do APOD da NASA com tradução e upload para o Supabase",
-  "main": "index.js",
-  "scripts": {
-    "start": "node index.js"
-  },
-  "dependencies": {
-    "@supabase/supabase-js": "^2.0.0",
-    "node-fetch": "^2.6.7"
-  },
-  "engines": {
-    "node": ">=14.0.0"
-  },
-  "author": "",
-  "license": "ISC"
+    "name": "apod-fetcher",
+    "version": "1.0.0",
+    "description": "Script para buscar e salvar dados do APOD da NASA com tradução e upload para o Supabase",
+    "main": "index.js",
+    "scripts": {
+        "start": "node index.js"
+    },
+    "dependencies": {
+        "@supabase/supabase-js": "^2.0.0",
+        "cheerio": "^1.1.0",
+        "dotenv": "^17.2.2",
+        "node-fetch": "^2.6.7"
+    },
+    "engines": {
+        "node": ">=14.0.0"
+    },
+    "author": "",
+    "license": "ISC"
 }
