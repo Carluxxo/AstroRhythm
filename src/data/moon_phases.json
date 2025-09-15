@@ -1,0 +1,50 @@
+[
+  {
+    "name": "Lua Nova",
+    "icon": "new_moon",
+    "briefDescription": "Início do ciclo lunar. A Lua está entre a Terra e o Sol, e sua face visível permanece escura.",
+    "longDescription": "A Lua Nova marca o começo do ciclo lunar. Neste momento, a Lua está posicionada entre a Terra e o Sol, e o lado que vemos não recebe luz solar. É um instante de escuridão propício à introspecção, à contemplação do céu e ao plantio de novas intenções. Simboliza recomeços, reflexões profundas e sementes energéticas para projetos futuros."
+  },
+  {
+    "name": "Crescente Côncava",
+    "icon": "waxing_crescent",
+    "briefDescription": "Uma pequena porção da Lua começa a brilhar. Energia de crescimento e manifestação.",
+    "longDescription": "Após a Lua Nova, uma fina curva de luz surge na Lua, conhecida como Crescente Côncava. A luminosidade aumenta gradualmente, sinalizando o crescimento da energia e a direção para a Lua Cheia. É um período ideal para dar os primeiros passos em direção aos objetivos, nutrir intenções e construir momentum em seus projetos e sonhos."
+  },
+  {
+    "name": "Quarto Crescente",
+    "icon": "first_quarter",
+    "briefDescription": "Metade da Lua iluminada. Momento de decisões e ação.",
+    "longDescription": "No Quarto Crescente, metade do disco lunar está iluminada e a outra metade permanece na sombra. Este é um ponto de virada no ciclo lunar, associado a desafios e escolhas importantes. É um momento para agir com determinação, superar obstáculos e se comprometer com o caminho traçado, aproveitando a energia crescente para avançar nos projetos."
+  },
+  {
+    "name": "Crescente Gibosa",
+    "icon": "waxing_gibbous",
+    "briefDescription": "Mais da metade da Lua visível. Tempo de ajustes e preparação para a culminação.",
+    "longDescription": "Durante a Crescente Gibosa, a Lua já está mais da metade iluminada, aproximando-se da plenitude. É um período de expectativa e refinamento, em que se ajustam planos, fortalecem intenções e se prepara para o ápice da Lua Cheia. A energia convida à paciência e à atenção aos detalhes antes da manifestação completa."
+  },
+  {
+    "name": "Lua Cheia",
+    "icon": "full_moon",
+    "briefDescription": "Lua totalmente iluminada. Auge de energia, celebração e manifestação.",
+    "longDescription": "A Lua Cheia surge quando a Terra está entre o Sol e a Lua, iluminando por completo seu disco visível. É o ápice do ciclo lunar, momento de intensa energia, clareza e celebração. Simboliza a colheita, a gratidão e a manifestação plena das intenções plantadas na Lua Nova. Emoções se intensificam, favorecendo reflexões profundas e experiências transformadoras."
+  },
+  {
+    "name": "Minguante Gibosa",
+    "icon": "waning_gibbous",
+    "briefDescription": "A luz da Lua diminui. Momento de gratidão e análise.",
+    "longDescription": "Após a Lua Cheia, a luz começa a diminuir na Minguante Gibosa, com a sombra crescendo sobre o disco lunar. Este período convida à gratidão pelo que foi alcançado, ao compartilhamento e à análise dos resultados. É um momento de reflexão, internalização da experiência e preparação para liberar o que não é mais necessário."
+  },
+  {
+    "name": "Quarto Minguante",
+    "icon": "third_quarter",
+    "briefDescription": "Metade da Lua escura. Hora de liberar, perdoar e deixar ir.",
+    "longDescription": "No Quarto Minguante, metade da Lua está iluminada e a outra metade na sombra crescente. É uma fase de liberação, ideal para abandonar hábitos que não servem mais, perdoar e limpar espaços internos e externos. A energia favorece o desapego, preparando o caminho para o renascimento e o ciclo que se aproxima."
+  },
+  {
+    "name": "Minguante Côncava",
+    "icon": "waning_crescent",
+    "briefDescription": "Apenas uma fina faixa de luz. Período de descanso e interiorização.",
+    "longDescription": "Na Minguante Côncava, resta apenas uma pequena porção de luz. É o momento mais introspectivo do ciclo lunar, propício ao descanso, à meditação e à recuperação de energias. Convida à rendição, ao recolhimento e à preparação para a Lua Nova, encerrando o ciclo de forma serena e renovadora."
+  }
+]

@@ -1,0 +1,33 @@
+{
+  "expo": {
+    "name": "AstroRhythm",
+    "slug": "astrorhythm-uiqakao4-qovgesipm8zu",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "newArchEnabled": true,
+    "jsEngine": "hermes",
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": { "supportsTablet": true },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      }
+    },
+    "web": { "favicon": "./assets/favicon.png" },
+    "extra": { "eas": { "projectId": "615d126a-3853-40d3-86f4-cac96808f6b4" } },
+    "owner": "carlos.henrique",
+    "runtimeVersion": { "policy": "appVersion" },
+    "updates": { "url": "https://u.expo.dev/615d126a-3853-40d3-86f4-cac96808f6b4" },
+    "plugins": [
+      "expo-audio",
+      "expo-video"
+    ]
+  }
+}

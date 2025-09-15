@@ -1,0 +1,402 @@
+[
+  {
+    "id": "1",
+    "title": "Viagem a Júpiter",
+    "description": "Uma meditação guiada sobre Viagem a Júpiter. Explore as maravilhas do cosmos e encontre a paz interior.",
+    "duration_seconds": 720,
+    "audio_url": "https://cdn.pixabay.com/download/audio/2025/04/04/audio_cc53130fa0.mp3?filename=meditation-music-322801.mp3",
+    "image_url": "https://moon.nasa.gov/internal_resources/606",
+    "category": "Sistema Solar",
+    "is_premium": false
+  },
+  {
+    "id": "2",
+    "title": "Viagem a Marte",
+    "description": "Uma meditação guiada sobre Viagem a Marte. Explore as maravilhas do cosmos e encontre a paz interior.",
+    "duration_seconds": 720,
+    "audio_url": "https://cdn.pixabay.com/download/audio/2025/04/20/audio_9186958ce0.mp3?filename=meditation-spiritual-music-330169.mp3",
+    "image_url": "https://images.nasa.gov/details-PIA19048",
+    "category": "Sistema Solar",
+    "is_premium": true
+  },
+  {
+    "id": "3",
+    "title": "Viagem a Saturno",
+    "description": "Uma meditação guiada sobre Viagem a Saturno. Explore as maravilhas do cosmos e encontre a paz interior.",
+    "duration_seconds": 720,
+    "audio_url": "https://cdn.pixabay.com/download/audio/2025/04/04/audio_cc53130fa0.mp3?filename=meditation-music-322801.mp3",
+    "image_url": "https://images.nasa.gov/details-PIA17172",
+    "category": "Sistema Solar",
+    "is_premium": false
+  },
+  {
+    "id": "4",
+    "title": "Viagem a Mercúrio",
+    "description": "Uma meditação guiada sobre Viagem a Mercúrio. Explore as maravilhas do cosmos e encontre a paz interior.",
+    "duration_seconds": 720,
+    "audio_url": "https://cdn.pixabay.com/download/audio/2025/04/20/audio_9186958ce0.mp3?filename=meditation-spiritual-music-330169.mp3",
+    "image_url": "https://images.nasa.gov/details-PIA19411",
+    "category": "Sistema Solar",
+    "is_premium": false
+  },
+  {
+    "id": "5",
+    "title": "Viagem a Vênus",
+    "description": "Uma meditação guiada sobre Viagem a Vênus. Explore as maravilhas do cosmos e encontre a paz interior.",
+    "duration_seconds": 720,
+    "audio_url": "https://cdn.pixabay.com/download/audio/2025/04/04/audio_cc53130fa0.mp3?filename=meditation-music-322801.mp3",
+    "image_url": "https://images.nasa.gov/details-PIA00271",
+    "category": "Sistema Solar",
+    "is_premium": false
+  },
+  {
+    "id": "6",
+    "title": "Viagem a Urano",
+    "description": "Uma meditação guiada sobre Viagem a Urano. Explore as maravilhas do cosmos e encontre a paz interior.",
+    "duration_seconds": 720,
+    "audio_url": "https://cdn.pixabay.com/download/audio/2025/04/20/audio_9186958ce0.mp3?filename=meditation-spiritual-music-330169.mp3",
+    "image_url": "https://images.nasa.gov/details-PIA18182",
+    "category": "Sistema Solar",
+    "is_premium": false
+  },
+  {
+    "id": "7",
+    "title": "Viagem a Netuno",
+    "description": "Uma meditação guiada sobre Viagem a Netuno. Explore as maravilhas do cosmos e encontre a paz interior.",
+    "duration_seconds": 720,
+    "audio_url": "https://cdn.pixabay.com/download/audio/2025/04/04/audio_cc53130fa0.mp3?filename=meditation-music-322801.mp3",
+    "image_url": "https://images.nasa.gov/details-PIA00042",
+    "category": "Sistema Solar",
+    "is_premium": false
+  },
+  {
+    "id": "8",
+    "title": "Viagem à Lua",
+    "description": "Uma meditação guiada sobre Viagem à Lua. Explore as maravilhas do cosmos e encontre a paz interior.",
+    "duration_seconds": 720,
+    "audio_url": "https://cdn.pixabay.com/download/audio/2025/04/20/audio_9186958ce0.mp3?filename=meditation-spiritual-music-330169.mp3",
+    "image_url": "https://images.nasa.gov/details-as11-40-5875",
+    "category": "Sistema Solar",
+    "is_premium": false
+  },
+  {
+    "id": "9",
+    "title": "Galáxia de Andrômeda",
+    "description": "Uma meditação guiada sobre Galáxia de Andrômeda. Explore as maravilhas do cosmos e encontre a paz interior.",
+    "duration_seconds": 720,
+    "audio_url": "https://cdn.pixabay.com/download/audio/2025/04/04/audio_cc53130fa0.mp3?filename=meditation-music-322801.mp3",
+    "image_url": "https://images.nasa.gov/details-PIA19821",
+    "category": "Galáxias",
+    "is_premium": false
+  },
+  {
+    "id": "10",
+    "title": "Via Láctea",
+    "description": "Uma meditação guiada sobre Via Láctea. Explore as maravilhas do cosmos e encontre a paz interior.",
+    "duration_seconds": 720,
+    "audio_url": "https://cdn.pixabay.com/download/audio/2025/04/20/audio_9186958ce0.mp3?filename=meditation-spiritual-music-330169.mp3",
+    "image_url": "https://images.nasa.gov/details-PIA16684",
+    "category": "Galáxias",
+    "is_premium": false
+  },
+  {
+    "id": "11",
+    "title": "Galáxia do Sombrero",
+    "description": "Uma meditação guiada sobre Galáxia do Sombrero. Explore as maravilhas do cosmos e encontre a paz interior.",
+    "duration_seconds": 720,
+    "audio_url": "https://cdn.pixabay.com/download/audio/2025/04/04/audio_cc53130fa0.mp3?filename=meditation-music-322801.mp3",
+    "image_url": "https://images.nasa.gov/details-opo0328a",
+    "category": "Galáxias",
+    "is_premium": false
+  },
+  {
+    "id": "12",
+    "title": "Galáxia do Redemoinho",
+    "description": "Uma meditação guiada sobre Galáxia do Redemoinho. Explore as maravilhas do cosmos e encontre a paz interior.",
+    "duration_seconds": 720,
+    "audio_url": "https://cdn.pixabay.com/download/audio/2025/04/20/audio_9186958ce0.mp3?filename=meditation-spiritual-music-330169.mp3",
+    "image_url": "https://images.nasa.gov/details-opo05012a",
+    "category": "Galáxias",
+    "is_premium": false
+  },
+  {
+    "id": "13",
+    "title": "Galáxia de Bode",
+    "description": "Uma meditação guiada sobre Galáxia de Bode. Explore as maravilhas do cosmos e encontre a paz interior.",
+    "duration_seconds": 720,
+    "audio_url": "https://cdn.pixabay.com/download/audio/2025/04/04/audio_cc53130fa0.mp3?filename=meditation-music-322801.mp3",
+    "image_url": "https://images.nasa.gov/details-opo0723a",
+    "category": "Galáxias",
+    "is_premium": false
+  },
+  {
+    "id": "14",
+    "title": "Galáxia do Triângulo",
+    "description": "Uma meditação guiada sobre Galáxia do Triângulo. Explore as maravilhas do cosmos e encontre a paz interior.",
+    "duration_seconds": 720,
+    "audio_url": "https://cdn.pixabay.com/download/audio/2025/04/20/audio_9186958ce0.mp3?filename=meditation-spiritual-music-330169.mp3",
+    "image_url": "https://images.nasa.gov/details-PIA23042",
+    "category": "Galáxias",
+    "is_premium": false
+  },
+  {
+    "id": "15",
+    "title": "Galáxia do Olho Negro",
+    "description": "Uma meditação guiada sobre Galáxia do Olho Negro. Explore as maravilhas do cosmos e encontre a paz interior.",
+    "duration_seconds": 720,
+    "audio_url": "https://cdn.pixabay.com/download/audio/2025/04/04/audio_cc53130fa0.mp3?filename=meditation-music-322801.mp3",
+    "image_url": "https://example.com/default_image.jpg",
+    "category": "Galáxias",
+    "is_premium": false
+  },
+  {
+    "id": "16",
+    "title": "Galáxia Anã do Cão Maior",
+    "description": "Uma meditação guiada sobre Galáxia Anã do Cão Maior. Explore as maravilhas do cosmos e encontre a paz interior.",
+    "duration_seconds": 720,
+    "audio_url": "https://cdn.pixabay.com/download/audio/2025/04/20/audio_9186958ce0.mp3?filename=meditation-spiritual-music-330169.mp3",
+    "image_url": "https://www.nasa.gov/wp-content/uploads/2020/04/hubble_friday_04032020.jpg",
+    "category": "Galáxias",
+    "is_premium": false
+  },
+  {
+    "id": "17",
+    "title": "Nebulosa de Orion",
+    "description": "Uma meditação guiada sobre Nebulosa de Orion. Explore as maravilhas do cosmos e encontre a paz interior.",
+    "duration_seconds": 720,
+    "audio_url": "https://cdn.pixabay.com/download/audio/2025/04/04/audio_cc53130fa0.mp3?filename=meditation-music-322801.mp3",
+    "image_url": "https://science.nasa.gov/wp-content/uploads/2023/04/orion-nebula-xlarge_web.jpg",
+    "category": "Nebulosas",
+    "is_premium": false
+  },
+  {
+    "id": "18",
+    "title": "Nebulosa do Caranguejo",
+    "description": "Uma meditação guiada sobre Nebulosa do Caranguejo. Explore as maravilhas do cosmos e encontre a paz interior.",
+    "duration_seconds": 720,
+    "audio_url": "https://cdn.pixabay.com/download/audio/2025/04/20/audio_9186958ce0.mp3?filename=meditation-spiritual-music-330169.mp3",
+    "image_url": "https://www.nasa.gov/wp-content/uploads/2017/07/crab_nebula_0.jpg",
+    "category": "Nebulosas",
+    "is_premium": false
+  },
+  {
+    "id": "19",
+    "title": "Nebulosa da Águia",
+    "description": "Uma meditação guiada sobre Nebulosa da Águia. Explore as maravilhas do cosmos e encontre a paz interior.",
+    "duration_seconds": 720,
+    "audio_url": "https://cdn.pixabay.com/download/audio/2025/04/04/audio_cc53130fa0.mp3?filename=meditation-music-322801.mp3",
+    "image_url": "https://www.nasa.gov/wp-content/uploads/2015/01/pillars_of_creation.jpg",
+    "category": "Nebulosas",
+    "is_premium": false
+  },
+  {
+    "id": "20",
+    "title": "Nebulosa da Lagoa",
+    "description": "Uma meditação guiada sobre Nebulosa da Lagoa. Explore as maravilhas do cosmos e encontre a paz interior.",
+    "duration_seconds": 720,
+    "audio_url": "https://cdn.pixabay.com/download/audio/2025/04/20/audio_9186958ce0.mp3?filename=meditation-spiritual-music-330169.mp3",
+    "image_url": "https://www.nasa.gov/wp-content/uploads/2018/04/lagoon-nebula-28th.jpg",
+    "category": "Nebulosas",
+    "is_premium": false
+  },
+  {
+    "id": "21",
+    "title": "Nebulosa da Borboleta",
+    "description": "Uma meditação guiada sobre Nebulosa da Borboleta. Explore as maravilhas do cosmos e encontre a paz interior.",
+    "duration_seconds": 720,
+    "audio_url": "https://cdn.pixabay.com/download/audio/2025/04/04/audio_cc53130fa0.mp3?filename=meditation-music-322801.mp3",
+    "image_url": "https://www.nasa.gov/wp-content/uploads/2023/06/nhq202306010001-largesl.jpg",
+    "category": "Nebulosas",
+    "is_premium": false
+  },
+  {
+    "id": "22",
+    "title": "Nebulosa da Hélice",
+    "description": "Uma meditação guiada sobre Nebulosa da Hélice. Explore as maravilhas do cosmos e encontre a paz interior.",
+    "duration_seconds": 720,
+    "audio_url": "https://cdn.pixabay.com/download/audio/2025/04/20/audio_9186958ce0.mp3?filename=meditation-spiritual-music-330169.mp3",
+    "image_url": "https://www.nasa.gov/wp-content/uploads/2020/09/stsci-h-p2047a-f-1991x1991.png",
+    "category": "Nebulosas",
+    "is_premium": false
+  },
+  {
+    "id": "23",
+    "title": "Nebulosa da Tarântula",
+    "description": "Uma meditação guiada sobre Nebulosa da Tarântula. Explore as maravilhas do cosmos e encontre a paz interior.",
+    "duration_seconds": 720,
+    "audio_url": "https://cdn.pixabay.com/download/audio/2025/04/04/audio_cc53130fa0.mp3?filename=meditation-music-322801.mp3",
+    "image_url": "https://www.nasa.gov/wp-content/uploads/2022/09/stsci-01gb26b7z3f611x00q1t3y1525.png",
+    "category": "Nebulosas",
+    "is_premium": false
+  },
+  {
+    "id": "24",
+    "title": "Nebulosa do Anel",
+    "description": "Uma meditação guiada sobre Nebulosa do Anel. Explore as maravilhas do cosmos e encontre a paz interior.",
+    "duration_seconds": 720,
+    "audio_url": "https://cdn.pixabay.com/download/audio/2025/04/20/audio_9186958ce0.mp3?filename=meditation-spiritual-music-330169.mp3",
+    "image_url": "https://www.nasa.gov/wp-content/uploads/2023/08/stsci-01h6nkx0b0j2gj9m819rvp1gsc.png",
+    "category": "Nebulosas",
+    "is_premium": false
+  },
+  {
+    "id": "25",
+    "title": "Chuva de Líridas",
+    "description": "Uma meditação guiada sobre Chuva de Líridas. Explore as maravilhas do cosmos e encontre a paz interior.",
+    "duration_seconds": 720,
+    "audio_url": "https://cdn.pixabay.com/download/audio/2025/04/04/audio_cc53130fa0.mp3?filename=meditation-music-322801.mp3",
+    "image_url": "https://www.nasa.gov/wp-content/uploads/2023/04/lyrids_2023_0.jpg",
+    "category": "Eventos Cósmicos",
+    "is_premium": false
+  },
+  {
+    "id": "26",
+    "title": "Eclipse Solar",
+    "description": "Uma meditação guiada sobre Eclipse Solar. Explore as maravilhas do cosmos e encontre a paz interior.",
+    "duration_seconds": 720,
+    "audio_url": "https://cdn.pixabay.com/download/audio/2025/04/20/audio_9186958ce0.mp3?filename=meditation-spiritual-music-330169.mp3",
+    "image_url": "https://www.nasa.gov/wp-content/uploads/2017/10/2017_eclipse_composite_color.jpg",
+    "category": "Eventos Cósmicos",
+    "is_premium": false
+  },
+  {
+    "id": "27",
+    "title": "Eclipse Lunar",
+    "description": "Uma meditação guiada sobre Eclipse Lunar. Explore as maravilhas do cosmos e encontre a paz interior.",
+    "duration_seconds": 720,
+    "audio_url": "https://cdn.pixabay.com/download/audio/2025/04/04/audio_cc53130fa0.mp3?filename=meditation-music-322801.mp3",
+    "image_url": "https://www.nasa.gov/wp-content/uploads/2022/11/52487893105_a7c3701b8b_o.jpg",
+    "category": "Eventos Cósmicos",
+    "is_premium": false
+  },
+  {
+    "id": "28",
+    "title": "Supernova",
+    "description": "Uma meditação guiada sobre Supernova. Explore as maravilhas do cosmos e encontre a paz interior.",
+    "duration_seconds": 720,
+    "audio_url": "https://cdn.pixabay.com/download/audio/2025/04/20/audio_9186958ce0.mp3?filename=meditation-spiritual-music-330169.mp3",
+    "image_url": "https://www.nasa.gov/wp-content/uploads/2023/01/stsci-01gw127a0z9j0z9j0z9j0z9j.png",
+    "category": "Eventos Cósmicos",
+    "is_premium": false
+  },
+  {
+    "id": "29",
+    "title": "Passagem do Cometa Halley",
+    "description": "Uma meditação guiada sobre Passagem do Cometa Halley. Explore as maravilhas do cosmos e encontre a paz interior.",
+    "duration_seconds": 720,
+    "audio_url": "https://cdn.pixabay.com/download/audio/2025/04/04/audio_cc53130fa0.mp3?filename=meditation-music-322801.mp3",
+    "image_url": "https://solarsystem.nasa.gov/system/stellar_items/image_files/54_halley.jpg",
+    "category": "Eventos Cósmicos",
+    "is_premium": false
+  },
+  {
+    "id": "30",
+    "title": "Alinhamento Planetário",
+    "description": "Uma meditação guiada sobre Alinhamento Planetário. Explore as maravilhas do cosmos e encontre a paz interior.",
+    "duration_seconds": 720,
+    "audio_url": "https://cdn.pixabay.com/download/audio/2025/04/20/audio_9186958ce0.mp3?filename=meditation-spiritual-music-330169.mp3",
+    "image_url": "https://www.nasa.gov/wp-content/uploads/2022/06/5planets_align_2022_1024.jpg",
+    "category": "Eventos Cósmicos",
+    "is_premium": false
+  },
+  {
+    "id": "31",
+    "title": "Aurora Boreal",
+    "description": "Uma meditação guiada sobre Aurora Boreal. Explore as maravilhas do cosmos e encontre a paz interior.",
+    "duration_seconds": 720,
+    "audio_url": "https://cdn.pixabay.com/download/audio/2025/04/04/audio_cc53130fa0.mp3?filename=meditation-music-322801.mp3",
+    "image_url": "https://www.nasa.gov/wp-content/uploads/2022/05/iss067e007007_orig.jpg",
+    "category": "Eventos Cósmicos",
+    "is_premium": false
+  },
+  {
+    "id": "32",
+    "title": "Chuva de Meteoros Perseidas",
+    "description": "Uma meditação guiada sobre Chuva de Meteoros Perseidas. Explore as maravilhas do cosmos e encontre a paz interior.",
+    "duration_seconds": 720,
+    "audio_url": "https://cdn.pixabay.com/download/audio/2025/04/20/audio_9186958ce0.mp3?filename=meditation-spiritual-music-330169.mp3",
+    "image_url": "https://www.nasa.gov/wp-content/uploads/2023/08/perseid_meteor_shower_2023.jpg",
+    "category": "Eventos Cósmicos",
+    "is_premium": false
+  },
+  {
+    "id": "33",
+    "title": "Lua Nova",
+    "description": "Uma meditação guiada sobre Lua Nova. Explore as maravilhas do cosmos e encontre a paz interior.",
+    "duration_seconds": 720,
+    "audio_url": "https://cdn.pixabay.com/download/audio/2025/04/04/audio_cc53130fa0.mp3?filename=meditation-music-322801.mp3",
+    "image_url": "https://moon.nasa.gov/internal_resources/606",
+    "category": "Fases da Lua",
+    "is_premium": false
+  },
+  {
+    "id": "34",
+    "title": "Lua Crescente",
+    "description": "Uma meditação guiada sobre Lua Crescente. Explore as maravilhas do cosmos e encontre a paz interior.",
+    "duration_seconds": 720,
+    "audio_url": "https://cdn.pixabay.com/download/audio/2025/04/20/audio_9186958ce0.mp3?filename=meditation-spiritual-music-330169.mp3",
+    "image_url": "https://moon.nasa.gov/internal_resources/608",
+    "category": "Fases da Lua",
+    "is_premium": false
+  },
+  {
+    "id": "35",
+    "title": "Quarto Crescente",
+    "description": "Uma meditação guiada sobre Quarto Crescente. Explore as maravilhas do cosmos e encontre a paz interior.",
+    "duration_seconds": 720,
+    "audio_url": "https://cdn.pixabay.com/download/audio/2025/04/04/audio_cc53130fa0.mp3?filename=meditation-music-322801.mp3",
+    "image_url": "https://moon.nasa.gov/internal_resources/610",
+    "category": "Fases da Lua",
+    "is_premium": false
+  },
+  {
+    "id": "36",
+    "title": "Gibosa Crescente",
+    "description": "Uma meditação guiada sobre Gibosa Crescente. Explore as maravilhas do cosmos e encontre a paz interior.",
+    "duration_seconds": 720,
+    "audio_url": "https://cdn.pixabay.com/download/audio/2025/04/20/audio_9186958ce0.mp3?filename=meditation-spiritual-music-330169.mp3",
+    "image_url": "https://moon.nasa.gov/internal_resources/612",
+    "category": "Fases da Lua",
+    "is_premium": false
+  },
+  {
+    "id": "37",
+    "title": "Lua Cheia",
+    "description": "Uma meditação guiada sobre Lua Cheia. Explore as maravilhas do cosmos e encontre a paz interior.",
+    "duration_seconds": 720,
+    "audio_url": "https://cdn.pixabay.com/download/audio/2025/04/04/audio_cc53130fa0.mp3?filename=meditation-music-322801.mp3",
+    "image_url": "https://moon.nasa.gov/internal_resources/614",
+    "category": "Fases da Lua",
+    "is_premium": false
+  },
+  {
+    "id": "38",
+    "title": "Gibosa Minguante",
+    "description": "Uma meditação guiada sobre Gibosa Minguante. Explore as maravilhas do cosmos e encontre a paz interior.",
+    "duration_seconds": 720,
+    "audio_url": "https://cdn.pixabay.com/download/audio/2025/04/20/audio_9186958ce0.mp3?filename=meditation-spiritual-music-330169.mp3",
+    "image_url": "https://moon.nasa.gov/internal_resources/616",
+    "category": "Fases da Lua",
+    "is_premium": false
+  },
+  {
+    "id": "39",
+    "title": "Quarto Minguante",
+    "description": "Uma meditação guiada sobre Quarto Minguante. Explore as maravilhas do cosmos e encontre a paz interior.",
+    "duration_seconds": 720,
+    "audio_url": "https://cdn.pixabay.com/download/audio/2025/04/04/audio_cc53130fa0.mp3?filename=meditation-music-322801.mp3",
+    "image_url": "https://moon.nasa.gov/internal_resources/618",
+    "category": "Fases da Lua",
+    "is_premium": false
+  },
+  {
+    "id": "40",
+    "title": "Lua Minguante",
+    "description": "Uma meditação guiada sobre Lua Minguante. Explore as maravilhas do cosmos e encontre a paz interior.",
+    "duration_seconds": 720,
+    "audio_url": "https://cdn.pixabay.com/download/audio/2025/04/20/audio_9186958ce0.mp3?filename=meditation-spiritual-music-330169.mp3",
+    "image_url": "https://moon.nasa.gov/internal_resources/620",
+    "category": "Fases da Lua",
+    "is_premium": false
+  }
+]
