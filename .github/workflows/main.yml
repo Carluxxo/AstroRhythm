@@ -1,5 +1,5 @@
 
-name: Daily Apod Run
+name: Daily Apod Task
 
 on:
   schedule:
