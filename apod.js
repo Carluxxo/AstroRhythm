@@ -10,23 +10,36 @@ const cheerio = require('cheerio'); // Para scrap HTML
 // ⚠️ Use SERVICE ROLE KEY para ignorar RLS
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_KEY);
 
-// Função para traduzir textos curtos (title)
-async function translateShortTextGroq(text) {
+// Função auxiliar genérica para request no Groq
+async function groqRequestSystem(system, user) {
   try {
     const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${process.env.GROQ}` },
       body: JSON.stringify({
         model: 'llama-3.3-70b-versatile',
-        messages: [
-          { role: 'system', content: 'Você é um tradutor especializado em textos científicos curtos e títulos. Traduza fielmente para português mantendo nomes próprios, siglas, nomes de telescópios, planetas e instituições intactos. Entregue uma tradução natural e científica, sem introduções ou complementos.' },
-          { role: 'user', content: `Traduza o seguinte título para português: ${text}` }
-        ],
+        messages: [system, user],
         temperature: 0
       })
     });
     const data = await response.json();
-    return data.choices[0].message.content;
+    return data.choices?.[0]?.message?.content?.trim();
+  } catch (err) {
+    console.error("Erro no groqRequestSystem:", err);
+    return null;
+  }
+}
+
+// Função para traduzir textos curtos (title)
+async function translateShortTextGroq(text) {
+  try {
+    const system = {
+      role: 'system',
+      content:
+        'Você é um tradutor especializado em textos científicos curtos e títulos. Traduza fielmente para português mantendo nomes próprios, siglas, nomes de telescópios, planetas e instituições intactos. Entregue uma tradução natural e científica, sem introduções ou complementos.'
+    };
+    const user = { role: 'user', content: `Traduza o seguinte título para português: ${text}` };
+    return (await groqRequestSystem(system, user)) || text;
   } catch (err) {
     console.error('Erro ao traduzir título:', err);
     return text;
@@ -36,32 +49,41 @@ async function translateShortTextGroq(text) {
 // Função para traduzir textos longos (explanation)
 async function translateLongTextGroq(text) {
   try {
-    const midIndex = Math.floor(text.length / 2);
-    const part1 = text.slice(0, midIndex);
-    const part2 = text.slice(midIndex);
+    const mid = Math.floor(text.length / 2);
+    const p1 = text.slice(0, mid);
+    const p2 = text.slice(mid);
 
-    const translatePart = async (chunk) => {
-      const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${process.env.GROQ}` },
-        body: JSON.stringify({
-          model: 'llama-3.3-70b-versatile',
-          messages: [
-            { role: 'system', content: 'Você é um tradutor especializado em textos científicos. Traduza fielmente para português mantendo nomes próprios, siglas, nomes de telescópios, planetas e instituições intactos. Não adicione introduções ou conclusões extras.' },
-            { role: 'user', content: `Traduza o seguinte texto: ${chunk}` }
-          ],
-          temperature: 0
-        })
-      });
-      const data = await response.json();
-      return data.choices[0].message.content;
+    const system = {
+      role: 'system',
+      content:
+        'Você é um tradutor especializado em textos científicos. Traduza fielmente para português mantendo nomes próprios, siglas, nomes de telescópios, planetas e instituições intactos. Retorne APENAS o texto traduzido, sem saudações, explicações ou complementos.'
     };
 
-    const translatedPart1 = await translatePart(part1);
-    const translatedPart2 = await translatePart(part2);
-    return translatedPart1 + translatedPart2;
-  } catch (err) {
-    console.error('Erro ao traduzir explanation:', err);
+    const user1 = { role: 'user', content: `Traduza o seguinte texto: ${p1}` };
+    const user2 = { role: 'user', content: `Traduza o seguinte texto: ${p2}` };
+
+    const t1 = (await groqRequestSystem(system, user1)) || p1;
+    const t2 = (await groqRequestSystem(system, user2)) || p2;
+
+    return (t1 + t2).trim();
+  } catch (e) {
+    console.error('Erro ao traduzir texto longo:', e);
+    return text;
+  }
+}
+
+// Função para revisar textos
+async function reviewText(text) {
+  try {
+    const system = {
+      role: 'system',
+      content:
+        'Você é um professor de português especializado em revisar textos científicos e técnicos. Corrija apenas erros de digitação, pontuação, gramática, capitalização e identação. Não altere termos técnicos, nomes próprios, siglas ou nomes de instituições. Retorne APENAS o texto revisado, sem saudações, explicações ou complementos.'
+    };
+    const user = { role: 'user', content: `Revise o seguinte texto: ${text}` };
+    return (await groqRequestSystem(system, user)) || text;
+  } catch (e) {
+    console.error('Erro ao revisar texto:', e);
     return text;
   }
 }
@@ -184,9 +206,10 @@ async function fetchAndSaveAPOD() {
       }
     }
 
-    // Tradução
+    // Tradução e revisão
     const translatedTitle = await translateShortTextGroq(data.title);
-    const translatedExplanation = await translateLongTextGroq(data.explanation);
+    let translatedExplanation = await translateLongTextGroq(data.explanation);
+    translatedExplanation = await reviewText(translatedExplanation); // revisão gramatical
 
     // Salva no banco
     const { error } = await supabase.from('apod').insert([{
