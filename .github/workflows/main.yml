@@ -1,0 +1,39 @@
+
+name: Daily Apod Run
+
+on:
+  schedule:
+    # Executa todos os dias às 6:00 da manhã no horário de São Paulo (BRT)
+    - cron: '0 9 * * *'
+  workflow_dispatch: # Permite execução manual no GitHub Actions
+
+jobs:
+  run_script:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Clonar repositório (branch autorun)
+        uses: actions/checkout@v3
+        with:
+          ref: autorun  # Garante que usa a branch correta
+
+      - name: 🌎 Configurar fuso horário para São Paulo
+        run: |
+          echo "TZ=America/Sao_Paulo" >> $GITHUB_ENV
+
+      - name: 🛠 Configurar Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20 # Atualizado para evitar depreciação
+
+      - name: 📦 Instalar dependências
+        run: npm install
+
+      - name: 📡 Rodar script apod.js
+        env:
+          GROQ: ${{ secrets.GROQ }}
+          NASA_API_KEY: ${{ secrets.NASA_API_KEY }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          SUPABASE_BUCKET: ${{ secrets.SUPABASE_BUCKET }}
+        run: node apod.js
